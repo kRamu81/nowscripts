@@ -31,31 +31,17 @@ export function PlatformShowcase() {
                 <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
               </div>
               
-              {/* UI Content (LMS Simulation) */}
-              <div className="p-6 flex h-[calc(100%-2rem)]">
-                {/* Sidebar */}
-                <div className="w-48 border-r border-gray-800 pr-4 hidden md:block">
-                  <div className="h-4 w-24 bg-gray-800 rounded mb-6"></div>
-                  <div className="space-y-4">
-                    {[...Array(5)].map((_, i) => (
-                      <div key={i} className={`h-8 rounded flex items-center px-3 ${i === 1 ? 'bg-now-primary/10 border-l-2 border-now-primary' : ''}`}>
-                        <div className={`h-2 w-full rounded ${i === 1 ? 'bg-now-primary/50' : 'bg-gray-800'}`}></div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                {/* Main Content Area */}
-                <div className="flex-1 md:pl-6 flex flex-col">
-                  <div className="h-8 w-1/3 bg-gray-800 rounded mb-4"></div>
-                  <div className="h-4 w-2/3 bg-gray-800/50 rounded mb-8"></div>
-                  
-                  {/* Video/Content block */}
-                  <div className="flex-1 bg-[#151b2b] rounded-lg border border-gray-800 flex items-center justify-center relative overflow-hidden group">
-                    <div className="w-16 h-16 rounded-full bg-now-primary/20 flex items-center justify-center border border-now-primary/30 group-hover:scale-110 transition-transform cursor-pointer">
-                      <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[16px] border-l-now-primary border-b-[10px] border-b-transparent ml-1"></div>
-                    </div>
-                  </div>
-                </div>
+              {/* Realistic Screenshot Placeholder */}
+              <div className="w-full h-full relative group bg-[#020617] flex items-center justify-center p-4">
+                <img 
+                  src="/images/platform_dashboard_real.png" 
+                  alt="NowScripts Learning Platform Dashboard" 
+                  className="w-full h-full object-cover rounded-lg shadow-[0_0_40px_rgba(0,229,255,0.1)] group-hover:shadow-[0_0_60px_rgba(0,229,255,0.2)] transition-shadow duration-500"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = "https://placehold.co/1200x800/0f172a/00E5FF?text=Upload+Platform+Screenshot+Here\n(/images/platform_dashboard_real.png)";
+                  }}
+                />
               </div>
               
               {/* Glowing gradient effect behind mockup */}
