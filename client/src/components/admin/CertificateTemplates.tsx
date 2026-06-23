@@ -49,44 +49,39 @@ export const CertificateTemplate = React.forwardRef<HTMLDivElement, { data: Cert
       style={{ width: "794px", height: "1123px", padding: "60px 80px", boxSizing: "border-box" }}
     >
       {/* Header */}
-      <div className="flex justify-end mb-4">
-        <img src="/certificate-logo.jpg" alt="NowScripts Logo" className="h-[40px] object-contain mix-blend-multiply" />
+      <div className="flex justify-between items-start mb-12">
+        <div className="text-left space-y-1">
+          <p className="font-semibold text-gray-800 text-sm">Certificate ID: {data.certificateId || "[Auto-Generated]"}</p>
+          <p className="text-gray-600 text-sm">Date: {formatDate(data.issueDate)}</p>
+        </div>
+        <img src="/certificate-logo.jpg" alt="NowScripts Logo" className="h-[50px] object-contain mix-blend-multiply" />
       </div>
 
-      <div className="text-center mb-10">
+      <div className="text-center mb-12">
         <a href="https://nowscripts.com" className="text-blue-600 underline text-lg font-medium tracking-wide decoration-1 underline-offset-4">
           {data.companyName}
         </a>
       </div>
 
-      <h1 className="text-4xl font-extrabold text-center text-[#0F172A] mb-12 tracking-tight">
+      <h1 className="text-[38px] font-extrabold text-center text-[#0F172A] mb-16 tracking-tight uppercase">
         {data.templateType}
       </h1>
 
-      <div className="text-right mb-12">
-        <p className="font-bold text-gray-900 text-lg">{formatDate(data.issueDate)}</p>
-      </div>
-
-      <div className="mb-12 space-y-1">
-        <h2 className="text-2xl font-bold text-[#0F172A]">Name: {data.candidateName || "[Candidate Name]"}</h2>
-        <p className="text-gray-600 text-sm">
-          Certificate ID: <span className="font-semibold text-gray-800">{data.certificateId || "[Auto-Generated]"}</span> · {data.location || "Full-time Remote"}
-        </p>
-      </div>
-
-      <div className="text-[17px] leading-relaxed text-gray-900 space-y-8 min-h-[300px]">
+      <div className="text-[18px] leading-[1.8] text-gray-900 space-y-8 min-h-[250px] text-justify">
         {isCompletionLetter ? (
           <>
             <p>
-              This is to certify that <strong>{data.candidateName || "[Candidate Name]"}</strong> was an intern in our organization from <strong>{formatMonthYear(data.startDate)}</strong> to <strong>{formatMonthYear(data.endDate)}</strong> as part of the <strong>{data.internshipTitle || "[Internship Program]"}</strong>, under the mentorship of <strong>{data.mentorName || "[Mentor Name]"}</strong> and has successfully completed the internship.
+              This is to certify that <span className="font-bold text-xl">{data.candidateName || "[Candidate Name]"}</span> was an intern in our organization from <strong>{formatMonthYear(data.startDate)}</strong> to <strong>{formatMonthYear(data.endDate)}</strong> as part of the <strong>{data.internshipTitle || "[Internship Program]"}</strong>, under the mentorship of <strong>{data.mentorName || "[Mentor Name]"}</strong> and has successfully completed the internship.
             </p>
-            <div>
-              <p className="mb-2">Project undertaken:</p>
-              <ol className="list-decimal pl-8 font-semibold space-y-2">
-                <li>{data.projectUndertaken || "[Project details will appear here]"}</li>
-              </ol>
-            </div>
-            <p>We wish you all the best for your future endeavors.</p>
+            {data.projectUndertaken && (
+              <div className="mt-6">
+                <p className="mb-2">Project undertaken:</p>
+                <ol className="list-decimal pl-8 font-semibold space-y-2">
+                  <li>{data.projectUndertaken}</li>
+                </ol>
+              </div>
+            )}
+            <p className="mt-8">We wish you all the best for your future endeavors.</p>
           </>
         ) : (
            // General Certificate Text
@@ -106,22 +101,18 @@ export const CertificateTemplate = React.forwardRef<HTMLDivElement, { data: Cert
       </div>
 
       {/* Signatures & Stamp */}
-      <div className="mt-16 space-y-6 relative">
-        <p className="text-[17px] text-gray-900">Sincere Regards</p>
-        <p className="text-[17px] text-gray-900">For {data.companyName}</p>
+      <div className="mt-20 flex justify-between items-end relative">
+        <div className="space-y-6">
+          <p className="text-[17px] text-gray-900">Sincere Regards</p>
+          <p className="text-[17px] text-gray-900">For {data.companyName}</p>
+          <div className="mt-12">
+            <p className="text-[17px] text-gray-900">HR Department</p>
+            <p className="text-[17px] font-bold text-gray-900">Senior Director – HR Shared Service</p>
+          </div>
+        </div>
         
-        <div className="mt-8">
-          <img src="/certificate-stamp.jpg" alt="NowScripts Stamp" className="h-[120px] object-contain mix-blend-multiply" />
-        </div>
-
-        <div className="mt-4">
-          <p className="text-[17px] text-gray-900">HR Department</p>
-          <p className="text-[17px] font-bold text-gray-900">Senior Director – HR Shared Service</p>
-        </div>
-
-        {/* HR Signature Overlay */}
-        <div className="absolute bottom-[80px] left-[150px] opacity-80 pointer-events-none mix-blend-multiply">
-          <HRSignature />
+        <div className="absolute right-12 bottom-0">
+          <img src="/certificate-stamp.jpg" alt="NowScripts Stamp" className="h-[140px] w-[140px] object-contain mix-blend-multiply opacity-90" />
         </div>
       </div>
 
