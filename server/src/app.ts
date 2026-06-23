@@ -9,6 +9,7 @@ import searchRouter from "./routers/search";
 import learnRouter from "./routers/learn";
 import roadmapRouter from "./routes/roadmapRoutes";
 import newsletterRouter from "./routes/newsletterRoutes";
+import certificateRouter from "./routes/certificateRoutes";
 import cors from "cors";
 import { errorHandler } from "./middlewares/errorHandler";
 import { createServer } from "http";
@@ -86,6 +87,7 @@ app.use("/search", searchRouter);
 app.use("/learn", learnRouter);
 app.use("/roadmap", roadmapRouter);
 app.use("/newsletter", newsletterRouter);
+app.use("/certificate", certificateRouter);
 
 app.use(errorHandler);
 

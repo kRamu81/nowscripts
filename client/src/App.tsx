@@ -32,6 +32,8 @@ const CertificationCenter = lazy(() => import("./pages/CertificationCenter"));
 const Newsletter = lazy(() => import("./pages/Newsletter"));
 const SearchResults = lazy(() => import("./pages/SearchResults"));
 const Suggestions = lazy(() => import("./pages/Suggestions"));
+const VerifyCertificate = lazy(() => import("./pages/VerifyCertificate"));
+const AdminCertificates = lazy(() => import("./pages/admin/AdminCertificates"));
 import { Routes, Route, Outlet, Navigate } from "react-router-dom";
 import { useAuth } from "./contexts/Auth";
 import ProtectedRoute from "./router/Authentication";
@@ -140,6 +142,8 @@ export default function App() {
               <Route path="/roadmaps/:slug" element={<RoadmapViewer />} />
               <Route path="/certifications" element={<CertificationCenter />} />
               <Route path="/newsletter" element={<Newsletter />} />
+              <Route path="/verify" element={<VerifyCertificate />} />
+              <Route path="/verify/:certificateId" element={<VerifyCertificate />} />
             </Route>
 
             {/* Protected App Layout Routes (Requires Login) */}
@@ -157,6 +161,7 @@ export default function App() {
               <Route path="/profile/:username/:tab?" element={<Profile />} />
               <Route path="/user/:username/:tab?" element={<Profile />} />
               <Route path="/notifications" element={<Notifications emptyNotifications={NullifyNotificationsCount} />} />
+              <Route path="/admin/certificates" element={<AdminCertificates />} />
               <Route path="/write/:postId?" element={
                 <div className="write_page mx-auto w-full md:w-3/4 lg:w-1/2 h-full">
                   <Write />
