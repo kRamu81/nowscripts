@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { getProgress, updateProgress, resetProgress } from "../controllers/interviewPrepProgressController";
-import isAuth from "../middlewares/isAuth";
+import isAuth from "../middlewares/auth";
 
 const router = Router();
 
