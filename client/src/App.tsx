@@ -157,7 +157,7 @@ export default function App() {
               <Route path="/learn" element={<LearnDashboard />} />
               <Route path="/learn/:categorySlug/:lessonSlug" element={<LearnDashboard />} />
               <Route path="/interview-prep" element={<InterviewPrepDashboard />} />
-              <Route path="/interview-prep/:categorySlug/:lessonSlug" element={<InterviewPrepDashboard />} />
+              <Route path="/interview-prep/:categoryId" element={<InterviewPrepDashboard />} />
               <Route path="/community" element={<CommunityFeed />} />
               <Route path="/tag/:tag" element={<CommunityFeed />} />
               <Route path="/projects" element={<div className="text-[#0F172A] text-center mt-20 text-2xl font-bold">Projects Coming Soon</div>} />

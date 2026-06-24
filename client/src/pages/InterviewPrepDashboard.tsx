@@ -1,466 +1,487 @@
-import React, { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState, useEffect } from "react";
 import { 
-  Search, ChevronDown, ChevronRight, PlayCircle, FileText, 
-  CheckSquare, Award, Clock, Target, List, Video, BookOpen, ChevronLeft, ChevronRight as IconNext, CheckCircle, X
+  Search, ChevronRight, CheckCircle, Bookmark, Star, ArrowLeft, ArrowRight,
+  Target, BarChart3, AlertCircle, PlayCircle, RefreshCw, BookOpen
 } from "lucide-react";
-import { useParams, useNavigate } from "react-router-dom";
-import { MarkdownRenderer } from "../components/markdown/MarkdownRenderer";
-import { interviewData, LessonData, Subtopic, generateSlug } from "../utils/markdownParser";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-hot-toast";
 
+// --- Types ---
+interface Category {
+  id: string;
+  title: string;
+  status: string;
+  dataFile?: string;
+}
+
+interface Question {
+  id: string;
+  question_text: string;
+  question_type: string;
+  options: { option_id: string; option_text: string }[];
+  correct_options: string[];
+  explanation: string;
+}
+
+interface Module {
+  name: string;
+  questions: Question[];
+}
+
+interface QuestionBank {
+  title: string;
+  modules: Module[];
+}
+
+interface Progress {
+  completedQuestions: string[];
+  bookmarkedQuestions: string[];
+  importantQuestions: string[];
+  lastViewedQuestion: string | null;
+  progressPercentage: number;
+}
+
+// Ensure axios includes credentials
+axios.defaults.withCredentials = true;
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 export default function InterviewPrepDashboard() {
-  const { categorySlug, lessonSlug } = useParams();
+  const { categoryId } = useParams();
   const navigate = useNavigate();
 
-  // Find initial lesson based on URL params, or default to the very first one
-  const getInitialLesson = () => {
-    if (categorySlug && lessonSlug) {
-      const found = interviewData.flatMap(c => c.lessons).find(l => l.categorySlug === categorySlug && l.slug === lessonSlug);
-      if (found) return found;
-    }
-    return interviewData[0]?.lessons[0];
-  };
-
-  const [activeLesson, setActiveLesson] = useState<LessonData>(getInitialLesson());
-  const [searchQuery, setSearchQuery] = useState("");
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [activeCategory, setActiveCategory] = useState<Category | null>(null);
+  const [questionBank, setQuestionBank] = useState<QuestionBank | null>(null);
   
-  // By default, expand the section of the active lesson
-  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
-    [activeLesson?.category || interviewData[0]?.sectionTitle]: true
+  const [progress, setProgress] = useState<Progress>({
+    completedQuestions: [], bookmarkedQuestions: [], importantQuestions: [], lastViewedQuestion: null, progressPercentage: 0
   });
+
+  const [activeModuleIndex, setActiveModuleIndex] = useState(0);
+  const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
   
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [tocMenuOpen, setTocMenuOpen] = useState(false);
-  
-  const [expandedLessons, setExpandedLessons] = useState<Record<string, boolean>>({
-    [activeLesson?.id]: true
-  });
-  
-  const [completedLessons, setCompletedLessons] = useState<Record<string, boolean>>({});
-  const [completedSubtopics, setCompletedSubtopics] = useState<Record<string, boolean>>({});
-  const [activeSubtopicId, setActiveSubtopicId] = useState<string>("");
-  const [readingProgress, setReadingProgress] = useState(0);
+  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+  const [showAnswer, setShowAnswer] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-
-  // Flatten lessons for next/prev navigation
-  const allLessons = interviewData.flatMap(section => section.lessons);
-  const currentIndex = activeLesson ? allLessons.findIndex(l => l.id === activeLesson.id) : -1;
-
-  // Sync URL when activeLesson changes
+  // Load index.json
   useEffect(() => {
-    if (activeLesson) {
-      const newUrl = `/interview-prep/${activeLesson.categorySlug}/${activeLesson.slug}`;
-      if (window.location.pathname !== newUrl) {
-        navigate(newUrl, { replace: true });
-      }
-    }
-  }, [activeLesson, navigate]);
-
-  const filteredData = interviewData.map(section => {
-    const filteredLessons = section.lessons.filter(l => 
-      l.title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    return { ...section, lessons: filteredLessons };
-  }).filter(section => section.lessons.length > 0);
-
-  useEffect(() => {
-    if (!activeLesson) return;
-    setExpandedLessons(prev => ({ ...prev, [activeLesson.id]: true }));
-    setExpandedSections(prev => ({ ...prev, [activeLesson.category]: true }));
-    
-    if (activeLesson.subtopics && activeLesson.subtopics.length > 0) {
-      if (!window.location.hash) {
-         setActiveSubtopicId(activeLesson.subtopics[0].id);
-      }
-    }
-    
-    if (scrollContainerRef.current) {
-       scrollContainerRef.current.scrollTop = 0;
-       setReadingProgress(0);
-    }
-  }, [activeLesson]);
-
-  // Jump to hash on mount or when activeLesson changes
-  useEffect(() => {
-    if (!activeLesson) return;
-    const hash = window.location.hash.replace('#', '');
-    if (hash && activeLesson.subtopics && activeLesson.subtopics.some(s => s.id === hash)) {
-      setTimeout(() => {
-        const el = document.getElementById(hash);
-        if (el && scrollContainerRef.current) {
-           el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    fetch("/content/interview-prep/index.json")
+      .then(res => res.json())
+      .then(data => {
+        setCategories(data.categories);
+        let active = null;
+        if (categoryId) {
+          active = data.categories.find((c: Category) => c.id === categoryId);
         }
-      }, 100);
-    }
-  }, [activeLesson]);
-
-  // Intersection Observer
-  useEffect(() => {
-    if (!activeLesson) return;
-    const container = scrollContainerRef.current;
-    if (!container) return;
-
-    const handleScroll = () => {
-      const totalScroll = container.scrollHeight - container.clientHeight;
-      const currentScroll = container.scrollTop;
-      if (totalScroll > 0) {
-        setReadingProgress(Math.min(100, Math.max(0, (currentScroll / totalScroll) * 100)));
-      } else {
-        setReadingProgress(100);
-      }
-    };
-
-    container.addEventListener('scroll', handleScroll);
-
-    const observer = new IntersectionObserver((entries) => {
-      const visibleEntries = entries.filter(e => e.isIntersecting);
-      if (visibleEntries.length > 0) {
-        visibleEntries.sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-        const topMost = visibleEntries[0].target.id;
-        
-        setActiveSubtopicId(topMost);
-        
-        window.history.replaceState(null, "", `#${topMost}`);
-
-        setCompletedSubtopics(prev => ({ ...prev, [topMost]: true }));
-      }
-    }, { 
-      root: container, 
-      rootMargin: '-10% 0px -60% 0px' 
-    });
-
-    if (activeLesson.subtopics) {
-      activeLesson.subtopics.forEach(sub => {
-        const el = document.getElementById(sub.id);
-        if (el) observer.observe(el);
+        if (!active && data.categories.length > 0) {
+          active = data.categories[0];
+          navigate(`/interview-prep/${active.id}`, { replace: true });
+        }
+        setActiveCategory(active || null);
+      })
+      .catch(err => {
+        console.error("Failed to load categories", err);
+        setLoading(false);
       });
+  }, [categoryId, navigate]);
+
+  // Load data.json & progress when category changes
+  useEffect(() => {
+    if (!activeCategory) return;
+
+    if (activeCategory.status !== "active" || !activeCategory.dataFile) {
+      setQuestionBank(null);
+      setLoading(false);
+      return;
     }
 
-    return () => {
-      container.removeEventListener('scroll', handleScroll);
-      observer.disconnect();
-    };
-  }, [activeLesson]);
+    setLoading(true);
+    
+    // Fetch JSON question bank
+    fetch(activeCategory.dataFile)
+      .then(res => res.json())
+      .then(data => {
+        setQuestionBank(data);
+        return axios.get(`${API_BASE}/api/progress/interview-prep/${activeCategory.id}`);
+      })
+      .then(res => {
+        const p = res.data;
+        setProgress({
+          completedQuestions: p.completedQuestions || [],
+          bookmarkedQuestions: p.bookmarkedQuestions || [],
+          importantQuestions: p.importantQuestions || [],
+          lastViewedQuestion: p.lastViewedQuestion || null,
+          progressPercentage: p.progressPercentage || 0
+        });
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error("Failed to load question bank or progress", err);
+        setLoading(false);
+      });
+  }, [activeCategory]);
 
-  const toggleSection = (sectionTitle: string) => {
-    setExpandedSections(prev => ({
-      ...prev,
-      [sectionTitle]: !prev[sectionTitle]
-    }));
-  };
+  // Jump to last viewed question
+  useEffect(() => {
+    if (questionBank && progress.lastViewedQuestion) {
+      let found = false;
+      questionBank.modules.forEach((mod, mIdx) => {
+        const qIdx = mod.questions.findIndex(q => q.id === progress.lastViewedQuestion);
+        if (qIdx !== -1) {
+          setActiveModuleIndex(mIdx);
+          setActiveQuestionIndex(qIdx);
+          found = true;
+        }
+      });
+      if (!found) {
+        setActiveModuleIndex(0);
+        setActiveQuestionIndex(0);
+      }
+    } else if (questionBank) {
+      setActiveModuleIndex(0);
+      setActiveQuestionIndex(0);
+    }
+  }, [questionBank]);
 
-  const toggleLesson = (lessonId: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    setExpandedLessons(prev => ({
-      ...prev,
-      [lessonId]: !prev[lessonId]
-    }));
-  };
+  // Reset state on question change
+  useEffect(() => {
+    setSelectedOptions([]);
+    setShowAnswer(false);
+  }, [activeQuestionIndex, activeModuleIndex]);
 
-  const goToNextLesson = () => {
-    if (currentIndex < allLessons.length - 1) {
-      setActiveLesson(allLessons[currentIndex + 1]);
+  const activeModule = questionBank?.modules[activeModuleIndex];
+  const activeQuestion = activeModule?.questions[activeQuestionIndex];
+
+  const totalQuestions = questionBank?.modules.reduce((acc, m) => acc + m.questions.length, 0) || 0;
+  
+  const updateProgressBackend = async (updates: Partial<Progress>) => {
+    try {
+      await axios.post(`${API_BASE}/api/progress/interview-prep/${activeCategory?.id}/update`, updates);
+    } catch (e) {
+      console.error(e);
     }
   };
 
-  const goToPrevLesson = () => {
-    if (currentIndex > 0) {
-      setActiveLesson(allLessons[currentIndex - 1]);
+  const handleOptionToggle = (optId: string) => {
+    if (showAnswer) return; // Prevent changing answer after reveal
+    if (activeQuestion?.question_type === "single") {
+      setSelectedOptions([optId]);
+    } else {
+      setSelectedOptions(prev => 
+        prev.includes(optId) ? prev.filter(id => id !== optId) : [...prev, optId]
+      );
     }
   };
 
-  const scrollToSubtopic = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const handleCheckAnswer = () => {
+    if (!activeQuestion) return;
+    setShowAnswer(true);
+
+    const isCorrect = 
+      activeQuestion.correct_options.length === selectedOptions.length &&
+      activeQuestion.correct_options.every(opt => selectedOptions.includes(opt));
+
+    if (isCorrect) {
+      const newCompleted = [...new Set([...progress.completedQuestions, activeQuestion.id])];
+      const newPercent = Math.round((newCompleted.length / totalQuestions) * 100);
+      const newProgress = { 
+        ...progress, 
+        completedQuestions: newCompleted,
+        progressPercentage: newPercent,
+        lastViewedQuestion: activeQuestion.id
+      };
+      setProgress(newProgress);
+      updateProgressBackend({ 
+        completedQuestions: newCompleted, 
+        progressPercentage: newPercent,
+        lastViewedQuestion: activeQuestion.id
+      });
+    } else {
+      updateProgressBackend({ lastViewedQuestion: activeQuestion.id });
     }
   };
 
-  if (!activeLesson) return <div className="p-8 text-center">Loading Content...</div>;
+  const handleToggleBookmark = () => {
+    if (!activeQuestion) return;
+    const isBookmarked = progress.bookmarkedQuestions.includes(activeQuestion.id);
+    const newBookmarked = isBookmarked 
+      ? progress.bookmarkedQuestions.filter(id => id !== activeQuestion.id)
+      : [...progress.bookmarkedQuestions, activeQuestion.id];
+    
+    setProgress(prev => ({ ...prev, bookmarkedQuestions: newBookmarked }));
+    updateProgressBackend({ bookmarkedQuestions: newBookmarked });
+  };
 
-  // We slice the rawMarkdown to remove the frontmatter block at the top before rendering
-  const contentToRender = activeLesson.rawMarkdown.replace(/^---[\s\S]+?---/, '').trim();
+  const handleToggleImportant = () => {
+    if (!activeQuestion) return;
+    const isImportant = progress.importantQuestions.includes(activeQuestion.id);
+    const newImportant = isImportant 
+      ? progress.importantQuestions.filter(id => id !== activeQuestion.id)
+      : [...progress.importantQuestions, activeQuestion.id];
+    
+    setProgress(prev => ({ ...prev, importantQuestions: newImportant }));
+    updateProgressBackend({ importantQuestions: newImportant });
+  };
+
+  const goToNext = () => {
+    if (!activeModule) return;
+    if (activeQuestionIndex < activeModule.questions.length - 1) {
+      setActiveQuestionIndex(i => i + 1);
+    } else if (activeModuleIndex < questionBank!.modules.length - 1) {
+      setActiveModuleIndex(i => i + 1);
+      setActiveQuestionIndex(0);
+    }
+  };
+
+  const goToPrev = () => {
+    if (!activeModule) return;
+    if (activeQuestionIndex > 0) {
+      setActiveQuestionIndex(i => i - 1);
+    } else if (activeModuleIndex > 0) {
+      setActiveModuleIndex(i => i - 1);
+      setActiveQuestionIndex(questionBank!.modules[activeModuleIndex - 1].questions.length - 1);
+    }
+  };
+
+  const handleReset = async () => {
+    if (confirm("Are you sure you want to reset all your progress for this category?")) {
+      try {
+        await axios.post(`${API_BASE}/api/progress/interview-prep/${activeCategory?.id}/reset`);
+        setProgress({ ...progress, completedQuestions: [], lastViewedQuestion: null, progressPercentage: 0 });
+        setActiveModuleIndex(0);
+        setActiveQuestionIndex(0);
+        toast.success("Progress reset successfully.");
+      } catch (e) {
+        toast.error("Failed to reset progress.");
+      }
+    }
+  };
+
+  if (loading) {
+    return <div className="p-8 text-center dark:text-white">Loading Content...</div>;
+  }
 
   return (
-    <div className="bg-white dark:bg-slate-900 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans flex flex-col h-full overflow-hidden selection:bg-now-primary selection:text-black relative">
-      
-      <div className="absolute top-0 left-0 w-full h-1 bg-slate-200 dark:bg-slate-800 z-50">
-        <div 
-          className="h-full bg-now-primary transition-all duration-300 ease-out" 
-          style={{ width: `${readingProgress}%` }}
-        />
-      </div>
-
-      <div className="flex flex-1 overflow-hidden h-full mt-1 relative">
-        
-        {mobileMenuOpen && (
-          <div 
-            className="fixed inset-0 bg-[#0F172A]/20 z-40 lg:hidden"
-            onClick={() => setMobileMenuOpen(false)}
-          />
-        )}
-
-        <div className={`absolute lg:relative w-80 flex-shrink-0 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 dark:bg-slate-950 flex flex-col z-50 h-full overflow-hidden transition-transform duration-300 ${
-          mobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
-        }`}>
-          <div className="p-6 border-b border-slate-200 dark:border-slate-800">
-            <h2 className="text-xl font-bold mb-4 flex items-center gap-2 text-slate-900 dark:text-slate-100">
-              <BookOpen className="text-now-primary w-5 h-5" /> Course Contents
-            </h2>
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 dark:text-slate-400" />
-              <input 
-                type="text" 
-                placeholder="Search lessons..." 
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-now-primary transition-colors text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400"
-              />
-            </div>
-          </div>
-
-          <div className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar pb-24">
-            {filteredData.map((section, sIdx) => (
-              <div key={sIdx} className="border-b border-slate-200 dark:border-slate-800">
-                <button 
-                  onClick={() => toggleSection(section.sectionTitle)}
-                  className="w-full px-6 py-4 flex items-center justify-between hover:bg-slate-50 dark:bg-slate-900 transition-colors"
-                >
-                  <span className="font-bold text-sm text-slate-900 dark:text-slate-100">{section.sectionTitle}</span>
-                  {expandedSections[section.sectionTitle] ? (
-                    <ChevronDown className="w-4 h-4 text-slate-500 dark:text-slate-400" />
-                  ) : (
-                    <ChevronRight className="w-4 h-4 text-slate-500 dark:text-slate-400" />
-                  )}
-                </button>
-
-                <AnimatePresence>
-                  {expandedSections[section.sectionTitle] && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      className="overflow-hidden bg-slate-50/50 dark:bg-slate-900/50"
-                    >
-                      {section.lessons.map(lesson => {
-                        const isLessonActive = activeLesson.id === lesson.id;
-                        const isLessonExpanded = expandedLessons[lesson.id];
-
-                        return (
-                          <div key={lesson.id} className="border-b border-slate-200 dark:border-slate-800 last:border-b-0">
-                            <div className="flex items-stretch">
-                              <button
-                                onClick={() => setActiveLesson(lesson)}
-                                className={`flex-1 px-6 py-3 flex items-center gap-3 text-left transition-all ${
-                                  isLessonActive 
-                                    ? "bg-now-primary/5 text-slate-900 dark:text-slate-100" 
-                                    : "text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:bg-slate-900 hover:text-slate-900 dark:text-slate-100"
-                                }`}
-                              >
-                                <div className="flex flex-col truncate flex-1">
-                                  <span className="text-xs font-semibold uppercase tracking-wider mb-0.5 opacity-70">
-                                    Lesson {lesson.order}
-                                  </span>
-                                  <span className={`text-sm truncate ${isLessonActive ? "font-bold" : "font-medium"}`}>
-                                    {lesson.title}
-                                  </span>
-                                </div>
-                              </button>
-                              {lesson.subtopics && lesson.subtopics.length > 0 && (
-                                <button 
-                                  onClick={(e) => toggleLesson(lesson.id, e)}
-                                  className={`px-4 flex items-center justify-center transition-colors border-l border-transparent ${isLessonActive ? "hover:bg-now-primary/10" : "hover:bg-slate-200 dark:bg-slate-800"}`}
-                                >
-                                  {isLessonExpanded ? (
-                                    <ChevronDown className={`w-4 h-4 ${isLessonActive ? "text-now-primary" : "text-slate-500 dark:text-slate-400"}`} />
-                                  ) : (
-                                    <ChevronRight className={`w-4 h-4 ${isLessonActive ? "text-now-primary" : "text-slate-500 dark:text-slate-400"}`} />
-                                  )}
-                                </button>
-                              )}
-                            </div>
-
-                            <AnimatePresence>
-                              {isLessonExpanded && lesson.subtopics && (
-                                <motion.div
-                                  initial={{ height: 0, opacity: 0 }}
-                                  animate={{ height: "auto", opacity: 1 }}
-                                  exit={{ height: 0, opacity: 0 }}
-                                  className="overflow-hidden bg-white dark:bg-slate-900 dark:bg-slate-950"
-                                >
-                                  <div className="py-2">
-                                    {lesson.subtopics.map(sub => {
-                                      const isSubActive = isLessonActive && activeSubtopicId === sub.id;
-                                      return (
-                                        <button
-                                          key={sub.id}
-                                          onClick={() => {
-                                            if (!isLessonActive) {
-                                              setActiveLesson(lesson);
-                                              setMobileMenuOpen(false);
-                                              setTimeout(() => scrollToSubtopic(sub.id), 100);
-                                            } else {
-                                              scrollToSubtopic(sub.id);
-                                              setMobileMenuOpen(false);
-                                            }
-                                          }}
-                                          className={`w-full px-6 py-2 pl-12 flex items-center text-left text-sm transition-colors ${
-                                            isSubActive
-                                              ? "text-now-primary font-bold bg-now-primary/5 border-r-2 border-now-primary"
-                                              : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-slate-100 hover:bg-slate-50 dark:bg-slate-900"
-                                          }`}
-                                        >
-                                          <div className={`w-1.5 h-1.5 rounded-full mr-3 shrink-0 transition-colors ${isSubActive ? "bg-now-primary" : "bg-slate-200 dark:bg-slate-800"}`} />
-                                          <span className="truncate">{sub.title}</span>
-                                        </button>
-                                      );
-                                    })}
-                                  </div>
-                                </motion.div>
-                              )}
-                            </AnimatePresence>
-
-                          </div>
-                        );
-                      })}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            ))}
-          </div>
+    <div className="bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans flex h-full overflow-hidden">
+      {/* Sidebar */}
+      <div className="w-80 flex-shrink-0 border-r border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 flex flex-col h-full overflow-hidden">
+        <div className="p-6 border-b border-slate-200 dark:border-slate-800">
+          <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+            <BookOpen className="text-now-primary w-5 h-5" /> Interview Prep
+          </h2>
         </div>
 
-        <div 
-          ref={scrollContainerRef}
-          className="flex-1 overflow-y-auto bg-white dark:bg-slate-900 dark:bg-slate-950 custom-scrollbar relative h-full flex justify-center"
-        >
-          <div className="w-full max-w-4xl px-8 lg:px-16 py-12 pb-48">
-            <AnimatePresence mode="wait">
-              <motion.div 
-                key={activeLesson.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3 }}
+        <div className="flex-1 overflow-y-auto">
+          {categories.map((cat) => (
+            <div key={cat.id}>
+              <Link
+                to={`/interview-prep/${cat.id}`}
+                className={`w-full px-6 py-4 flex items-center justify-between transition-colors border-l-4 ${
+                  activeCategory?.id === cat.id 
+                    ? "bg-now-primary/10 border-now-primary text-now-primary font-bold" 
+                    : "border-transparent hover:bg-slate-100 dark:hover:bg-slate-800"
+                }`}
               >
-                <div className="mb-4 flex items-center">
-                  <button 
-                    onClick={() => setMobileMenuOpen(true)}
-                    className="lg:hidden p-2 -ml-2 rounded-lg hover:bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 flex items-center gap-2 font-medium"
-                  >
-                    <List className="w-5 h-5" /> Menu
-                  </button>
+                <span>{cat.title}</span>
+                {cat.status === "coming_soon" && (
+                  <span className="text-[10px] uppercase tracking-wider bg-slate-200 dark:bg-slate-800 text-slate-500 dark:text-slate-400 px-2 py-0.5 rounded">
+                    Coming Soon
+                  </span>
+                )}
+              </Link>
+              
+              {/* Modules List for Active Category */}
+              {activeCategory?.id === cat.id && questionBank && (
+                <div className="bg-white dark:bg-slate-950 border-y border-slate-200 dark:border-slate-800">
+                  {questionBank.modules.map((mod, mIdx) => (
+                    <button
+                      key={mIdx}
+                      onClick={() => {
+                        setActiveModuleIndex(mIdx);
+                        setActiveQuestionIndex(0);
+                      }}
+                      className={`w-full px-6 py-2.5 pl-10 text-sm text-left transition-colors flex items-center gap-2 ${
+                        activeModuleIndex === mIdx
+                          ? "text-now-primary font-bold bg-now-primary/5"
+                          : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
+                      }`}
+                    >
+                      <div className={`w-1.5 h-1.5 rounded-full ${activeModuleIndex === mIdx ? "bg-now-primary" : "bg-slate-300 dark:bg-slate-700"}`} />
+                      <span className="truncate">{mod.name}</span>
+                      <span className="ml-auto text-xs opacity-50">{mod.questions.length}</span>
+                    </button>
+                  ))}
                 </div>
-                
-                <MarkdownRenderer content={contentToRender} lessonData={activeLesson} />
-
-                <div className="mt-32 pt-10 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
-                   <button 
-                     onClick={goToPrevLesson}
-                     disabled={currentIndex === 0}
-                     className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all ${
-                       currentIndex === 0 
-                         ? "opacity-50 cursor-not-allowed text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900" 
-                         : "bg-white dark:bg-slate-900 dark:bg-slate-950 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-800 shadow-sm hover:bg-slate-50 dark:bg-slate-900 hover:border-now-primary"
-                     }`}
-                   >
-                     <ChevronLeft className="w-5 h-5" /> Previous Lesson
-                   </button>
-                   
-                   <button 
-                     onClick={(e) => {
-                        if(!completedLessons[activeLesson.id]) {
-                           setCompletedLessons(prev => ({ ...prev, [activeLesson.id]: true }));
-                        }
-                        goToNextLesson();
-                     }}
-                     disabled={currentIndex === allLessons.length - 1}
-                     className={`flex items-center gap-2 px-8 py-3 rounded-xl font-bold transition-all shadow-sm ${
-                       currentIndex === allLessons.length - 1
-                         ? "opacity-50 cursor-not-allowed text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800" 
-                         : "bg-now-primary text-white hover:bg-now-accent"
-                     }`}
-                   >
-                     Complete & Continue <IconNext className="w-5 h-5" />
-                   </button>
-                </div>
-
-              </motion.div>
-            </AnimatePresence>
-          </div>
+              )}
+            </div>
+          ))}
         </div>
-
-        {/* Mobile TOC Overlay */}
-        {tocMenuOpen && (
-          <div 
-            className="fixed inset-0 bg-[#0F172A]/20 z-40 xl:hidden"
-            onClick={() => setTocMenuOpen(false)}
-          />
-        )}
-        <div className={`fixed right-0 top-0 xl:relative w-72 flex-shrink-0 border-l border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 dark:bg-slate-950 flex flex-col z-50 h-full overflow-hidden transition-transform duration-300 ${
-          tocMenuOpen ? "translate-x-0" : "translate-x-full xl:translate-x-0"
-        }`}>
-          <div className="p-6 pb-4 flex items-center justify-between">
-            <h3 className="font-bold text-slate-900 dark:text-slate-100 uppercase tracking-widest text-xs">On This Page</h3>
-            <button onClick={() => setTocMenuOpen(false)} className="xl:hidden p-1 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-slate-100"><X size={18} /></button>
-          </div>
-          <div className="flex-1 overflow-y-auto px-6 pb-24 space-y-2 custom-scrollbar">
-            {activeLesson.subtopics && activeLesson.subtopics.map(sub => (
-               <button 
-                 key={sub.id}
-                 onClick={() => { scrollToSubtopic(sub.id); setTocMenuOpen(false); }}
-                 className={`block text-left text-sm transition-all w-full border-l-2 pl-4 py-2 ${
-                   activeSubtopicId === sub.id 
-                     ? "border-now-primary text-now-primary font-bold bg-now-primary/5" 
-                     : "border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-slate-100 hover:border-[#64748B]"
-                 }`}
-               >
-                 {sub.title}
-               </button>
-            ))}
-          </div>
-        </div>
-
       </div>
 
-      {/* Bottom Floating Pill Navigation (Mobile) */}
-      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 lg:hidden flex bg-[#0F172A] text-white rounded-full shadow-xl overflow-hidden font-medium text-sm">
-        <button 
-          onClick={() => { setMobileMenuOpen(true); setTocMenuOpen(false); }}
-          className="px-6 py-3 hover:bg-[#1E293B] transition-colors border-r border-[#334155] flex items-center gap-2"
-        >
-          <List size={16} /> Contents
-        </button>
-        <button 
-          onClick={() => { setTocMenuOpen(true); setMobileMenuOpen(false); }}
-          className="px-6 py-3 hover:bg-[#1E293B] transition-colors flex items-center gap-2"
-        >
-          <List size={16} /> TOC
-        </button>
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col h-full overflow-hidden bg-white dark:bg-slate-950 relative">
+        {activeCategory?.status === "coming_soon" ? (
+          <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
+            <div className="w-24 h-24 mb-6 rounded-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center">
+              <BookOpen className="w-10 h-10 text-slate-400" />
+            </div>
+            <h2 className="text-3xl font-bold mb-4">{activeCategory.title}</h2>
+            <p className="text-lg text-slate-500 dark:text-slate-400 max-w-md">
+              We're working hard to prepare this content. Stay tuned for updates!
+            </p>
+          </div>
+        ) : questionBank ? (
+          <>
+            {/* Top Stats Bar */}
+            <div className="px-8 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50">
+              <div className="flex items-center gap-8">
+                <div>
+                  <div className="text-xs text-slate-500 uppercase tracking-wider font-semibold">Total</div>
+                  <div className="text-xl font-bold">{totalQuestions}</div>
+                </div>
+                <div>
+                  <div className="text-xs text-emerald-500 uppercase tracking-wider font-semibold">Completed</div>
+                  <div className="text-xl font-bold text-emerald-600 dark:text-emerald-400">{progress.completedQuestions.length}</div>
+                </div>
+                <div>
+                  <div className="text-xs text-now-primary uppercase tracking-wider font-semibold">Progress</div>
+                  <div className="text-xl font-bold text-now-primary">{progress.progressPercentage}%</div>
+                </div>
+                <div className="flex gap-4 border-l border-slate-200 dark:border-slate-700 pl-8 ml-2">
+                   <div className="flex flex-col items-center">
+                      <Bookmark className="w-4 h-4 text-amber-500 mb-1" />
+                      <span className="text-xs font-medium">{progress.bookmarkedQuestions.length}</span>
+                   </div>
+                   <div className="flex flex-col items-center">
+                      <Star className="w-4 h-4 text-rose-500 mb-1" />
+                      <span className="text-xs font-medium">{progress.importantQuestions.length}</span>
+                   </div>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-3">
+                 <button onClick={handleReset} className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-lg transition-colors">
+                    <RefreshCw className="w-4 h-4" /> Reset
+                 </button>
+              </div>
+            </div>
+
+            {/* Question Viewer */}
+            {activeQuestion && (
+              <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
+                <div className="max-w-4xl mx-auto">
+                  
+                  {/* Category & Module Header */}
+                  <div className="flex justify-between items-center mb-8">
+                    <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 font-medium">
+                      <span className="text-now-primary">{questionBank.title}</span>
+                      <ChevronRight className="w-4 h-4" />
+                      <span>{activeModule?.name}</span>
+                      <ChevronRight className="w-4 h-4" />
+                      <span>Question {activeQuestionIndex + 1} of {activeModule?.questions.length}</span>
+                    </div>
+
+                    <div className="flex gap-2">
+                      <button onClick={handleToggleBookmark} className={`p-2 rounded-lg transition-colors ${progress.bookmarkedQuestions.includes(activeQuestion.id) ? "bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400" : "hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400"}`} title="Bookmark">
+                        <Bookmark className="w-5 h-5" fill={progress.bookmarkedQuestions.includes(activeQuestion.id) ? "currentColor" : "none"} />
+                      </button>
+                      <button onClick={handleToggleImportant} className={`p-2 rounded-lg transition-colors ${progress.importantQuestions.includes(activeQuestion.id) ? "bg-rose-100 text-rose-600 dark:bg-rose-900/30 dark:text-rose-400" : "hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400"}`} title="Mark Important">
+                        <Star className="w-5 h-5" fill={progress.importantQuestions.includes(activeQuestion.id) ? "currentColor" : "none"} />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Question Text */}
+                  <div className="text-2xl font-bold mb-8 leading-snug whitespace-pre-wrap">
+                    {activeQuestion.question_text}
+                  </div>
+
+                  {/* Options */}
+                  <div className="space-y-3 mb-10">
+                    {activeQuestion.options.map(opt => {
+                      const isSelected = selectedOptions.includes(opt.option_id);
+                      const isCorrect = activeQuestion.correct_options.includes(opt.option_id);
+                      
+                      let optionClass = "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:border-now-primary";
+                      
+                      if (showAnswer) {
+                        if (isCorrect) optionClass = "border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-900 dark:text-emerald-100";
+                        else if (isSelected && !isCorrect) optionClass = "border-rose-500 bg-rose-50 dark:bg-rose-900/20 text-rose-900 dark:text-rose-100";
+                        else optionClass = "border-slate-200 dark:border-slate-800 opacity-50";
+                      } else if (isSelected) {
+                        optionClass = "border-now-primary bg-now-primary/5 text-now-primary";
+                      }
+
+                      return (
+                        <button
+                          key={opt.option_id}
+                          onClick={() => handleOptionToggle(opt.option_id)}
+                          className={`w-full text-left p-4 rounded-xl border-2 flex items-start gap-4 transition-all ${optionClass}`}
+                        >
+                          <div className={`w-6 h-6 shrink-0 rounded ${activeQuestion.question_type === 'single' ? 'rounded-full' : 'rounded'} border-2 flex items-center justify-center ${
+                             showAnswer && isCorrect ? "border-emerald-500 bg-emerald-500 text-white" :
+                             showAnswer && isSelected && !isCorrect ? "border-rose-500 bg-rose-500 text-white" :
+                             isSelected ? "border-now-primary bg-now-primary text-white" : "border-slate-300 dark:border-slate-600"
+                          }`}>
+                            {(showAnswer && isCorrect) || isSelected ? <CheckCircle className="w-4 h-4" /> : null}
+                          </div>
+                          <div className="flex-1 mt-0.5 whitespace-pre-wrap font-medium">
+                            {opt.option_text}
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Explanation Block */}
+                  {showAnswer && activeQuestion.explanation && (
+                    <div className="mb-10 p-6 rounded-xl bg-blue-50 border border-blue-100 dark:bg-blue-900/20 dark:border-blue-800/50">
+                      <h4 className="font-bold text-blue-900 dark:text-blue-300 mb-2 flex items-center gap-2">
+                        <AlertCircle className="w-5 h-5" /> Explanation
+                      </h4>
+                      <p className="text-blue-800 dark:text-blue-200 whitespace-pre-wrap leading-relaxed">
+                        {activeQuestion.explanation}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Bottom Controls */}
+                  <div className="flex items-center justify-between border-t border-slate-200 dark:border-slate-800 pt-8 pb-12">
+                    <button 
+                      onClick={goToPrev}
+                      disabled={activeModuleIndex === 0 && activeQuestionIndex === 0}
+                      className="px-6 py-3 rounded-xl font-bold flex items-center gap-2 text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                    >
+                      <ArrowLeft className="w-5 h-5" /> Previous
+                    </button>
+                    
+                    {!showAnswer ? (
+                      <button 
+                        onClick={handleCheckAnswer}
+                        disabled={selectedOptions.length === 0}
+                        className="px-10 py-3 rounded-xl font-bold bg-now-primary text-white hover:bg-now-accent shadow-md disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                      >
+                        Check Answer
+                      </button>
+                    ) : (
+                      <button 
+                        onClick={goToNext}
+                        className="px-10 py-3 rounded-xl font-bold bg-emerald-500 text-white hover:bg-emerald-600 shadow-md transition-all flex items-center gap-2"
+                      >
+                        Next Question <ArrowRight className="w-5 h-5" />
+                      </button>
+                    )}
+                  </div>
+
+                </div>
+              </div>
+            )}
+          </>
+        ) : null}
       </div>
 
-      <style>{`
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background-color: #CBD5E1;
-          border-radius: 20px;
-        }
-        .custom-scrollbar:hover::-webkit-scrollbar-thumb {
-          background-color: #94A3B8;
-        }
-        
-        html {
-          scroll-behavior: smooth;
-        }
-      `}</style>
     </div>
   );
 }
