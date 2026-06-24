@@ -12,6 +12,7 @@ export interface CertificateData {
   mentorName: string;
   department?: string;
   projectUndertaken?: string;
+  rolesAndResponsibilities?: string;
   location?: string;
   certificateId: string;
   verificationNumber: string;
@@ -20,7 +21,7 @@ export interface CertificateData {
 }
 
 export const CertificateTemplate = React.forwardRef<HTMLDivElement, { data: CertificateData }>(({ data }, ref) => {
-  const isCompletionLetter = data.templateType === "Internship Completion Letter";
+  const isCompletionLetter = data.templateType === "Internship Completion Letter" || data.templateType === "Offer Letter";
   
   // Format dates cleanly (e.g., "June 23, 2026")
   const formatDate = (dateStr: string) => {
@@ -80,9 +81,16 @@ export const CertificateTemplate = React.forwardRef<HTMLDivElement, { data: Cert
       <div className="text-[17px] leading-[1.7] text-black space-y-6 min-h-[180px]">
         {isCompletionLetter ? (
           <>
-            <p>
-              This is to certify that <strong>{data.candidateName || "[Candidate Name]"}</strong> was an intern in our organization from <strong>{formatMonthYear(data.startDate)}</strong> to <strong>{formatMonthYear(data.endDate)}</strong> as part of the <strong>{data.internshipTitle || "[Internship Program]"}</strong>, under the mentorship of <strong>{data.mentorName || "[Mentor Name]"}</strong> and has successfully completed the internship.
-            </p>
+            {data.templateType === "Offer Letter" ? (
+              <p>
+                We are pleased to offer you the position of an intern at our organization from <strong>{formatMonthYear(data.startDate)}</strong> to <strong>{formatMonthYear(data.endDate)}</strong> as part of the <strong>{data.internshipTitle || "[Internship Program]"}</strong>, under the mentorship of <strong>{data.mentorName || "[Mentor Name]"}</strong>.
+              </p>
+            ) : (
+              <p>
+                This is to certify that <strong>{data.candidateName || "[Candidate Name]"}</strong> was an intern in our organization from <strong>{formatMonthYear(data.startDate)}</strong> to <strong>{formatMonthYear(data.endDate)}</strong> as part of the <strong>{data.internshipTitle || "[Internship Program]"}</strong>, under the mentorship of <strong>{data.mentorName || "[Mentor Name]"}</strong> and has successfully completed the internship.
+              </p>
+            )}
+            
             {data.projectUndertaken && (
               <div className="mt-6">
                 <p className="mb-2">Project undertaken:</p>
@@ -91,6 +99,16 @@ export const CertificateTemplate = React.forwardRef<HTMLDivElement, { data: Cert
                 </ol>
               </div>
             )}
+            
+            {data.rolesAndResponsibilities && (
+              <div className="mt-6">
+                <p className="mb-2">Intern Role's and Responsibilities:</p>
+                <ul className="list-disc pl-10">
+                  <li className="pl-2">{data.rolesAndResponsibilities}</li>
+                </ul>
+              </div>
+            )}
+            
             <p className="mt-8">We wish you all the best for your future endeavors.</p>
           </>
         ) : (

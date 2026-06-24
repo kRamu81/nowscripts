@@ -21,6 +21,7 @@ const INTERNSHIP_PROGRAMS = [
 ];
 
 const TEMPLATE_TYPES = [
+  "Offer Letter",
   "Internship Completion Letter",
   "Internship Certificate",
   "Experience Letter",
@@ -45,6 +46,7 @@ export default function CertificateStudio() {
     templateType: TEMPLATE_TYPES[0],
     department: "ServiceNow Development",
     projectUndertaken: "",
+    rolesAndResponsibilities: "",
     location: "Full-time Remote",
     companyName: "NowScripts Private Limited",
     issueDate: new Date().toISOString().split('T')[0],
@@ -224,6 +226,10 @@ export default function CertificateStudio() {
               <div>
                 <label className="block text-xs font-semibold text-gray-400 mb-1">Project Undertaken</label>
                 <textarea name="projectUndertaken" value={formData.projectUndertaken} onChange={handleChange} rows={2} placeholder="e.g. Development of content writing modules and learning materials..." className="w-full px-3 py-2 bg-[#0F172A] border border-[rgba(255,255,255,0.1)] rounded text-white focus:outline-none focus:border-now-primary text-sm resize-none"></textarea>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-gray-400 mb-1">Intern Role's and Responsibilities</label>
+                <textarea name="rolesAndResponsibilities" value={formData.rolesAndResponsibilities} onChange={handleChange} rows={2} placeholder="e.g. Assisting in full-stack development tasks..." className="w-full px-3 py-2 bg-[#0F172A] border border-[rgba(255,255,255,0.1)] rounded text-white focus:outline-none focus:border-now-primary text-sm resize-none"></textarea>
               </div>
               <div>
                 <label className="block text-xs font-semibold text-gray-400 mb-1">Mentor Name *</label>
