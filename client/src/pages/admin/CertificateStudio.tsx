@@ -87,7 +87,7 @@ export default function CertificateStudio() {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.candidateName || !formData.email || !formData.startDate || !formData.endDate) {
+    if (!formData.candidateName || !formData.email || !formData.startDate || !formData.endDate || !formData.mentorName) {
       return handleToast("Please fill all required fields");
     }
     createMutation.mutate(formData);

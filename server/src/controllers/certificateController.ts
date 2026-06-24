@@ -32,7 +32,7 @@ export const createCertificate = async (req: Request, res: Response, next: NextF
     const { 
       candidateName, email, internshipTitle, companyName, 
       issueDate, startDate, endDate, mentorName,
-      templateType, department, projectUndertaken, location
+      templateType, department, projectUndertaken, rolesAndResponsibilities, location
     } = req.body;
 
     const certificateId = await generateCertificateId();
@@ -53,6 +53,7 @@ export const createCertificate = async (req: Request, res: Response, next: NextF
       templateType,
       department,
       projectUndertaken,
+      rolesAndResponsibilities,
       location,
       verificationUrl: relativeVerificationUrl,
       issuedBy: req.userId,
