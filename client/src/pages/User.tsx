@@ -348,7 +348,7 @@ export default function UserProfile() {
                 
                 <div className="flex items-center gap-2 text-[15px] text-slate-600 dark:text-slate-400">
                    <Calendar className="w-4 h-4" /> 
-                   <span>Joined <ReactTimeAgo date={Date.parse(profile.createdAt)} locale="en-US" timeStyle="round" /></span>
+                   <span>Joined {profile.createdAt && !isNaN(Date.parse(profile.createdAt)) ? <ReactTimeAgo date={Date.parse(profile.createdAt)} locale="en-US" timeStyle="round" /> : "recently"}</span>
                 </div>
 
                 {profile.certifications && profile.certifications.length > 0 && (
