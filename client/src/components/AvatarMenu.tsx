@@ -216,34 +216,36 @@ function AuthMenu({
             </p>
           </MenuItem>
         </Link>
-        <Link
-          to={`/admin/certificates`}
-          style={{ textDecoration: "none", color: "inherit" }}
-        >
-          <MenuItem
-            sx={[{ "&:hover": { backgroundColor: "transparent" } }]}
-            onClick={handleClose}
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              padding: "8px 18px",
-            }}
+        {(userId === "demo_admin_123" || role === "Admin" || role === "Super Admin" || email === "nowadmin@gmail.com") && (
+          <Link
+            to={`/admin/certificates`}
+            style={{ textDecoration: "none", color: "inherit" }}
           >
-            <span
-              style={{ color: "gray", margin: "0 10px", marginBottom: "-5px" }}
+            <MenuItem
+              sx={[{ "&:hover": { backgroundColor: "transparent" } }]}
+              onClick={handleClose}
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                padding: "8px 18px",
+              }}
             >
-              {writeSmallIcon}
-            </span>
-            <p
-              style={{ marginLeft: "5px", color: "#6b6a6a", fontSize: "14px" }}
-            >
-              Certificates
-            </p>
-          </MenuItem>
-        </Link>
+              <span
+                style={{ color: "gray", margin: "0 10px", marginBottom: "-5px" }}
+              >
+                {writeSmallIcon}
+              </span>
+              <p
+                style={{ marginLeft: "5px", color: "#6b6a6a", fontSize: "14px" }}
+              >
+                Certificates
+              </p>
+            </MenuItem>
+          </Link>
+        )}
         {/* Admin Link if role is Admin or Super Admin */}
-        {(userId === "demo_admin_123" || role === "Admin" || role === "Super Admin") && (
+        {(userId === "demo_admin_123" || role === "Admin" || role === "Super Admin" || email === "nowadmin@gmail.com") && (
            <Link
              to={`/admin/users`}
              style={{ textDecoration: "none", color: "inherit" }}
