@@ -4,23 +4,21 @@ import ServerError from "../utils/ServerError";
 import crypto from "crypto";
 
 const generateCertificateId = async () => {
-  const currentYear = new Date().getFullYear();
-  // Find the latest certificate for the current year to get the sequential number
-  const lastCert = await Certificate.findOne({
-    certificateId: { $regex: `^NS-${currentYear}-` }
-  }).sort({ createdAt: -1 });
-
-  let sequence = 1;
-  if (lastCert) {
-    const parts = lastCert.certificateId.split("-");
-    const lastSequence = parseInt(parts[2], 10);
-    if (!isNaN(lastSequence)) {
-      sequence = lastSequence + 1;
+  let isUnique = false;
+  let id = "";
+  
+  while (!isUnique) {
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const chars = Array.from({length: 3}, () => letters[Math.floor(Math.random() * letters.length)]).join('');
+    const numbers = Math.floor(1000 + Math.random() * 9000); // 1000 to 9999
+    id = `CID${chars}${numbers}`;
+    
+    const existing = await Certificate.findOne({ certificateId: id });
+    if (!existing) {
+      isUnique = true;
     }
   }
-
-  // Format as NS-YYYY-XXXX (e.g., NS-2026-0001)
-  return `NS-${currentYear}-${sequence.toString().padStart(4, "0")}`;
+  return id;
 };
 
 const generateVerificationNumber = () => {

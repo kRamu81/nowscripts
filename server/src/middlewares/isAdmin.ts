@@ -16,7 +16,7 @@ const isAdmin = async (req: Request, res: Response, next: NextFunction) => {
     // Fetch user to check role
     const user = await User.findById(req.userId);
     if (!user) throw new ServerError(401, "User not found");
-    if (user.role !== "Admin") {
+    if (user.role !== "Admin" && user.role !== "Super Admin") {
       throw new ServerError(403, "Forbidden: Admin access required");
     }
 

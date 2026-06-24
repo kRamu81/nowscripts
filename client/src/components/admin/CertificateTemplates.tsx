@@ -71,9 +71,9 @@ export const CertificateTemplate = React.forwardRef<HTMLDivElement, { data: Cert
 
       {/* Name and ID Block */}
       <div className="mb-10 text-left">
-        <h2 className="text-[20px] font-bold text-black mb-1">Name: {data.candidateName || "[Candidate Name]"}</h2>
-        <p className="text-gray-600 text-[15px]">
-          Certificate ID: <span className="font-semibold text-gray-800">{data.certificateId || "[Auto-Generated]"}</span> · {data.location || "Full-time Remote"}
+        <h2 className="text-[20px] font-bold mb-1" style={{ color: "#000000" }}>Name: {data.candidateName || "[Candidate Name]"}</h2>
+        <p className="text-[15px]" style={{ color: "#4B5563" }}>
+          Certificate ID: <span className="font-semibold" style={{ color: "#1F2937" }}>{data.certificateId || "[Auto-Generated]"}</span> · {data.location || "Full-time Remote"}
         </p>
       </div>
 
