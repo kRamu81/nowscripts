@@ -131,7 +131,9 @@ export const forgotPassword = asyncHandler(async (req, res, next) => {
     return;
   }
 
-  const otp = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false, lowerCaseAlphabets: false });
+  // Use fixed OTP in development or if SMTP is not configured
+  const isDevOrNoSMTP = env.DEV || !env.SMTP_HOST;
+  const otp = isDevOrNoSMTP ? "333333" : otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false, lowerCaseAlphabets: false });
   
   // Save OTP
   await PasswordReset.deleteMany({ email }); // Clear previous
@@ -141,14 +143,16 @@ export const forgotPassword = asyncHandler(async (req, res, next) => {
     expiresAt: new Date(Date.now() + 10 * 60 * 1000) // 10 minutes
   });
 
-  const sent = await sendOTP(email, user.name, otp);
-  if (!sent) {
-    throw new ServerError(500, "Email could not be sent. Try again later.");
+  if (!isDevOrNoSMTP) {
+    const sent = await sendOTP(email, user.name, otp);
+    if (!sent) {
+      throw new ServerError(500, "Email could not be sent. Try again later.");
+    }
   }
 
   await logActivity(user._id, "OTP_REQUEST", req.ip, req.headers['user-agent']);
 
-  res.status(200).json({ message: "If that email exists, an OTP has been sent." });
+  res.status(200).json({ message: "Enter the reset code sent to your email." });
 });
 
 export const verifyOTP = asyncHandler(async (req, res, next) => {
