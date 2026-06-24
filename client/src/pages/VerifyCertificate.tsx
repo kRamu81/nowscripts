@@ -73,11 +73,11 @@ export default function VerifyCertificate() {
               placeholder="Enter Certificate ID or Verification Number" 
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
-              className="w-full bg-[#0F172A] border border-[rgba(255,255,255,0.1)] rounded-full py-4 pl-12 pr-32 text-white placeholder:text-[#64748B] focus:outline-none focus:border-now-primary focus:ring-1 focus:ring-now-primary transition-all text-lg"
+              className="w-full bg-[#0F172A] border border-[rgba(255,255,255,0.1)] rounded-full py-4 pl-12 pr-24 sm:pr-32 text-white placeholder:text-[#64748B] focus:outline-none focus:border-now-primary focus:ring-1 focus:ring-now-primary transition-all text-sm md:text-lg"
             />
             <button 
               type="submit" 
-              className="absolute right-2 px-6 py-2 bg-now-primary text-black font-bold rounded-full hover:bg-now-accent transition-colors"
+              className="absolute right-2 px-4 sm:px-6 py-2 bg-now-primary text-black font-bold rounded-full hover:bg-now-accent transition-colors text-sm md:text-base"
             >
               Verify
             </button>

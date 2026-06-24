@@ -206,9 +206,14 @@ export default function LearnDashboard() {
           mobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         }`}>
           <div className="p-6 border-b border-slate-200 dark:border-slate-800">
-            <h2 className="text-xl font-bold mb-4 flex items-center gap-2 text-slate-900 dark:text-slate-100">
-              <BookOpen className="text-now-primary w-5 h-5" /> Course Contents
-            </h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold flex items-center gap-2 text-slate-900 dark:text-slate-100">
+                <BookOpen className="text-now-primary w-5 h-5" /> Course Contents
+              </h2>
+              <button className="lg:hidden p-2 text-slate-500 hover:text-slate-900 dark:hover:text-white" onClick={() => setMobileMenuOpen(false)}>
+                <X className="w-5 h-5" />
+              </button>
+            </div>
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 dark:text-slate-400" />
               <input 
@@ -335,9 +340,9 @@ export default function LearnDashboard() {
 
         <div 
           ref={scrollContainerRef}
-          className="flex-1 overflow-y-auto bg-white dark:bg-slate-900 dark:bg-slate-950 custom-scrollbar relative h-full flex justify-center"
+          className="flex-1 overflow-y-auto bg-white dark:bg-slate-900 dark:bg-slate-950 custom-scrollbar relative h-full flex justify-center w-full min-w-0"
         >
-          <div className="w-full max-w-4xl px-8 lg:px-16 py-12 pb-48">
+          <div className="w-full max-w-4xl px-4 lg:px-8 xl:px-16 py-8 xl:py-12 pb-48 overflow-x-hidden">
             <AnimatePresence mode="wait">
               <motion.div 
                 key={activeLesson.id}
@@ -346,28 +351,36 @@ export default function LearnDashboard() {
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.3 }}
               >
-                <div className="mb-4 flex items-center">
+                <div className="mb-4 flex items-center justify-between">
                   <button 
                     onClick={() => setMobileMenuOpen(true)}
                     className="lg:hidden p-2 -ml-2 rounded-lg hover:bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 flex items-center gap-2 font-medium"
                   >
                     <List className="w-5 h-5" /> Menu
                   </button>
+                  {activeLesson.subtopics && activeLesson.subtopics.length > 0 && (
+                    <button 
+                      onClick={() => setTocMenuOpen(true)}
+                      className="xl:hidden p-2 -mr-2 rounded-lg hover:bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 flex items-center gap-2 font-medium"
+                    >
+                      <List className="w-5 h-5" /> TOC
+                    </button>
+                  )}
                 </div>
                 
                 <MarkdownRenderer content={contentToRender} lessonData={activeLesson} />
 
-                <div className="mt-32 pt-10 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                <div className="mt-20 lg:mt-32 pt-8 lg:pt-10 border-t border-slate-200 dark:border-slate-800 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-4">
                    <button 
                      onClick={goToPrevLesson}
                      disabled={currentIndex === 0}
-                     className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all ${
+                     className={`flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold transition-all min-h-[44px] ${
                        currentIndex === 0 
                          ? "opacity-50 cursor-not-allowed text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900" 
                          : "bg-white dark:bg-slate-900 dark:bg-slate-950 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-800 shadow-sm hover:bg-slate-50 dark:bg-slate-900 hover:border-now-primary"
                      }`}
                    >
-                     <ChevronLeft className="w-5 h-5" /> Previous Lesson
+                     <ChevronLeft className="w-5 h-5" /> <span className="sm:inline">Previous Lesson</span>
                    </button>
                    
                    <button 
@@ -378,7 +391,7 @@ export default function LearnDashboard() {
                         goToNextLesson();
                      }}
                      disabled={currentIndex === allLessons.length - 1}
-                     className={`flex items-center gap-2 px-8 py-3 rounded-xl font-bold transition-all shadow-sm ${
+                     className={`flex items-center justify-center gap-2 px-8 py-3 rounded-xl font-bold transition-all shadow-sm min-h-[44px] ${
                        currentIndex === allLessons.length - 1
                          ? "opacity-50 cursor-not-allowed text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800" 
                          : "bg-now-primary text-white hover:bg-now-accent"

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { 
   Search, ChevronRight, CheckCircle, Bookmark, Star, ArrowLeft, ArrowRight,
-  Target, BarChart3, AlertCircle, PlayCircle, RefreshCw, BookOpen
+  Target, BarChart3, AlertCircle, PlayCircle, RefreshCw, BookOpen, Menu, X, List
 } from "lucide-react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
@@ -60,12 +60,15 @@ export default function InterviewPrepDashboard() {
 
   const [activeModuleIndex, setActiveModuleIndex] = useState(0);
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
-  
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [showAnswer, setShowAnswer] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // Load index.json
+  // Mobile responsiveness states
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [questionPaletteOpen, setQuestionPaletteOpen] = useState(false);
+
+  // Load index.json on mount
   useEffect(() => {
     fetch("/content/interview-prep/index.json")
       .then(res => res.json())
@@ -264,13 +267,31 @@ export default function InterviewPrepDashboard() {
   }
 
   return (
-    <div className="bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans flex h-full overflow-hidden">
-      {/* Sidebar */}
-      <div className="w-80 flex-shrink-0 border-r border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 flex flex-col h-full overflow-hidden">
-        <div className="p-6 border-b border-slate-200 dark:border-slate-800">
-          <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+    <div className="bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans flex h-full overflow-hidden relative">
+      
+      {/* Mobile Overlays */}
+      {mobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-[#0F172A]/40 z-40 lg:hidden backdrop-blur-sm transition-opacity"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+      {questionPaletteOpen && (
+        <div 
+          className="fixed inset-0 bg-[#0F172A]/40 z-40 lg:hidden backdrop-blur-sm transition-opacity"
+          onClick={() => setQuestionPaletteOpen(false)}
+        />
+      )}
+
+      {/* Main Categories Sidebar */}
+      <div className={`fixed inset-y-0 left-0 z-50 transform ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 lg:static lg:flex w-80 flex-shrink-0 border-r border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 flex-col h-full overflow-hidden transition-transform duration-300 ease-in-out`}>
+        <div className="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+          <h2 className="text-xl font-bold flex items-center gap-2">
             <BookOpen className="text-now-primary w-5 h-5" /> Interview Prep
           </h2>
+          <button className="lg:hidden p-2 text-slate-500 hover:text-slate-900 dark:hover:text-white" onClick={() => setMobileMenuOpen(false)}>
+            <X className="w-5 h-5" />
+          </button>
         </div>
 
         <div className="flex-1 overflow-y-auto">
@@ -298,9 +319,10 @@ export default function InterviewPrepDashboard() {
                   {questionBank.modules.map((mod, mIdx) => (
                     <button
                       key={mIdx}
-                      onClick={() => {
+                        onClick={() => {
                         setActiveModuleIndex(mIdx);
                         setActiveQuestionIndex(0);
+                        setMobileMenuOpen(false); // Close on selection (mobile)
                       }}
                       className={`w-full px-6 py-2.5 pl-10 text-sm text-left transition-colors flex items-center gap-2 ${
                         activeModuleIndex === mIdx
@@ -320,8 +342,51 @@ export default function InterviewPrepDashboard() {
         </div>
       </div>
 
+      {/* Question Palette Sidebar (Right side, primarily for mobile overlay) */}
+      <div className={`fixed inset-y-0 right-0 z-50 transform ${questionPaletteOpen ? "translate-x-0" : "translate-x-full"} lg:hidden w-80 flex-shrink-0 border-l border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 flex-col h-full overflow-hidden transition-transform duration-300 ease-in-out`}>
+         <div className="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <h2 className="text-xl font-bold flex items-center gap-2">
+               Question Palette
+            </h2>
+            <button className="p-2 text-slate-500 hover:text-slate-900 dark:hover:text-white" onClick={() => setQuestionPaletteOpen(false)}>
+               <X className="w-5 h-5" />
+            </button>
+         </div>
+         <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
+            {activeModule?.questions.map((q, idx) => {
+               const isCompleted = progress.completedQuestions.includes(q.id);
+               return (
+                 <button
+                   key={q.id}
+                   onClick={() => {
+                     setActiveQuestionIndex(idx);
+                     setQuestionPaletteOpen(false);
+                   }}
+                   className={`w-full p-3 mb-2 text-left text-sm rounded-lg border transition-colors flex items-center gap-3 ${
+                     activeQuestionIndex === idx 
+                       ? "bg-now-primary/10 border-now-primary text-now-primary font-bold"
+                       : isCompleted
+                         ? "bg-emerald-50 dark:bg-emerald-900/10 border-emerald-200 dark:border-emerald-800/30 text-emerald-700 dark:text-emerald-400"
+                         : "bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-now-primary/50"
+                   }`}
+                 >
+                   <div className={`w-6 h-6 rounded-full shrink-0 flex items-center justify-center border ${
+                     activeQuestionIndex === idx ? "bg-now-primary text-white border-now-primary" :
+                     isCompleted ? "bg-emerald-500 text-white border-emerald-500" : "border-slate-300 dark:border-slate-700 text-slate-500"
+                   }`}>
+                     {idx + 1}
+                   </div>
+                   <div className="truncate flex-1">
+                     Question {idx + 1}
+                   </div>
+                 </button>
+               );
+            })}
+         </div>
+      </div>
+
       {/* Main Content */}
-      <div className="flex-1 flex flex-col h-full overflow-hidden bg-white dark:bg-slate-950 relative">
+      <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden bg-white dark:bg-slate-950 relative">
         {activeCategory?.status === "coming_soon" ? (
           <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
             <div className="w-24 h-24 mb-6 rounded-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center">
@@ -335,34 +400,40 @@ export default function InterviewPrepDashboard() {
         ) : questionBank ? (
           <>
             {/* Top Stats Bar */}
-            <div className="px-8 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50">
-              <div className="flex items-center gap-8">
+            <div className="px-4 lg:px-8 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50 overflow-x-auto custom-scrollbar">
+              <div className="flex items-center gap-4 lg:gap-8 min-w-max">
+                <button className="lg:hidden p-2 -ml-2 text-slate-600 hover:bg-slate-200 rounded-lg dark:text-slate-300 dark:hover:bg-slate-800 transition-colors" onClick={() => setMobileMenuOpen(true)}>
+                  <Menu className="w-5 h-5" />
+                </button>
                 <div>
-                  <div className="text-xs text-slate-500 uppercase tracking-wider font-semibold">Total</div>
-                  <div className="text-xl font-bold">{totalQuestions}</div>
+                  <div className="text-[10px] lg:text-xs text-slate-500 uppercase tracking-wider font-semibold">Total</div>
+                  <div className="text-lg lg:text-xl font-bold">{totalQuestions}</div>
                 </div>
                 <div>
-                  <div className="text-xs text-emerald-500 uppercase tracking-wider font-semibold">Completed</div>
-                  <div className="text-xl font-bold text-emerald-600 dark:text-emerald-400">{progress.completedQuestions.length}</div>
+                  <div className="text-[10px] lg:text-xs text-emerald-500 uppercase tracking-wider font-semibold">Completed</div>
+                  <div className="text-lg lg:text-xl font-bold text-emerald-600 dark:text-emerald-400">{progress.completedQuestions.length}</div>
                 </div>
                 <div>
-                  <div className="text-xs text-now-primary uppercase tracking-wider font-semibold">Progress</div>
-                  <div className="text-xl font-bold text-now-primary">{progress.progressPercentage}%</div>
+                  <div className="text-[10px] lg:text-xs text-now-primary uppercase tracking-wider font-semibold">Progress</div>
+                  <div className="text-lg lg:text-xl font-bold text-now-primary">{progress.progressPercentage}%</div>
                 </div>
-                <div className="flex gap-4 border-l border-slate-200 dark:border-slate-700 pl-8 ml-2">
+                <div className="flex gap-4 border-l border-slate-200 dark:border-slate-700 pl-4 lg:pl-8 ml-2">
                    <div className="flex flex-col items-center">
-                      <Bookmark className="w-4 h-4 text-amber-500 mb-1" />
-                      <span className="text-xs font-medium">{progress.bookmarkedQuestions.length}</span>
+                      <Bookmark className="w-4 h-4 text-amber-500 mb-0.5 lg:mb-1" />
+                      <span className="text-[10px] lg:text-xs font-medium">{progress.bookmarkedQuestions.length}</span>
                    </div>
                    <div className="flex flex-col items-center">
-                      <Star className="w-4 h-4 text-rose-500 mb-1" />
-                      <span className="text-xs font-medium">{progress.importantQuestions.length}</span>
+                      <Star className="w-4 h-4 text-rose-500 mb-0.5 lg:mb-1" />
+                      <span className="text-[10px] lg:text-xs font-medium">{progress.importantQuestions.length}</span>
                    </div>
                 </div>
               </div>
               
-              <div className="flex items-center gap-3">
-                 <button onClick={handleReset} className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-lg transition-colors">
+              <div className="flex items-center gap-3 min-w-max pl-4">
+                 <button onClick={() => setQuestionPaletteOpen(true)} className="lg:hidden flex items-center gap-2 px-3 py-1.5 text-xs lg:text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-lg transition-colors">
+                    <List className="w-4 h-4" /> Palette
+                 </button>
+                 <button onClick={handleReset} className="flex items-center gap-2 px-3 py-1.5 lg:px-4 lg:py-2 text-xs lg:text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-lg transition-colors">
                     <RefreshCw className="w-4 h-4" /> Reset
                  </button>
               </div>
@@ -374,16 +445,16 @@ export default function InterviewPrepDashboard() {
                 <div className="max-w-4xl mx-auto">
                   
                   {/* Category & Module Header */}
-                  <div className="flex justify-between items-center mb-8">
-                    <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 font-medium">
-                      <span className="text-now-primary">{questionBank.title}</span>
-                      <ChevronRight className="w-4 h-4" />
-                      <span>{activeModule?.name}</span>
-                      <ChevronRight className="w-4 h-4" />
-                      <span>Question {activeQuestionIndex + 1} of {activeModule?.questions.length}</span>
+                  <div className="flex justify-between items-start lg:items-center mb-6 lg:mb-8 flex-col lg:flex-row gap-4">
+                    <div className="flex flex-wrap items-center gap-2 text-xs lg:text-sm text-slate-500 dark:text-slate-400 font-medium">
+                      <span className="text-now-primary truncate max-w-[120px] lg:max-w-none">{questionBank.title}</span>
+                      <ChevronRight className="w-4 h-4 flex-shrink-0" />
+                      <span className="truncate max-w-[120px] lg:max-w-none">{activeModule?.name}</span>
+                      <ChevronRight className="w-4 h-4 flex-shrink-0" />
+                      <span className="whitespace-nowrap">Question {activeQuestionIndex + 1} of {activeModule?.questions.length}</span>
                     </div>
 
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 self-end lg:self-auto">
                       <button onClick={handleToggleBookmark} className={`p-2 rounded-lg transition-colors ${progress.bookmarkedQuestions.includes(activeQuestion.id) ? "bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400" : "hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400"}`} title="Bookmark">
                         <Bookmark className="w-5 h-5" fill={progress.bookmarkedQuestions.includes(activeQuestion.id) ? "currentColor" : "none"} />
                       </button>
@@ -394,7 +465,7 @@ export default function InterviewPrepDashboard() {
                   </div>
 
                   {/* Question Text */}
-                  <div className="text-2xl font-bold mb-8 leading-snug whitespace-pre-wrap">
+                  <div className="text-xl lg:text-2xl font-bold mb-6 lg:mb-8 leading-snug whitespace-pre-wrap">
                     {activeQuestion.question_text}
                   </div>
 
@@ -418,16 +489,16 @@ export default function InterviewPrepDashboard() {
                         <button
                           key={opt.option_id}
                           onClick={() => handleOptionToggle(opt.option_id)}
-                          className={`w-full text-left p-4 rounded-xl border-2 flex items-start gap-4 transition-all ${optionClass}`}
+                          className={`w-full min-h-[44px] text-left p-3 lg:p-4 rounded-xl border-2 flex items-start gap-3 lg:gap-4 transition-all ${optionClass}`}
                         >
-                          <div className={`w-6 h-6 shrink-0 rounded ${activeQuestion.question_type === 'single' ? 'rounded-full' : 'rounded'} border-2 flex items-center justify-center ${
+                          <div className={`w-5 h-5 lg:w-6 lg:h-6 shrink-0 rounded ${activeQuestion.question_type === 'single' ? 'rounded-full' : 'rounded'} border-2 flex items-center justify-center ${
                              showAnswer && isCorrect ? "border-emerald-500 bg-emerald-500 text-white" :
                              showAnswer && isSelected && !isCorrect ? "border-rose-500 bg-rose-500 text-white" :
                              isSelected ? "border-now-primary bg-now-primary text-white" : "border-slate-300 dark:border-slate-600"
                           }`}>
-                            {(showAnswer && isCorrect) || isSelected ? <CheckCircle className="w-4 h-4" /> : null}
+                            {(showAnswer && isCorrect) || isSelected ? <CheckCircle className="w-3 h-3 lg:w-4 lg:h-4" /> : null}
                           </div>
-                          <div className="flex-1 mt-0.5 whitespace-pre-wrap font-medium">
+                          <div className="flex-1 mt-0 lg:mt-0.5 text-sm lg:text-base whitespace-pre-wrap font-medium">
                             {opt.option_text}
                           </div>
                         </button>
@@ -448,27 +519,27 @@ export default function InterviewPrepDashboard() {
                   )}
 
                   {/* Bottom Controls */}
-                  <div className="flex items-center justify-between border-t border-slate-200 dark:border-slate-800 pt-8 pb-12">
+                  <div className="flex flex-col-reverse lg:flex-row items-stretch lg:items-center justify-between border-t border-slate-200 dark:border-slate-800 pt-6 lg:pt-8 pb-12 gap-4">
                     <button 
                       onClick={goToPrev}
                       disabled={activeModuleIndex === 0 && activeQuestionIndex === 0}
-                      className="px-6 py-3 rounded-xl font-bold flex items-center gap-2 text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                      className="min-h-[44px] px-6 py-3 rounded-xl font-bold flex items-center justify-center gap-2 text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                     >
-                      <ArrowLeft className="w-5 h-5" /> Previous
+                      <ArrowLeft className="w-5 h-5" /> <span className="lg:inline">Previous</span>
                     </button>
                     
                     {!showAnswer ? (
                       <button 
                         onClick={handleCheckAnswer}
                         disabled={selectedOptions.length === 0}
-                        className="px-10 py-3 rounded-xl font-bold bg-now-primary text-white hover:bg-now-accent shadow-md disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                        className="min-h-[44px] px-10 py-3 rounded-xl font-bold bg-now-primary text-white hover:bg-now-accent shadow-md disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                       >
                         Check Answer
                       </button>
                     ) : (
                       <button 
                         onClick={goToNext}
-                        className="px-10 py-3 rounded-xl font-bold bg-emerald-500 text-white hover:bg-emerald-600 shadow-md transition-all flex items-center gap-2"
+                        className="min-h-[44px] px-10 py-3 rounded-xl font-bold bg-emerald-500 text-white hover:bg-emerald-600 shadow-md transition-all flex items-center justify-center gap-2"
                       >
                         Next Question <ArrowRight className="w-5 h-5" />
                       </button>

@@ -173,23 +173,23 @@ export default function CertificateStudio() {
       </div>
 
       {/* Main Workspace */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
         
         {/* Left Panel: Form */}
-        <div className="w-[450px] bg-[#1E293B] border-r border-[rgba(255,255,255,0.1)] overflow-y-auto p-6 custom-scrollbar shrink-0">
+        <div className="w-full lg:w-[450px] bg-[#1E293B] border-b lg:border-b-0 lg:border-r border-[rgba(255,255,255,0.1)] overflow-y-auto p-4 lg:p-6 custom-scrollbar shrink-0">
           <form className="space-y-6">
             
             <div className="space-y-4">
               <h3 className="text-white font-bold uppercase tracking-wider text-sm border-b border-[rgba(255,255,255,0.1)] pb-2">Document Settings</h3>
               <div>
                 <label className="block text-xs font-semibold text-gray-400 mb-1">Template Type</label>
-                <select name="templateType" value={formData.templateType} onChange={handleChange} className="w-full px-3 py-2 bg-[#0F172A] border border-[rgba(255,255,255,0.1)] rounded text-white focus:outline-none focus:border-now-primary text-sm">
+                <select name="templateType" value={formData.templateType} onChange={handleChange} className="w-full px-3 py-3 lg:py-2 bg-[#0F172A] border border-[rgba(255,255,255,0.1)] rounded text-white focus:outline-none focus:border-now-primary text-sm min-h-[44px]">
                   {TEMPLATE_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
                 </select>
               </div>
               <div>
                 <label className="block text-xs font-semibold text-gray-400 mb-1">Internship Program</label>
-                <select name="internshipTitle" value={formData.internshipTitle} onChange={handleChange} className="w-full px-3 py-2 bg-[#0F172A] border border-[rgba(255,255,255,0.1)] rounded text-white focus:outline-none focus:border-now-primary text-sm">
+                <select name="internshipTitle" value={formData.internshipTitle} onChange={handleChange} className="w-full px-3 py-3 lg:py-2 bg-[#0F172A] border border-[rgba(255,255,255,0.1)] rounded text-white focus:outline-none focus:border-now-primary text-sm min-h-[44px]">
                   {INTERNSHIP_PROGRAMS.map(p => <option key={p} value={p}>{p}</option>)}
                 </select>
               </div>
@@ -199,50 +199,50 @@ export default function CertificateStudio() {
               <h3 className="text-white font-bold uppercase tracking-wider text-sm border-b border-[rgba(255,255,255,0.1)] pb-2">Candidate Details</h3>
               <div>
                 <label className="block text-xs font-semibold text-gray-400 mb-1">Candidate Name *</label>
-                <input type="text" name="candidateName" value={formData.candidateName} onChange={handleChange} placeholder="e.g. Kalluri Prathap" className="w-full px-3 py-2 bg-[#0F172A] border border-[rgba(255,255,255,0.1)] rounded text-white focus:outline-none focus:border-now-primary text-sm" />
+                <input type="text" name="candidateName" value={formData.candidateName} onChange={handleChange} placeholder="e.g. Kalluri Prathap" className="w-full px-3 py-3 lg:py-2 bg-[#0F172A] border border-[rgba(255,255,255,0.1)] rounded text-white focus:outline-none focus:border-now-primary text-sm min-h-[44px]" />
               </div>
               <div>
                 <label className="block text-xs font-semibold text-gray-400 mb-1">Email Address *</label>
-                <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="e.g. name@example.com" className="w-full px-3 py-2 bg-[#0F172A] border border-[rgba(255,255,255,0.1)] rounded text-white focus:outline-none focus:border-now-primary text-sm" />
+                <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="e.g. name@example.com" className="w-full px-3 py-3 lg:py-2 bg-[#0F172A] border border-[rgba(255,255,255,0.1)] rounded text-white focus:outline-none focus:border-now-primary text-sm min-h-[44px]" />
               </div>
               <div>
                 <label className="block text-xs font-semibold text-gray-400 mb-1">Department</label>
-                <input type="text" name="department" value={formData.department} onChange={handleChange} placeholder="e.g. ServiceNow Development" className="w-full px-3 py-2 bg-[#0F172A] border border-[rgba(255,255,255,0.1)] rounded text-white focus:outline-none focus:border-now-primary text-sm" />
+                <input type="text" name="department" value={formData.department} onChange={handleChange} placeholder="e.g. ServiceNow Development" className="w-full px-3 py-3 lg:py-2 bg-[#0F172A] border border-[rgba(255,255,255,0.1)] rounded text-white focus:outline-none focus:border-now-primary text-sm min-h-[44px]" />
               </div>
             </div>
 
             <div className="space-y-4">
               <h3 className="text-white font-bold uppercase tracking-wider text-sm border-b border-[rgba(255,255,255,0.1)] pb-2">Timeline & Execution</h3>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-gray-400 mb-1">Start Date *</label>
-                  <input type="date" name="startDate" value={formData.startDate} onChange={handleChange} className="w-full px-3 py-2 bg-[#0F172A] border border-[rgba(255,255,255,0.1)] rounded text-white focus:outline-none focus:border-now-primary text-sm [color-scheme:dark]" />
+                  <input type="date" name="startDate" value={formData.startDate} onChange={handleChange} className="w-full px-3 py-3 lg:py-2 bg-[#0F172A] border border-[rgba(255,255,255,0.1)] rounded text-white focus:outline-none focus:border-now-primary text-sm [color-scheme:dark] min-h-[44px]" />
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-gray-400 mb-1">End Date *</label>
-                  <input type="date" name="endDate" value={formData.endDate} onChange={handleChange} className="w-full px-3 py-2 bg-[#0F172A] border border-[rgba(255,255,255,0.1)] rounded text-white focus:outline-none focus:border-now-primary text-sm [color-scheme:dark]" />
+                  <input type="date" name="endDate" value={formData.endDate} onChange={handleChange} className="w-full px-3 py-3 lg:py-2 bg-[#0F172A] border border-[rgba(255,255,255,0.1)] rounded text-white focus:outline-none focus:border-now-primary text-sm [color-scheme:dark] min-h-[44px]" />
                 </div>
               </div>
               <div>
                 <label className="block text-xs font-semibold text-gray-400 mb-1">Project Undertaken</label>
-                <textarea name="projectUndertaken" value={formData.projectUndertaken} onChange={handleChange} rows={2} placeholder="e.g. Development of content writing modules and learning materials..." className="w-full px-3 py-2 bg-[#0F172A] border border-[rgba(255,255,255,0.1)] rounded text-white focus:outline-none focus:border-now-primary text-sm resize-none"></textarea>
+                <textarea name="projectUndertaken" value={formData.projectUndertaken} onChange={handleChange} rows={3} placeholder="e.g. Development of content writing modules and learning materials..." className="w-full px-3 py-3 lg:py-2 bg-[#0F172A] border border-[rgba(255,255,255,0.1)] rounded text-white focus:outline-none focus:border-now-primary text-sm resize-none"></textarea>
               </div>
               <div>
                 <label className="block text-xs font-semibold text-gray-400 mb-1">Intern Role's and Responsibilities</label>
-                <textarea name="rolesAndResponsibilities" value={formData.rolesAndResponsibilities} onChange={handleChange} rows={2} placeholder="e.g. Assisting in full-stack development tasks..." className="w-full px-3 py-2 bg-[#0F172A] border border-[rgba(255,255,255,0.1)] rounded text-white focus:outline-none focus:border-now-primary text-sm resize-none"></textarea>
+                <textarea name="rolesAndResponsibilities" value={formData.rolesAndResponsibilities} onChange={handleChange} rows={3} placeholder="e.g. Assisting in full-stack development tasks..." className="w-full px-3 py-3 lg:py-2 bg-[#0F172A] border border-[rgba(255,255,255,0.1)] rounded text-white focus:outline-none focus:border-now-primary text-sm resize-none"></textarea>
               </div>
               <div>
                 <label className="block text-xs font-semibold text-gray-400 mb-1">Mentor Name *</label>
-                <input type="text" name="mentorName" value={formData.mentorName} onChange={handleChange} placeholder="e.g. NowScripts Private Limited" className="w-full px-3 py-2 bg-[#0F172A] border border-[rgba(255,255,255,0.1)] rounded text-white focus:outline-none focus:border-now-primary text-sm" />
+                <input type="text" name="mentorName" value={formData.mentorName} onChange={handleChange} placeholder="e.g. NowScripts Private Limited" className="w-full px-3 py-3 lg:py-2 bg-[#0F172A] border border-[rgba(255,255,255,0.1)] rounded text-white focus:outline-none focus:border-now-primary text-sm min-h-[44px]" />
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-gray-400 mb-1">Issue Date</label>
-                  <input type="date" name="issueDate" value={formData.issueDate} onChange={handleChange} className="w-full px-3 py-2 bg-[#0F172A] border border-[rgba(255,255,255,0.1)] rounded text-white focus:outline-none focus:border-now-primary text-sm [color-scheme:dark]" />
+                  <input type="date" name="issueDate" value={formData.issueDate} onChange={handleChange} className="w-full px-3 py-3 lg:py-2 bg-[#0F172A] border border-[rgba(255,255,255,0.1)] rounded text-white focus:outline-none focus:border-now-primary text-sm [color-scheme:dark] min-h-[44px]" />
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-gray-400 mb-1">Location</label>
-                  <input type="text" name="location" value={formData.location} onChange={handleChange} placeholder="e.g. Full-time Remote" className="w-full px-3 py-2 bg-[#0F172A] border border-[rgba(255,255,255,0.1)] rounded text-white focus:outline-none focus:border-now-primary text-sm" />
+                  <input type="text" name="location" value={formData.location} onChange={handleChange} placeholder="e.g. Full-time Remote" className="w-full px-3 py-3 lg:py-2 bg-[#0F172A] border border-[rgba(255,255,255,0.1)] rounded text-white focus:outline-none focus:border-now-primary text-sm min-h-[44px]" />
                 </div>
               </div>
             </div>
@@ -257,9 +257,9 @@ export default function CertificateStudio() {
         </div>
 
         {/* Right Panel: Live Preview */}
-        <div className="flex-1 bg-gray-300 overflow-y-auto flex items-center justify-center p-8 custom-scrollbar">
+        <div className="flex-1 bg-gray-300 overflow-auto flex items-start justify-center p-4 lg:p-8 custom-scrollbar">
           {/* Wrapper to scale the A4 component to fit the screen nicely */}
-          <div className="shadow-2xl transition-all duration-300 ease-in-out hover:scale-[1.02] transform-gpu">
+          <div className="shadow-2xl transition-all duration-300 ease-in-out hover:scale-[1.02] transform-gpu origin-top scale-[0.35] sm:scale-[0.5] md:scale-[0.7] lg:scale-[0.8] xl:scale-100 mt-4 mb-[500px] lg:mb-0">
              <CertificateTemplate ref={certificateRef} data={formData} />
           </div>
         </div>

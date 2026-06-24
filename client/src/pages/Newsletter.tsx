@@ -218,7 +218,7 @@ export default function Newsletter() {
                   {featuredArticle.summary}
                 </p>
 
-                <div className="flex items-center justify-between mt-auto">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-auto gap-4">
                   <div className="flex flex-col">
                     <span className="text-sm font-bold text-white">{featuredArticle.source}</span>
                     {featuredArticle.author && <span className="text-xs text-[#64748B]">by {featuredArticle.author}</span>}
@@ -227,7 +227,7 @@ export default function Newsletter() {
                     href={featuredArticle.articleUrl} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#00E5FF]/10 text-[#00E5FF] font-bold hover:bg-[#00E5FF]/20 transition-colors"
+                    className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-[#00E5FF]/10 text-[#00E5FF] font-bold hover:bg-[#00E5FF]/20 transition-colors w-full sm:w-auto"
                   >
                     Read Full Story <ExternalLink className="w-4 h-4" />
                   </a>
