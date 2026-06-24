@@ -134,15 +134,23 @@ export default function EditProfileModal({ profile, onClose, refetch }: EditProf
               <label className="block text-sm font-semibold text-slate-900 dark:text-slate-100 mb-4">Photo</label>
               <div className="flex items-center gap-6">
                 <img 
-                  src={avatarPreview || "https://firebasestorage.googleapis.com/v0/b/upload-pics-e599e.appspot.com/o/images%2F1_dmbNkD5D-u45r44go_cf0g.png?alt=media&token=3ef51503-f601-448b-a55b-0682607ddc8a"} 
+                  src={avatarPreview || `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(formData.name)}`} 
                   alt="Avatar preview" 
                   className="w-24 h-24 rounded-full object-cover border border-slate-200 dark:border-slate-800"
                 />
                 <div className="flex flex-col gap-2">
-                  <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-full font-medium transition-colors text-sm">
-                    <Upload className="w-4 h-4" /> Update
-                    <input type="file" accept="image/png, image/jpeg, image/webp" className="hidden" onChange={handleAvatarChange} />
-                  </label>
+                  <div className="flex items-center gap-3">
+                    <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-full font-medium transition-colors text-sm">
+                      <Upload className="w-4 h-4" /> Upload Image
+                      <input type="file" accept="image/png, image/jpeg, image/webp" className="hidden" onChange={handleAvatarChange} />
+                    </label>
+                    <button type="button" onClick={() => setAvatarPreview(`https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(formData.name + Math.random().toString())}`)} className="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-full font-medium transition-colors text-sm">
+                      Generate Random Avatar
+                    </button>
+                    <button type="button" onClick={() => setAvatarPreview(`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(formData.name)}`)} className="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-full font-medium transition-colors text-sm">
+                      Use Initials Avatar
+                    </button>
+                  </div>
                   <span className="text-xs text-slate-500 dark:text-slate-400">Recommended: Square JPG, PNG, or WEBP, at least 1,000 pixels per side. Max 5MB.</span>
                 </div>
               </div>

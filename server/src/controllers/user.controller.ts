@@ -2,10 +2,26 @@ import asyncHandler from "express-async-handler";
 import User from "../models/user";
 import ServerError from "../utils/ServerError";
 
+import env from "../utils/envalid";
+import { v2 as cloudinary } from "cloudinary";
+
 export const editUser = asyncHandler(async (req, res, next) => {
   const { userId } = req;
   const user = await User.findOne({ _id: userId });
   if (!user) throw new ServerError(400, "User doesn't exist");
+
+  if (req.body.avatar && req.body.avatar.startsWith("data:image")) {
+    if (env.CLOUDINARY_CLOUD_NAME && env.CLOUDINARY_API_KEY && env.CLOUDINARY_API_SECRET) {
+      cloudinary.config({
+        cloud_name: env.CLOUDINARY_CLOUD_NAME,
+        api_key: env.CLOUDINARY_API_KEY,
+        api_secret: env.CLOUDINARY_API_SECRET,
+      });
+      const uploadRes = await cloudinary.uploader.upload(req.body.avatar, { folder: "nowscripts_avatars" });
+      req.body.avatar = uploadRes.secure_url;
+    }
+  }
+
   const updatedRef = await User.updateOne({ _id: userId }, req.body);
   res.send({ success: updatedRef.modifiedCount == 1 });
 });

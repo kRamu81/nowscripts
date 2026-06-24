@@ -17,6 +17,9 @@ const env = cleanEnv(process.env, {
   SMTP_PORT: port({ default: 0 }),
   SMTP_USER: str({ default: "" }),
   SMTP_PASS: str({ default: "" }),
+  CLOUDINARY_CLOUD_NAME: str({ default: "" }),
+  CLOUDINARY_API_KEY: str({ default: "" }),
+  CLOUDINARY_API_SECRET: str({ default: "" }),
 });
 
 export default env;

@@ -9,19 +9,24 @@ import ListSection from "../components/ListSection";
 import UserCard from "../components/UserCard";
 import AboutSection from "../components/AboutSection";
 import SavedSection from "../components/SavedSection";
-import { Award, Target, Zap, LayoutDashboard, Settings, MoreHorizontal, BookOpen, Star, Mail, MapPin, Link as LinkIcon, Calendar, BookMarked, MessageSquare } from "lucide-react";
+import { Award, Target, Zap, LayoutDashboard, Settings, MoreHorizontal, BookOpen, Star, Mail, MapPin, Link as LinkIcon, Calendar, BookMarked, MessageSquare, Flame, Medal, ExternalLink, Github, Linkedin } from "lucide-react";
 import { formatNumber, toTitleCase } from "../utils/helper";
 import ReactTimeAgo from "react-time-ago";
+import EditProfileModal from "../components/profile/EditProfileModal";
 
 const USER_PAGE_TAB_OPTIONS_AUTH = [
-  { id: 1, url: "/user/userId", title: "posts", icon: <MessageSquare className="w-4 h-4" /> },
-  { id: 2, url: "/user/userId/lists", title: "bookmarks", icon: <BookMarked className="w-4 h-4" /> },
-  { id: 3, url: "/user/userId/about", title: "about", icon: <BookOpen className="w-4 h-4" /> },
+  { id: 1, url: "/user/userId", title: "home" },
+  { id: 2, url: "/user/userId/activity", title: "activity" },
+  { id: 3, url: "/user/userId/certificates", title: "certificates" },
+  { id: 4, url: "/user/userId/progress", title: "progress" },
+  { id: 5, url: "/user/userId/about", title: "about" },
 ];
 
 const USER_PAGE_TAB_OPTIONS_UNAUTH = [
-  { id: 1, url: "/user/userId", title: "posts", icon: <MessageSquare className="w-4 h-4" /> },
-  { id: 3, url: "/user/userId/about", title: "about", icon: <BookOpen className="w-4 h-4" /> },
+  { id: 1, url: "/user/userId", title: "home" },
+  { id: 2, url: "/user/userId/activity", title: "activity" },
+  { id: 3, url: "/user/userId/certificates", title: "certificates" },
+  { id: 5, url: "/user/userId/about", title: "about" },
 ];
 
 export default function UserProfile() {
@@ -35,6 +40,7 @@ export default function UserProfile() {
   const [optionsTab, setOptionsTab] = useState(USER_PAGE_TAB_OPTIONS_UNAUTH);
   const [posts, setposts] = useState<Array<any>>([]);
   const [userData, setUserData] = useState<Array<any>>([]);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const { data } = useQuery({
     queryFn: () => httpRequest.get(`${url}/user/${id}`),
@@ -100,157 +106,80 @@ export default function UserProfile() {
   const currentTab = tab || "posts";
 
   return (
-    <div className="bg-slate-50 dark:bg-slate-900 min-h-screen pt-8 pb-24 text-slate-900 dark:text-slate-100 font-sans selection:bg-now-primary selection:text-black dark:text-white">
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="bg-white dark:bg-[#121212] min-h-screen pt-12 pb-24 text-slate-900 dark:text-slate-100 font-sans">
+      <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* PROFILE HEADER CARD */}
-        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm mb-8">
-           <div className="h-48 bg-gradient-to-r from-[#0F172A] to-[#1E293B] relative">
-              <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
-              {user?._id === id && (
-                 <button className="absolute top-4 right-4 bg-white dark:bg-slate-900/10 hover:bg-white dark:bg-slate-900/20 text-white backdrop-blur-md border border-white/20 p-2 rounded-lg transition-colors">
-                    <Settings className="w-5 h-5" />
-                 </button>
-              )}
-           </div>
-           
-           <div className="px-8 pb-8 relative">
-              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 -mt-16 sm:-mt-20 mb-6">
-                 <div className="flex items-end gap-6">
-                    <img 
-                       src={profile.avatar} 
-                       className="w-32 h-32 sm:w-40 sm:h-40 rounded-2xl border-4 border-white shadow-lg object-cover bg-white dark:bg-slate-900" 
-                       alt="" 
-                    />
-                    <div className="pb-2 hidden sm:block">
-                       <h1 className="text-3xl font-extrabold text-slate-900 dark:text-slate-100">{profile.name}</h1>
-                       <p className="text-slate-500 dark:text-slate-400 font-medium mt-1">{profile.role || "ServiceNow Developer"}</p>
-                    </div>
-                 </div>
-                 <div className="flex items-center gap-3 pb-2">
-                    {user?._id !== id ? (
-                       <>
-                          <button className="bg-[#0F172A] hover:bg-black text-white px-6 py-2.5 rounded-lg text-sm font-bold transition-all shadow-sm">
-                             Follow
-                          </button>
-                          <button className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-[#0F172A] text-slate-900 dark:text-slate-100 px-4 py-2.5 rounded-lg text-sm font-bold transition-colors">
-                             Message
-                          </button>
-                       </>
-                    ) : (
-                       <button className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-[#0F172A] text-slate-900 dark:text-slate-100 px-6 py-2.5 rounded-lg text-sm font-bold transition-colors">
-                          Edit Profile
-                       </button>
-                    )}
-                 </div>
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-12 lg:gap-20">
+          
+          {/* LEFT COLUMN: Name, Tabs, Content */}
+          <div className="min-w-0">
+            {/* Mobile Sidebar Content (Avatar/Bio) appears here on small screens */}
+            <div className="block lg:hidden mb-10">
+              <div className="flex items-center gap-4 mb-4">
+                <img 
+                  src={profile.avatar} 
+                  onError={(e) => { e.currentTarget.src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(profile.name)}` }}
+                  className="w-20 h-20 rounded-full object-cover border border-slate-200 dark:border-slate-800"
+                  alt=""
+                />
+                <div>
+                  <h1 className="text-2xl font-bold">{profile.name}</h1>
+                  {user?._id === id && (
+                    <button 
+                      onClick={() => setIsEditModalOpen(true)}
+                      className="text-[#1A8917] text-sm mt-1 font-medium"
+                    >
+                      Edit profile
+                    </button>
+                  )}
+                </div>
               </div>
-
-              {/* Mobile Name (shows only on mobile since desktop is inline with avatar) */}
-              <div className="sm:hidden mb-6">
-                 <h1 className="text-2xl font-extrabold text-slate-900 dark:text-slate-100">{profile.name}</h1>
-                 <p className="text-slate-500 dark:text-slate-400 font-medium mt-1">{profile.role || "ServiceNow Developer"}</p>
+              <p className="text-slate-600 dark:text-slate-400 text-sm mb-4">
+                {profile.bio || "No bio yet."}
+              </p>
+              <div className="flex items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
+                <Link to={`/user/${id}/followers`} className="hover:text-slate-900 dark:hover:text-white">
+                  {formatNumber(profile.followers?.length || 0)} Followers
+                </Link>
+                <Link to={`/user/${id}/followings`} className="hover:text-slate-900 dark:hover:text-white">
+                  {formatNumber(profile.followings?.length || 0)} Following
+                </Link>
               </div>
+            </div>
 
-              <div className="max-w-2xl text-[#475569] leading-relaxed mb-6">
-                 {profile.bio || "Passionate about ServiceNow development and sharing knowledge with the community."}
-              </div>
+            <h1 className="hidden lg:block text-[42px] font-bold text-slate-900 dark:text-white mb-8 tracking-tight">
+              {profile.name}
+            </h1>
 
-              {/* Badges & Info */}
-              <div className="flex flex-wrap items-center gap-6 mb-8 text-sm font-medium text-slate-500 dark:text-slate-400">
-                 <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4" /> Global
-                 </div>
-                 <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4" /> Joined <ReactTimeAgo date={Date.parse(profile.createdAt)} locale="en-US" timeStyle="round" />
-                 </div>
-                 {profile.certifications?.map((cert: string) => (
-                    <div key={cert} className="flex items-center gap-1.5 text-yellow-700 bg-yellow-50 border border-yellow-200 px-2.5 py-1 rounded-md uppercase tracking-wider text-[10px] font-bold">
-                       <Award className="w-3.5 h-3.5" /> {cert}
-                    </div>
-                 ))}
-              </div>
+            {/* CONTENT TABS */}
+            <div className="flex items-center gap-6 mb-8 border-b border-slate-100 dark:border-slate-800 overflow-x-auto custom-scrollbar">
+               {optionsTab.map(opt => {
+                  const isActive = (tab === undefined && opt.title === 'home') || tab === opt.title;
+                  return (
+                     <Link
+                        key={opt.id}
+                        to={opt.url}
+                        className={`pb-4 text-[15px] whitespace-nowrap transition-colors ${
+                           isActive 
+                              ? "border-b border-slate-900 dark:border-white text-slate-900 dark:text-white font-medium" 
+                              : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                        }`}
+                     >
+                        {toTitleCase(opt.title)}
+                     </Link>
+                  );
+               })}
+            </div>
 
-              {/* Stats Bar */}
-              <div className="flex flex-wrap items-center gap-x-8 gap-y-4 pt-6 border-t border-slate-200 dark:border-slate-800">
-                 <Link to={`/user/${id}/followers`} className="flex items-center gap-2 hover:text-[#00C08B] transition-colors">
-                    <span className="font-extrabold text-slate-900 dark:text-slate-100 text-lg">{formatNumber(profile.followers?.length || 0)}</span>
-                    <span className="text-slate-500 dark:text-slate-400 text-sm uppercase tracking-wider font-bold">Followers</span>
-                 </Link>
-                 <Link to={`/user/${id}/followings`} className="flex items-center gap-2 hover:text-[#00C08B] transition-colors">
-                    <span className="font-extrabold text-slate-900 dark:text-slate-100 text-lg">{formatNumber(profile.followings?.length || 0)}</span>
-                    <span className="text-slate-500 dark:text-slate-400 text-sm uppercase tracking-wider font-bold">Following</span>
-                 </Link>
-                 <div className="flex items-center gap-2">
-                    <span className="font-extrabold text-[#00C08B] text-lg">{formatNumber(profile.xp || 1240)}</span>
-                    <span className="text-slate-500 dark:text-slate-400 text-sm uppercase tracking-wider font-bold flex items-center gap-1"><Zap className="w-4 h-4 text-yellow-500 fill-yellow-500" /> XP</span>
-                 </div>
-                 <div className="flex items-center gap-2">
-                    <span className="font-extrabold text-slate-900 dark:text-slate-100 text-lg">{formatNumber(profile.contributionScore || 85)}</span>
-                    <span className="text-slate-500 dark:text-slate-400 text-sm uppercase tracking-wider font-bold">Contribution Score</span>
-                 </div>
-              </div>
-           </div>
-        </div>
-
-        {/* CONTENT TABS */}
-        <div className="flex items-center gap-8 mb-8 border-b border-slate-200 dark:border-slate-800">
-           {optionsTab.map(opt => {
-              const isActive = (tab === undefined && opt.title === 'posts') || tab === opt.title;
-              return (
-                 <Link
-                    key={opt.id}
-                    to={opt.url}
-                    className={`flex items-center gap-2 pb-4 px-1 border-b-2 transition-all font-bold text-sm uppercase tracking-wider ${
-                       isActive 
-                          ? "border-[#00C08B] text-[#00C08B]" 
-                          : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-slate-100"
-                    }`}
-                 >
-                    {opt.icon} {opt.title}
-                 </Link>
-              );
-           })}
-        </div>
-
-        {/* TAB CONTENT */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8">
-           
-           <div className="min-w-0 space-y-6">
-              {/* Followers / Following List */}
-              {(tab === "followers" || tab === "followings") && (
-                 <div>
-                    <h2 className="text-xl font-extrabold text-slate-900 dark:text-slate-100 mb-6">{userData.length} {toTitleCase(tab)}</h2>
-                    <div className="space-y-4">
-                       {userData.map((u: any) => (
-                          <UserCard
-                             _id={u._id}
-                             avatar={u.avatar}
-                             followers={u.followers}
-                             name={u.name}
-                             bio={u.bio}
-                             key={u._id}
-                          />
-                       ))}
-                    </div>
-                 </div>
-              )}
-
-              {/* Lists Active Query */}
-              {tab === "lists" && activeQuery && (
-                 <div>
-                    <h2 className="text-xl font-extrabold text-slate-900 dark:text-slate-100 mb-6">List: {activeQuery}</h2>
-                    <ListSection listName={activeQuery} />
-                 </div>
-              )}
-
-              {/* Main Posts Tab */}
-              {(tab === undefined || tab === "posts") && (
-                 <div className="space-y-5">
+            {/* TAB CONTENT */}
+            <div className="space-y-8">
+              
+              {/* Main Posts Tab (Home) */}
+              {(tab === undefined || tab === "home" || tab === "posts") && (
+                 <div className="space-y-8">
                     {posts.length === 0 ? (
-                       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-12 text-center">
-                          <MessageSquare className="w-12 h-12 text-[#CBD5E1] mx-auto mb-4" />
-                          <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2">No posts yet</h3>
-                          <p className="text-slate-500 dark:text-slate-400 text-sm">{profile.name} hasn't published anything.</p>
+                       <div className="text-center py-10">
+                          <p className="text-slate-500 dark:text-slate-400 text-sm">{profile.name} hasn't published any posts yet.</p>
                        </div>
                     ) : (
                        posts.map((item: any) => (
@@ -283,9 +212,81 @@ export default function UserProfile() {
                  </div>
               )}
 
-              {/* Lists Tab */}
-              {tab === "lists" && !activeQuery && (
-                 <SavedSection userId={id!} />
+              {/* Progress Tab */}
+              {tab === "progress" && (
+                <div className="space-y-8">
+                  <div className="bg-slate-50 dark:bg-[#1A1A1A] rounded-xl p-6 border border-slate-100 dark:border-slate-800">
+                    <h3 className="font-bold text-lg text-slate-900 dark:text-slate-100 mb-5 flex items-center gap-2">
+                       <Target className="w-5 h-5 text-now-primary" /> Achievements
+                    </h3>
+                    <div className="space-y-4">
+                       <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium text-slate-600 dark:text-slate-400">Learning Streak</span>
+                          <span className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1">
+                             <FlameIcon /> {profile.learningStreak || 0} Days
+                          </span>
+                       </div>
+                       <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium text-slate-600 dark:text-slate-400">Total Badges</span>
+                          <span className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1">
+                             <Medal className="w-4 h-4 text-yellow-500" /> {profile.badges?.length || 0}
+                          </span>
+                       </div>
+                       <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium text-slate-600 dark:text-slate-400">XP</span>
+                          <span className="text-sm font-bold text-now-primary">
+                             {formatNumber(profile.xp || 0)}
+                          </span>
+                       </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-slate-50 dark:bg-[#1A1A1A] rounded-xl p-6 border border-slate-100 dark:border-slate-800">
+                     <h3 className="font-bold text-lg text-slate-900 dark:text-slate-100 mb-4">Skills</h3>
+                     <div className="flex flex-wrap gap-2">
+                        {(profile.skills?.length > 0 ? profile.skills : ["No skills listed"]).map((skill: string) => (
+                           <span key={skill} className="text-sm bg-white dark:bg-[#2A2A2A] border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-full">
+                              {skill}
+                           </span>
+                        ))}
+                     </div>
+                  </div>
+                  
+                  {/* ServiceNow Progress component could go here */}
+                </div>
+              )}
+
+              {/* Followers / Following Tab */}
+              {(tab === "followers" || tab === "followings") && (
+                 <div>
+                    <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-6">{userData.length} {toTitleCase(tab)}</h2>
+                    <div className="space-y-4">
+                       {userData.map((u: any) => (
+                          <UserCard
+                             _id={u._id}
+                             avatar={u.avatar}
+                             followers={u.followers}
+                             name={u.name}
+                             bio={u.bio}
+                             key={u._id}
+                          />
+                       ))}
+                    </div>
+                 </div>
+              )}
+
+              {/* Certificates Tab */}
+              {tab === "certificates" && (
+                 <div className="text-center py-10">
+                    <p className="text-slate-500 dark:text-slate-400 text-sm">Certificates will appear here.</p>
+                 </div>
+              )}
+
+              {/* Activity Tab */}
+              {tab === "activity" && (
+                 <div className="text-center py-10">
+                    <p className="text-slate-500 dark:text-slate-400 text-sm">Activity feed will appear here.</p>
+                 </div>
               )}
 
               {/* About Tab */}
@@ -297,53 +298,105 @@ export default function UserProfile() {
                     followings={profile.followings?.length || 0}
                  />
               )}
-           </div>
+            </div>
+          </div>
 
-           {/* RIGHT SIDEBAR */}
-           <div className="hidden lg:block space-y-6">
-              
-              {/* Gamification Stats Mini Card */}
-              <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
-                 <h3 className="font-bold text-slate-900 dark:text-slate-100 mb-5 flex items-center gap-2">
-                    <Target className="w-4 h-4 text-[#00C08B]" /> Achievements
-                 </h3>
-                 <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                       <span className="text-sm font-medium text-slate-500 dark:text-slate-400">Learning Streak</span>
-                       <span className="text-sm font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-1">
-                          <FlameIcon /> {profile.learningStreak || 5} Days
-                       </span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                       <span className="text-sm font-medium text-slate-500 dark:text-slate-400">Total Badges</span>
-                       <span className="text-sm font-extrabold text-slate-900 dark:text-slate-100">
-                          {profile.badges?.length || 3}
-                       </span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                       <span className="text-sm font-medium text-slate-500 dark:text-slate-400">Community Rank</span>
-                       <span className="text-sm font-extrabold text-[#00C08B]">
-                          Top 5%
-                       </span>
-                    </div>
-                 </div>
-              </div>
+          {/* RIGHT COLUMN: Sidebar (Avatar, Bio, Metadata) */}
+          <div className="hidden lg:block space-y-6 pt-2">
+             <img 
+                src={profile.avatar} 
+                onError={(e) => { e.currentTarget.src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(profile.name)}` }}
+                className="w-[88px] h-[88px] rounded-full object-cover mb-4" 
+                alt="" 
+             />
+             
+             <h2 className="text-base font-bold text-slate-900 dark:text-slate-100 mb-1">{profile.name}</h2>
+             
+             <p className="text-[#6B6B6B] dark:text-[#A8A8A8] text-[15px] leading-snug mb-4">
+                {profile.bio || "No bio yet."}
+             </p>
+             
+             <div className="flex items-center gap-3 mb-6">
+                {user?._id !== id ? (
+                   <>
+                      <button className="bg-[#1A8917] hover:bg-[#156d12] text-white px-4 py-1.5 rounded-full text-sm font-medium transition-colors">
+                         Follow
+                      </button>
+                      <button className="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white px-4 py-1.5 rounded-full text-sm font-medium transition-colors">
+                         Message
+                      </button>
+                   </>
+                ) : (
+                   <button 
+                      onClick={() => setIsEditModalOpen(true)}
+                      className="text-[#1A8917] hover:text-[#156d12] text-sm font-medium transition-colors"
+                   >
+                      Edit profile
+                   </button>
+                )}
+             </div>
 
-              {/* Skills */}
-              <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
-                 <h3 className="font-bold text-slate-900 dark:text-slate-100 mb-4">Skills</h3>
-                 <div className="flex flex-wrap gap-2">
-                    {(profile.skills?.length > 0 ? profile.skills : ["ITSM", "CMDB", "Service Portal", "JavaScript", "Flow Designer", "REST API"]).map((skill: string) => (
-                       <span key={skill} className="text-xs font-medium bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 px-2.5 py-1.5 rounded-md">
-                          {skill}
-                       </span>
-                    ))}
-                 </div>
-              </div>
+             <div className="space-y-4 pt-6 border-t border-slate-100 dark:border-slate-800">
+                <Link to={`/user/${id}/followers`} className="flex items-center gap-2 text-[15px] text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+                   <span className="font-bold">{formatNumber(profile.followers?.length || 0)}</span>
+                   <span>Followers</span>
+                </Link>
+                <Link to={`/user/${id}/followings`} className="flex items-center gap-2 text-[15px] text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+                   <span className="font-bold">{formatNumber(profile.followings?.length || 0)}</span>
+                   <span>Following</span>
+                </Link>
+                
+                <div className="flex items-center gap-2 text-[15px] text-slate-600 dark:text-slate-400">
+                   <Calendar className="w-4 h-4" /> 
+                   <span>Joined <ReactTimeAgo date={Date.parse(profile.createdAt)} locale="en-US" timeStyle="round" /></span>
+                </div>
 
-           </div>
+                {profile.certifications && profile.certifications.length > 0 && (
+                   <div className="flex items-center gap-2 text-[15px] text-slate-600 dark:text-slate-400">
+                      <Award className="w-4 h-4" /> 
+                      <span>{profile.certifications.length} Certificates</span>
+                   </div>
+                )}
+
+                {profile.projects && profile.projects.length > 0 && (
+                   <div className="flex items-center gap-2 text-[15px] text-slate-600 dark:text-slate-400">
+                      <LayoutDashboard className="w-4 h-4" /> 
+                      <span>{profile.projects.length} Projects</span>
+                   </div>
+                )}
+
+                {/* Social Links */}
+                {(profile.socialLinks?.linkedin || profile.socialLinks?.github || profile.socialLinks?.website) && (
+                   <div className="flex items-center gap-3 pt-2">
+                      {profile.socialLinks?.linkedin && (
+                         <a href={profile.socialLinks.linkedin} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-slate-900 dark:hover:text-white">
+                            <Linkedin className="w-5 h-5" />
+                         </a>
+                      )}
+                      {profile.socialLinks?.github && (
+                         <a href={profile.socialLinks.github} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-slate-900 dark:hover:text-white">
+                            <Github className="w-5 h-5" />
+                         </a>
+                      )}
+                      {profile.socialLinks?.website && (
+                         <a href={profile.socialLinks.website} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-slate-900 dark:hover:text-white">
+                            <ExternalLink className="w-5 h-5" />
+                         </a>
+                      )}
+                   </div>
+                )}
+             </div>
+          </div>
         </div>
       </div>
+      
+      {isEditModalOpen && (
+        <EditProfileModal 
+          profile={profile} 
+          onClose={() => setIsEditModalOpen(false)} 
+          refetch={refetch} 
+        />
+      )}
     </div>
   );
 }

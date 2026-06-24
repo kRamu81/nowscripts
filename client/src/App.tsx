@@ -42,7 +42,7 @@ import ProtectedRoute from "./router/Authentication";
 import { AuthModalProvider } from "./contexts/AuthModalContext";
 import { AuthModal } from "./components/AuthModal";
 export const DEFAULT_IMG =
-  "https://firebasestorage.googleapis.com/v0/b/upload-pics-e599e.appspot.com/o/images%2F1_dmbNkD5D-u45r44go_cf0g.png?alt=media&token=3ef51503-f601-448b-a55b-0682607ddc8a";
+  "https://api.dicebear.com/7.x/adventurer/svg?seed=NowScripts";
 
 type AppContextType = {
   hideNavbar(val: boolean): void;
