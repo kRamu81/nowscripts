@@ -26,6 +26,7 @@ app.use(cors({
   origin: [
     "https://nowscripts.in",
     "https://www.nowscripts.in",
+    "https://nowscripts.vercel.app",
     env.CLIENT_URL,
     "http://localhost:5173"
   ],
@@ -46,7 +47,15 @@ const ONLINE_USER_TO_SOCKET_ID_MAP = new Map<string, string>();
 
 const io = new Server(server, {
   cors: {
-    origin: env.CLIENT_URL,
+    origin: [
+      "https://nowscripts.in",
+      "https://www.nowscripts.in",
+      "https://nowscripts.vercel.app",
+      env.CLIENT_URL,
+      "http://localhost:5173"
+    ],
+    credentials: true,
+    methods: ["GET", "POST"]
   },
 });
 

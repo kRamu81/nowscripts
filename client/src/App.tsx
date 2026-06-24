@@ -87,6 +87,10 @@ export default function App() {
   const socket = useMemo(() => io(url), []);
 
   useEffect(() => {
+    socket.on("connect_error", (err) => {
+      console.error("Socket connection failed", err);
+    });
+
     if (!user) return;
     socket.emit("start", { userId: user?._id });
     socket.emit("checkNotifications", { userId: user?._id });
