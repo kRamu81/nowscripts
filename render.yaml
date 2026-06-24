@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: nowscripts-backend
+    env: node
+    rootDir: server
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_REFRESH_SECRET
+        sync: false
+      - key: CLIENT_URL
+        sync: false
+      - key: DEV
+        value: false
+      - key: email
+        sync: false
+      - key: password
+        sync: false
+      - key: clientid
+        sync: false
+      - key: clientsecret
+        sync: false
+      - key: redirect_url
+        sync: false
