@@ -10,7 +10,15 @@ import ru from "javascript-time-ago/locale/ru.json";
 import Auth from "./contexts/Auth";
 import { ThemeProvider } from "./contexts/ThemeContext";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes cache
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+});
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
 

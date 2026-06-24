@@ -5,6 +5,7 @@ import axios from "axios";
 import { url } from "../../baseUrl";
 import { useAppContext } from "../../App";
 import { Search, Plus, Filter, Download, X, Check, AlertCircle, FileText } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface Certificate {
   _id: string;
@@ -137,12 +138,12 @@ export default function AdminCertificates() {
             >
               <Download className="w-4 h-4" /> Export CSV
             </button>
-            <a 
-              href="/admin/certificates/studio"
+            <Link 
+              to="/admin/certificates/studio"
               className="px-5 py-2 bg-now-primary text-white font-semibold rounded-lg shadow-sm hover:bg-now-accent transition flex items-center gap-2"
             >
               <Plus className="w-5 h-5" /> Issue Certificate
-            </a>
+            </Link>
           </div>
         </div>
 
