@@ -10,6 +10,7 @@ export type User = {
   email: string;
   name: string;
   _id: string;
+  role?: string;
   list: Array<any>;
 };
 

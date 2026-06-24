@@ -13,6 +13,10 @@ const env = cleanEnv(process.env, {
   clientid: str(),
   clientsecret: str(),
   redirect_url: str(),
+  SMTP_HOST: str(),
+  SMTP_PORT: port(),
+  SMTP_USER: str(),
+  SMTP_PASS: str(),
 });
 
 export default env;

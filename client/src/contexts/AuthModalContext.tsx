@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 
-type AuthView = "login" | "signup";
+type AuthView = "login" | "signup" | "forgot_password" | "verify_otp" | "reset_password";
 
 type AuthModalContextType = {
   isOpen: boolean;

@@ -5,6 +5,7 @@ import logger from "./middlewares/logger";
 import postRouter from "./routers/post";
 import authRouter from "./routers/auth";
 import userRouter from "./routers/user";
+import adminRouter from "./routers/admin";
 import searchRouter from "./routers/search";
 import learnRouter from "./routers/learn";
 import roadmapRouter from "./routes/roadmapRoutes";
@@ -83,6 +84,7 @@ app.get("/test", (req, res) => {
 app.use("/post", postRouter);
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
+app.use("/admin", adminRouter);
 app.use("/search", searchRouter);
 app.use("/learn", learnRouter);
 app.use("/roadmap", roadmapRouter);

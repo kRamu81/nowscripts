@@ -5,6 +5,27 @@ const userSchema = new Schema(
     email: {
       type: String,
       required: true,
+      unique: true,
+      index: true,
+    },
+    password: {
+      type: String,
+    },
+    googleId: {
+      type: String,
+    },
+    authProviders: [{
+      type: String,
+      enum: ['google', 'password'],
+      default: ['password']
+    }],
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
     },
     username: {
       type: String,
@@ -71,7 +92,11 @@ const userSchema = new Schema(
     learningStreak: { type: Number, default: 0 },
     badges: [{ type: String }],
     certifications: [{ type: String }],
-    role: { type: String, default: "Member" },
+    role: { 
+      type: String, 
+      enum: ['Super Admin', 'Admin', 'user'],
+      default: "user" 
+    },
     contributionScore: { type: Number, default: 0 },
     skills: [{ type: String }],
     // Future features prep

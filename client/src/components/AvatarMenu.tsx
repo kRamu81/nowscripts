@@ -22,6 +22,7 @@ export default function AvatarMenu() {
       avatar={user!.avatar}
       email={user!.email}
       userId={user!._id}
+      role={user!.role}
       logout={logout}
     />
   ) : (
@@ -94,11 +95,13 @@ function AuthMenu({
   avatar,
   email,
   userId,
+  role,
   logout,
 }: {
   avatar: string;
   email: string;
   userId: string;
+  role?: string;
   logout(): void;
 }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -158,6 +161,32 @@ function AuthMenu({
         }}
       >
         <Link
+          to={`/`}
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          <MenuItem
+            sx={[{ "&:hover": { backgroundColor: "transparent" } }]}
+            onClick={handleClose}
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              padding: "8px 18px",
+            }}
+          >
+            <span
+              style={{ color: "gray", margin: "0 10px", marginBottom: "-5px" }}
+            >
+              {librabryIcon}
+            </span>
+            <p
+              style={{ marginLeft: "5px", color: "#6b6a6a", fontSize: "14px" }}
+            >
+              Dashboard
+            </p>
+          </MenuItem>
+        </Link>
+        <Link
           to={`/user/${userId}`}
           style={{ textDecoration: "none", color: "inherit" }}
         >
@@ -184,7 +213,7 @@ function AuthMenu({
           </MenuItem>
         </Link>
         <Link
-          to={`/write`}
+          to={`/admin/certificates`}
           style={{ textDecoration: "none", color: "inherit" }}
         >
           <MenuItem
@@ -205,39 +234,39 @@ function AuthMenu({
             <p
               style={{ marginLeft: "5px", color: "#6b6a6a", fontSize: "14px" }}
             >
-              Write ServiceNow topic
+              Certificates
             </p>
           </MenuItem>
         </Link>
-        <Link
-          to={`/user/${userId}/lists`}
-          style={{
-            textDecoration: "none",
-            color: "inherit",
-          }}
-        >
-          <MenuItem
-            sx={[{ "&:hover": { backgroundColor: "transparent" } }]}
-            onClick={handleClose}
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              padding: "8px 18px",
-            }}
-          >
-            <span
-              style={{ color: "gray", margin: "0 10px", marginBottom: "-5px" }}
-            >
-              {librabryIcon}
-            </span>
-            <p
-              style={{ marginLeft: "5px", color: "#6b6a6a", fontSize: "14px" }}
-            >
-              Library
-            </p>
-          </MenuItem>
-        </Link>
+        {/* Admin Link if role is Admin or Super Admin */}
+        {(userId === "demo_admin_123" || role === "Admin" || role === "Super Admin") && (
+           <Link
+             to={`/admin/users`}
+             style={{ textDecoration: "none", color: "inherit" }}
+           >
+             <MenuItem
+               sx={[{ "&:hover": { backgroundColor: "transparent" } }]}
+               onClick={handleClose}
+               style={{
+                 display: "flex",
+                 flexDirection: "row",
+                 alignItems: "center",
+                 padding: "8px 18px",
+               }}
+             >
+               <span
+                 style={{ color: "gray", margin: "0 10px", marginBottom: "-5px", display: "flex", alignItems: "center" }}
+               >
+                 <Settings className="w-[18px] h-[18px] text-[#6b6a6a]" />
+               </span>
+               <p
+                 style={{ marginLeft: "5px", color: "#6b6a6a", fontSize: "14px" }}
+               >
+                 Admin Dashboard
+               </p>
+             </MenuItem>
+           </Link>
+        )}
         <MenuItem
           sx={[{ "&:hover": { backgroundColor: "transparent" } }]}
           onClick={() => {
