@@ -55,8 +55,10 @@ function UnAuthMenu() {
         onClick={handleClick}
         style={{
           width: "32px",
+          height: "32px",
+          objectFit: "cover",
           borderRadius: "50%",
-          border: "1px solid #d9d9d9",
+          border: "1px solid #334155",
           cursor: "pointer",
         }}
         src={DEFAULT_IMG}
@@ -129,8 +131,10 @@ function AuthMenu({
         onClick={handleClick}
         style={{
           width: "32px",
+          height: "32px",
+          objectFit: "cover",
           borderRadius: "50%",
-          border: "1px solid #d9d9d9",
+          border: "1px solid #334155",
           cursor: "pointer",
         }}
         src={avatar ?? DEFAULT_IMG}

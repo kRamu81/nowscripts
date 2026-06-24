@@ -133,7 +133,7 @@ export const forgotPassword = asyncHandler(async (req, res, next) => {
 
   // Use fixed OTP in development or if SMTP is not configured
   const isDevOrNoSMTP = env.DEV || !env.SMTP_HOST;
-  const otp = isDevOrNoSMTP ? "333333" : otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false, lowerCaseAlphabets: false });
+  const otp = isDevOrNoSMTP ? "000000" : otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false, lowerCaseAlphabets: false });
   
   // Save OTP
   await PasswordReset.deleteMany({ email }); // Clear previous
