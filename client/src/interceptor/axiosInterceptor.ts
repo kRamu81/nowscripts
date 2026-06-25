@@ -49,8 +49,22 @@ axiosInstance.interceptors.response.use(
           return await axiosInstance(originalRequest);
         } catch (err) {
           console.log(err);
+          localStorage.clear();
+          window.location.href = "/signin/in";
         }
+      } else {
+        localStorage.clear();
+        window.location.href = "/signin/in";
       }
+    } else if (error.response?.status === 401) {
+      localStorage.clear();
+      window.location.href = "/signin/in";
+    } else if (error.response?.status === 403) {
+      alert("Access Denied");
+      window.location.href = "/";
+    } else if (error.response?.status >= 500) {
+      // Let it throw to Error Boundary, or we could redirect
+      // For now, let the error propagate so ErrorBoundary catches it
     }
 
     return Promise.reject(error);

@@ -245,6 +245,23 @@ export const resetPassword = asyncHandler(async (req, res, next) => {
 });
 
 
+export const me = asyncHandler(async (req: any, res, next) => {
+  const user = await User.findById(req.user.id).select("-password");
+  if (!user) throw new ServerError(404, "User not found");
+  
+  res.json({
+    user: {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      avatar: user.avatar,
+      bio: user.bio,
+      role: user.role,
+      list: user.lists,
+    }
+  });
+});
+
 // Legacy / Google Auth Methods
 export const tokenRefresh = asyncHandler((req, res, next) => {
   const { token } = req.body;

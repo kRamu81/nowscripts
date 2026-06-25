@@ -9,10 +9,14 @@ import {
   forgotPassword,
   verifyOTP,
   resetPassword,
+  me,
 } from "../controllers/auth.controller";
 import { loginLimiter, forgotPasswordLimiter, otpVerifyLimiter } from "../middlewares/rateLimiter";
+import isAuthenticated from "../middlewares/auth";
 
 const router = express.Router();
+
+router.get("/me", isAuthenticated, me);
 
 router.post("/register", register);
 router.post("/login", loginLimiter, login);
