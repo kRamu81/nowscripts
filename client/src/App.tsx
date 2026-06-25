@@ -63,10 +63,15 @@ export function useAppContext() {
 }
 
 function PublicLayout({ notificationsCount }: { notificationsCount: number }) {
+  const { isAuthenticated } = useAuth();
   return (
     <AuthModalProvider>
-      <div className="flex flex-col min-h-screen bg-now-background text-now-text font-sans relative">
-        <LandingNavbar notificationsCount={notificationsCount} />
+      <div className={`flex flex-col min-h-screen ${isAuthenticated ? "bg-[#F8FAFC] text-[#0F172A]" : "bg-now-background text-now-text"} font-sans relative`}>
+        {isAuthenticated ? (
+          <Navbar notificationsCount={notificationsCount} />
+        ) : (
+          <LandingNavbar notificationsCount={notificationsCount} />
+        )}
         <div className="flex-1">
           <Outlet />
         </div>

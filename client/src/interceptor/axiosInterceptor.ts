@@ -9,11 +9,18 @@ interface CustomAxiosConfig extends InternalAxiosRequestConfig<any> {
 
 axiosInstance.interceptors.request.use(
   async (config: CustomAxiosConfig) => {
-    config.headers = {
-      Authorization: `Bearer ${JSON.parse(
-        localStorage.getItem("access_token")!
-      )}`,
-    };
+    let token = localStorage.getItem("access_token");
+    if (token) {
+      try {
+        token = JSON.parse(token);
+      } catch (e) {
+        // Fallback if token was not JSON stringified
+      }
+      config.headers = {
+        ...config.headers,
+        Authorization: `Bearer ${token}`,
+      };
+    }
     return config;
   },
   (error) => {
@@ -27,15 +34,20 @@ axiosInstance.interceptors.response.use(
     const originalRequest = error.config;
 
     if (
-      error.response.status === 401 &&
-      error.response.data.message === "UnAuthorized, JWT Expired"
+      error.response?.status === 401 &&
+      error.response?.data?.message === "UnAuthorized, JWT Expired"
     ) {
-      const refreshToken = localStorage.getItem("refresh_token");
+      let refreshToken = localStorage.getItem("refresh_token");
 
       if (refreshToken) {
         try {
+          refreshToken = JSON.parse(refreshToken);
+        } catch (e) {
+          // Fallback
+        }
+        try {
           const response = await axiosInstance.post(`${url}/auth/token`, {
-            token: JSON.parse(refreshToken),
+            token: refreshToken,
           });
           localStorage.setItem(
             "access_token",
@@ -47,10 +59,13 @@ axiosInstance.interceptors.response.use(
           originalRequest.headers["Authorization"] =
             "Bearer " + response.data.access_token;
           return await axiosInstance(originalRequest);
-        } catch (err) {
+        } catch (err: any) {
           console.log(err);
-          localStorage.clear();
-          window.location.href = "/signin/in";
+          // Don't clear local storage blindly on network errors during refresh token
+          if (err.response?.status === 401 || err.response?.status === 403) {
+            localStorage.clear();
+            window.location.href = "/signin/in";
+          }
         }
       } else {
         localStorage.clear();
@@ -59,9 +74,6 @@ axiosInstance.interceptors.response.use(
     } else if (error.response?.status === 403) {
       alert("Access Denied");
       window.location.href = "/";
-    } else if (error.response?.status >= 500) {
-      // Let it throw to Error Boundary, or we could redirect
-      // For now, let the error propagate so ErrorBoundary catches it
     }
 
     return Promise.reject(error);

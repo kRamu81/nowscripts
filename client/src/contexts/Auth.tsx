@@ -50,9 +50,19 @@ export default function Auth({ children }: AuthProps) {
         } else {
           setIsAuthenticated(false);
         }
-      } catch (err) {
+      } catch (err: any) {
         console.error("Auth verification failed", err);
-        setIsAuthenticated(false);
+        if (err.response?.status === 401 || err.response?.status === 403 || err.response?.status === 404) {
+          setIsAuthenticated(false);
+        } else {
+          // On network errors, rely on localStorage user cache
+          const cachedUser = localStorage.getItem("user");
+          if (cachedUser) {
+            setIsAuthenticated(true);
+          } else {
+            setIsAuthenticated(false);
+          }
+        }
       } finally {
         setIsLoading(false);
       }
