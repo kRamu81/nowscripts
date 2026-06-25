@@ -47,9 +47,18 @@ export default function LandingNavbar({ notificationsCount = 0 }: { notification
           <Link to="/interview-prep" className="text-sm font-medium text-[#64748B] hover:text-[#0F172A] transition-colors hidden md:block">
             Interview Prep
           </Link>
-          <Link to={isAuthenticated ? "/write" : "/signin/write"} className="hidden sm:flex text-sm font-medium text-now-primary hover:text-now-accent transition-colors">
-            Share Content
-          </Link>
+          {isAuthenticated ? (
+            <Link to="/write" className="hidden sm:flex text-sm font-medium text-now-primary hover:text-now-accent transition-colors">
+              Share Content
+            </Link>
+          ) : (
+            <button 
+              onClick={() => openModal('login', () => window.location.href = '/write', 'Please log in to share content.')} 
+              className="hidden sm:flex text-sm font-medium text-now-primary hover:text-now-accent transition-colors"
+            >
+              Share Content
+            </button>
+          )}
           
           <div className="flex items-center gap-3 ml-2">
             {!isAuthenticated ? (

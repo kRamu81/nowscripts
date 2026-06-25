@@ -46,11 +46,19 @@ export default function CommunityFeed() {
 
 function HomeContainer({ tag }: { tag: string }) {
   const { isAuthenticated, user } = useAuth();
+  const { openModal } = useAuthModal();
   const { socket } = useAppContext();
   const navigate = useNavigate();
   const [posts, setposts] = useState<Array<any>>([]);
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Automatically open modal if not authenticated
+  useEffect(() => {
+    if (!isAuthenticated) {
+      openModal("login", undefined, "Please log in to view and interact with the Community.");
+    }
+  }, [isAuthenticated, openModal]);
 
   // Live States
   const [activityFeed, setActivityFeed] = useState<Array<any>>([]);
@@ -148,7 +156,7 @@ function HomeContainer({ tag }: { tag: string }) {
   });
 
   return (
-    <div className="bg-slate-50 dark:bg-slate-900 min-h-screen pt-6 pb-24 text-slate-900 dark:text-slate-100 font-sans selection:bg-now-primary selection:text-black dark:text-white">
+    <div className={`bg-slate-50 dark:bg-slate-900 min-h-screen pt-6 pb-24 text-slate-900 dark:text-slate-100 font-sans selection:bg-now-primary selection:text-black dark:text-white ${!isAuthenticated ? "filter blur-[8px] pointer-events-none select-none h-screen overflow-hidden" : ""}`}>
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* 3-COLUMN GRID */}
@@ -216,12 +224,21 @@ function HomeContainer({ tag }: { tag: string }) {
                       className="w-64 pl-9 pr-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg text-sm focus:outline-none focus:border-[#00C08B] transition-colors shadow-sm"
                     />
                  </div>
-                 <Link 
-                   to="/write" 
-                   className="bg-[#00C08B] hover:bg-[#00A376] text-white px-5 py-2.5 rounded-lg text-sm font-bold transition-all shadow-sm whitespace-nowrap"
-                 >
-                   Write a Post
-                 </Link>
+                 {isAuthenticated ? (
+                   <Link 
+                     to="/write" 
+                     className="bg-[#00C08B] hover:bg-[#00A376] text-white px-5 py-2.5 rounded-lg text-sm font-bold transition-all shadow-sm whitespace-nowrap"
+                   >
+                     Write a Post
+                   </Link>
+                 ) : (
+                   <button 
+                     onClick={() => openModal('login', () => window.location.href = '/write', 'Please log in to write a post.')}
+                     className="bg-[#00C08B] hover:bg-[#00A376] text-white px-5 py-2.5 rounded-lg text-sm font-bold transition-all shadow-sm whitespace-nowrap"
+                   >
+                     Write a Post
+                   </button>
+                 )}
               </div>
             </div>
 

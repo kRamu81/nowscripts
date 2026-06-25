@@ -9,6 +9,7 @@ import {
   writeBlogIcon,
 } from "../assets/icons";
 import { useAuth } from "../contexts/Auth";
+import { useAuthModal } from "../contexts/AuthModalContext";
 import AvatarMenu from "./AvatarMenu";
 import Search from "./Search";
 import { BrandLogo } from "./BrandLogo";
@@ -19,6 +20,8 @@ export default function Navbar({
   notificationsCount: number;
 }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { isAuthenticated } = useAuth();
+  const { openModal } = useAuthModal();
 
   return (
     <>
@@ -70,23 +73,48 @@ export default function Navbar({
           <Link to="/interview-prep" className="hidden lg:block" style={{ textDecoration: "none", color: "#64748B", fontSize: "14px", whiteSpace: "nowrap" }}>Interview Prep</Link>
           <Link to="/community" className="hidden md:block" style={{ textDecoration: "none", color: "#64748B", fontSize: "14px", whiteSpace: "nowrap" }}>Community</Link>
           <Link to="/newsletter" className="hidden md:block" style={{ textDecoration: "none", color: "#64748B", fontSize: "14px", whiteSpace: "nowrap" }}>Newsletter</Link>
-          <Link
-            to="/write"
-            className="writeBtn"
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              color: "gray",
-              gap: "8px",
-              textDecoration: "none",
-            }}
-          >
-            <span style={{ color: "#64748B" }}>
-              {writeBlogIcon}
-            </span>
-            <p style={{ fontSize: "14.5px", marginTop: "-4px", color: "#64748B" }}>Share Content</p>
-          </Link>
+          
+          {isAuthenticated ? (
+            <Link
+              to="/write"
+              className="writeBtn"
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                color: "gray",
+                gap: "8px",
+                textDecoration: "none",
+              }}
+            >
+              <span style={{ color: "#64748B" }}>
+                {writeBlogIcon}
+              </span>
+              <p style={{ fontSize: "14.5px", marginTop: "-4px", color: "#64748B" }}>Share Content</p>
+            </Link>
+          ) : (
+            <button
+              onClick={() => openModal('login', () => window.location.href = '/write', 'Please log in to share content.')}
+              className="writeBtn"
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                color: "gray",
+                gap: "8px",
+                textDecoration: "none",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              <span style={{ color: "#64748B" }}>
+                {writeBlogIcon}
+              </span>
+              <p style={{ fontSize: "14.5px", marginTop: "-4px", color: "#64748B" }}>Share Content</p>
+            </button>
+          )}
+
           <div className="notifactionBtn">
             <Link
               to="/notifications"

@@ -325,7 +325,7 @@ export default function InterviewPrepDashboard() {
   }
 
   return (
-    <div className="bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans flex h-full overflow-hidden relative">
+    <div className="bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans flex flex-1 h-full min-h-screen overflow-hidden relative">
       
       {/* Mobile Overlays */}
       {mobileMenuOpen && (

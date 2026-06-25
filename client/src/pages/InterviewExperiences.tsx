@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../contexts/Auth";
+import { useAuthModal } from "../contexts/AuthModalContext";
 import axios from "axios";
 import { url } from "../baseUrl";
 import { Link } from "react-router-dom";
-import { Search, Filter, Briefcase, MapPin, Calendar, Clock, Star, Plus, ThumbsUp, Eye, MessageSquare, ChevronRight, Menu, X, CheckCircle2, XCircle } from "lucide-react";
+import { Search, Filter, Briefcase, MapPin, Calendar, Clock, Star, Plus, ThumbsUp, Eye, MessageSquare, ChevronRight, Menu, X, CheckCircle2, XCircle, PenTool } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
 
@@ -23,7 +24,8 @@ const DIFFICULTIES = ["Easy", "Medium", "Hard"];
 const RESULTS = ["Selected", "Rejected", "Waiting"];
 
 export default function InterviewExperiences() {
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
+  const { openModal } = useAuthModal();
   const [experiences, setExperiences] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [total, setTotal] = useState(0);
@@ -140,14 +142,20 @@ export default function InterviewExperiences() {
               </button>
               <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">Real Interview Experiences</h1>
             </div>
-            {user && (
+            {isAuthenticated ? (
               <Link 
                 to="/interviews/submit" 
-                className="hidden md:flex items-center gap-2 bg-[#4f46e5] hover:bg-[#4338ca] text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                className="hidden md:flex items-center gap-2 bg-[#0F172A] hover:bg-[#1E293B] text-white px-5 py-2.5 rounded-lg text-sm font-bold transition-all shadow-sm"
               >
-                <Plus className="w-5 h-5" />
-                Share Experience
+                <PenTool className="w-4 h-4" /> Share Experience
               </Link>
+            ) : (
+              <button 
+                onClick={() => openModal('login', () => window.location.href = '/interviews/submit', 'Please log in to submit your interview experience.')} 
+                className="hidden md:flex items-center gap-2 bg-[#0F172A] hover:bg-[#1E293B] text-white px-5 py-2.5 rounded-lg text-sm font-bold transition-all shadow-sm"
+              >
+                <PenTool className="w-4 h-4" /> Share Experience
+              </button>
             )}
           </div>
 
@@ -187,16 +195,23 @@ export default function InterviewExperiences() {
         </div>
 
         {/* Floating Mobile Submit Button */}
-        {user && (
-          <div className="fixed bottom-6 right-6 z-30 md:hidden">
+        <div className="fixed bottom-6 right-6 z-30 md:hidden">
+          {isAuthenticated ? (
             <Link 
               to="/interviews/submit" 
               className="flex items-center justify-center w-14 h-14 bg-[#4f46e5] text-white rounded-full shadow-lg hover:bg-[#4338ca] transition-colors"
             >
               <Plus className="w-7 h-7" />
             </Link>
-          </div>
-        )}
+          ) : (
+            <button 
+              onClick={() => openModal('login', () => window.location.href = '/interviews/submit', 'Please log in to submit your interview experience.')}
+              className="flex items-center justify-center w-14 h-14 bg-[#4f46e5] text-white rounded-full shadow-lg hover:bg-[#4338ca] transition-colors"
+            >
+              <Plus className="w-7 h-7" />
+            </button>
+          )}
+        </div>
 
         {/* List of Experiences */}
         <div className="max-w-5xl mx-auto">

@@ -72,7 +72,7 @@ function PublicLayout({ notificationsCount }: { notificationsCount: number }) {
         ) : (
           <LandingNavbar notificationsCount={notificationsCount} />
         )}
-        <div className="flex-1">
+        <div className="flex-1 flex flex-col">
           <Outlet />
         </div>
         <AuthModal />
