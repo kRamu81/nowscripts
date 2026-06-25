@@ -25,13 +25,13 @@
     {
       "id": "experiences",
       "title": "Real Interview Experiences",
-      "status": "active",
-      "url": "/interviews"
+      "status": "coming_soon"
     },
     {
       "id": "mock",
       "title": "Mock Interviews",
-      "status": "coming_soon"
+      "status": "active",
+      "dataFile": "/content/interview-prep/mock/data.json"
     }
   ]
 }

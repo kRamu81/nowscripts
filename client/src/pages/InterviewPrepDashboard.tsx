@@ -475,53 +475,91 @@ export default function InterviewPrepDashboard() {
                     {activeQuestion.question_text}
                   </div>
 
-                  {/* Options */}
-                  <div className="space-y-3 mb-10">
-                    {activeQuestion.options.map(opt => {
-                      const isSelected = selectedOptions.includes(opt.option_id);
-                      const isCorrect = activeQuestion.correct_options.includes(opt.option_id);
-                      
-                      let optionClass = "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:border-now-primary";
-                      
-                      if (showAnswer) {
-                        if (isCorrect) optionClass = "border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-900 dark:text-emerald-100";
-                        else if (isSelected && !isCorrect) optionClass = "border-rose-500 bg-rose-50 dark:bg-rose-900/20 text-rose-900 dark:text-rose-100";
-                        else optionClass = "border-slate-200 dark:border-slate-800 opacity-50";
-                      } else if (isSelected) {
-                        optionClass = "border-now-primary bg-now-primary/5 text-now-primary";
-                      }
-
-                      return (
-                        <button
-                          key={opt.option_id}
-                          onClick={() => handleOptionToggle(opt.option_id)}
-                          className={`w-full min-h-[44px] text-left p-3 lg:p-4 rounded-xl border-2 flex items-start gap-3 lg:gap-4 transition-all ${optionClass}`}
-                        >
-                          <div className={`w-5 h-5 lg:w-6 lg:h-6 shrink-0 rounded ${activeQuestion.question_type === 'single' ? 'rounded-full' : 'rounded'} border-2 flex items-center justify-center ${
-                             showAnswer && isCorrect ? "border-emerald-500 bg-emerald-500 text-white" :
-                             showAnswer && isSelected && !isCorrect ? "border-rose-500 bg-rose-500 text-white" :
-                             isSelected ? "border-now-primary bg-now-primary text-white" : "border-slate-300 dark:border-slate-600"
-                          }`}>
-                            {(showAnswer && isCorrect) || isSelected ? <CheckCircle className="w-3 h-3 lg:w-4 lg:h-4" /> : null}
-                          </div>
-                          <div className="flex-1 mt-0 lg:mt-0.5 text-sm lg:text-base whitespace-pre-wrap font-medium">
-                            {opt.option_text}
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  {/* Explanation Block */}
-                  {showAnswer && activeQuestion.explanation && (
-                    <div className="mb-10 p-6 rounded-xl bg-blue-50 border border-blue-100 dark:bg-blue-900/20 dark:border-blue-800/50">
-                      <h4 className="font-bold text-blue-900 dark:text-blue-300 mb-2 flex items-center gap-2">
-                        <AlertCircle className="w-5 h-5" /> Explanation
-                      </h4>
-                      <p className="text-blue-800 dark:text-blue-200 whitespace-pre-wrap leading-relaxed">
-                        {activeQuestion.explanation}
-                      </p>
+                  {/* Options or Short Answer */}
+                  {activeQuestion.question_type === 'short_answer' ? (
+                    <div className="space-y-4 mb-10">
+                      {!showAnswer ? (
+                        <div className="p-6 rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 text-center">
+                          <p className="text-slate-500 dark:text-slate-400 font-medium mb-4">
+                            This is an open-ended question. Think about your answer before revealing the solution.
+                          </p>
+                          <button 
+                            onClick={() => {
+                              setShowAnswer(true);
+                              // Mark as completed since it's a review-based question
+                              if (!progress.completedQuestions.includes(activeQuestion.id)) {
+                                const newCompleted = [...progress.completedQuestions, activeQuestion.id];
+                                const newPercent = Math.round((newCompleted.length / totalQuestions) * 100);
+                                setProgress(p => ({ ...p, completedQuestions: newCompleted, progressPercentage: newPercent, lastViewedQuestion: activeQuestion.id }));
+                                updateProgressBackend({ completedQuestions: newCompleted, progressPercentage: newPercent, lastViewedQuestion: activeQuestion.id });
+                              }
+                            }}
+                            className="bg-now-primary text-white font-bold py-3 px-6 rounded-lg hover:bg-now-primary/90 transition-colors inline-flex items-center gap-2"
+                          >
+                            <BookOpen className="w-5 h-5" /> Show Answer
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="p-6 rounded-xl bg-blue-50 border border-blue-100 dark:bg-blue-900/20 dark:border-blue-800/50">
+                          <h4 className="font-bold text-blue-900 dark:text-blue-300 mb-4 flex items-center gap-2">
+                            <CheckCircle className="w-5 h-5 text-emerald-500" /> Answer
+                          </h4>
+                          <p className="text-blue-800 dark:text-blue-200 whitespace-pre-wrap leading-relaxed text-lg">
+                            {activeQuestion.explanation}
+                          </p>
+                        </div>
+                      )}
                     </div>
+                  ) : (
+                    <>
+                      <div className="space-y-3 mb-10">
+                        {activeQuestion.options.map(opt => {
+                          const isSelected = selectedOptions.includes(opt.option_id);
+                          const isCorrect = activeQuestion.correct_options.includes(opt.option_id);
+                          
+                          let optionClass = "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:border-now-primary";
+                          
+                          if (showAnswer) {
+                            if (isCorrect) optionClass = "border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-900 dark:text-emerald-100";
+                            else if (isSelected && !isCorrect) optionClass = "border-rose-500 bg-rose-50 dark:bg-rose-900/20 text-rose-900 dark:text-rose-100";
+                            else optionClass = "border-slate-200 dark:border-slate-800 opacity-50";
+                          } else if (isSelected) {
+                            optionClass = "border-now-primary bg-now-primary/5 text-now-primary";
+                          }
+
+                          return (
+                            <button
+                              key={opt.option_id}
+                              onClick={() => handleOptionToggle(opt.option_id)}
+                              className={`w-full min-h-[44px] text-left p-3 lg:p-4 rounded-xl border-2 flex items-start gap-3 lg:gap-4 transition-all ${optionClass}`}
+                            >
+                              <div className={`w-5 h-5 lg:w-6 lg:h-6 shrink-0 rounded ${activeQuestion.question_type === 'single' ? 'rounded-full' : 'rounded'} border-2 flex items-center justify-center ${
+                                 showAnswer && isCorrect ? "border-emerald-500 bg-emerald-500 text-white" :
+                                 showAnswer && isSelected && !isCorrect ? "border-rose-500 bg-rose-500 text-white" :
+                                 isSelected ? "border-now-primary bg-now-primary text-white" : "border-slate-300 dark:border-slate-600"
+                              }`}>
+                                {(showAnswer && isCorrect) || isSelected ? <CheckCircle className="w-3 h-3 lg:w-4 lg:h-4" /> : null}
+                              </div>
+                              <div className="flex-1 mt-0 lg:mt-0.5 text-sm lg:text-base whitespace-pre-wrap font-medium">
+                                {opt.option_text}
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      {/* Explanation Block */}
+                      {showAnswer && activeQuestion.explanation && (
+                        <div className="mb-10 p-6 rounded-xl bg-blue-50 border border-blue-100 dark:bg-blue-900/20 dark:border-blue-800/50">
+                          <h4 className="font-bold text-blue-900 dark:text-blue-300 mb-2 flex items-center gap-2">
+                            <AlertCircle className="w-5 h-5" /> Explanation
+                          </h4>
+                          <p className="text-blue-800 dark:text-blue-200 whitespace-pre-wrap leading-relaxed">
+                            {activeQuestion.explanation}
+                          </p>
+                        </div>
+                      )}
+                    </>
                   )}
 
                   {/* Bottom Controls */}
@@ -535,13 +573,15 @@ export default function InterviewPrepDashboard() {
                     </button>
                     
                     {!showAnswer ? (
-                      <button 
-                        onClick={handleCheckAnswer}
-                        disabled={selectedOptions.length === 0}
-                        className="min-h-[44px] px-10 py-3 rounded-xl font-bold bg-now-primary text-white hover:bg-now-accent shadow-md disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-                      >
-                        Check Answer
-                      </button>
+                      activeQuestion.question_type !== 'short_answer' && (
+                        <button 
+                          onClick={handleCheckAnswer}
+                          disabled={selectedOptions.length === 0}
+                          className="min-h-[44px] px-10 py-3 rounded-xl font-bold bg-now-primary text-white hover:bg-now-accent shadow-md disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                        >
+                          Check Answer
+                        </button>
+                      )
                     ) : (
                       <button 
                         onClick={goToNext}

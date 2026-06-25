@@ -1,0 +1,2059 @@
+{
+  "title": "Mock Interviews",
+  "modules": [
+    {
+      "name": "Module 1 (Q1-Q52)",
+      "questions": [
+        {
+          "id": "q1",
+          "question_text": "What is ServiceNow?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "ServiceNow is a cloud-based platform that helps companies manage their IT services, business processes, and daily operations from one place. Think of it as a digital workspace where teams can handle tickets, track issues, automate tasks, and improve overall workflow without installing anything on their computers."
+        },
+        {
+          "id": "q2",
+          "question_text": "Why do companies use ServiceNow?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Companies use ServiceNow because it makes work easier and faster. Instead of using multiple tools for different tasks, everything is available in one system. It saves time, reduces errors, and helps teams collaborate better. Plus, since it’s cloud-based, employees can access it from anywhere."
+        },
+        {
+          "id": "q3",
+          "question_text": "Who can use ServiceNow?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Anyone working in IT support, system administration, HR, customer service, or operations can use ServiceNow. You don’t need to be a programmer to start. Even non-IT professionals use it to manage workflows, track requests, and automate repetitive tasks."
+        },
+        {
+          "id": "q4",
+          "question_text": "What is the main need for ServiceNow in organizations?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "The main need is to bring order to chaos. Without ServiceNow, teams struggle with scattered information, slow processes, and manual work. ServiceNow organizes everything, automates routine tasks, and provides clear visibility into what’s happening across departments."
+        },
+        {
+          "id": "q5",
+          "question_text": "Explain cloud computing in ServiceNow. Cloud computing in ServiceNow means the software runs on remote servers managed by ServiceNow itself. You don’t install anything locally. You just log in through a web browser, and everything is ready to use. Updates happen automatically, and your data is stored securely in the cloud. Q6. What is ITIL, and how does it relate to ServiceNow?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "ITIL stands for Information Technology Infrastructure Library. It’s a set of best practices for managing IT services. ServiceNow is built following ITIL guidelines, which means it follows proven methods for incident management, change management, service requests, and more."
+        },
+        {
+          "id": "q7",
+          "question_text": "What are the different modules in ServiceNow?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "ServiceNow has many modules like Incident Management, Problem Management, Change Management, Service Catalog, Knowledge Management, User Administration, Reports, and Integrations. Each module handles a specific area of IT or business operations."
+        },
+        {
+          "id": "q8",
+          "question_text": "Can non-IT students learn ServiceNow easily?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Absolutely! ServiceNow is designed to be user-friendly. You don’t need a coding background to start. The interface is intuitive, and many tasks involve clicking, filling forms, and configuring settings rather than writing complex code."
+        },
+        {
+          "id": "q9",
+          "question_text": "What is the ServiceNow interface made up of?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "The interface has a banner at the top with navigation, a left sidebar showing applications and modules, and a main content area where you work. It’s clean and organized, similar to popular web applications you might already use."
+        },
+        {
+          "id": "q10",
+          "question_text": "What’s the difference between ServiceNow and traditional IT tools?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Traditional tools often require installation, updates, and maintenance on local servers. ServiceNow is cloud-based, so everything is managed remotely. It’s also modular, meaning you can activate only the features you need, unlike bulky traditional software. ⚡ Become a Certified ServiceNow Developer Master CSA → CAD → CIS modules with our ServiceNow Developer Course . Application Menus and Modules"
+        },
+        {
+          "id": "q11",
+          "question_text": "What are fields in ServiceNow?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Fields are individual data entry points on a form. For example, when you create a ticket, fields include ticket number, description, priority, and assigned user. They’re like boxes where you input information."
+        },
+        {
+          "id": "q12",
+          "question_text": "How do you create a new field in ServiceNow?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "You go to the form where you want the field, right-click on the header, choose “Configure,” then “Form Layout.” From there, you can add fields by dragging them from the available list or creating new custom fields."
+        },
+        {
+          "id": "q13",
+          "question_text": "What is a section in ServiceNow forms?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "A section groups related fields together on a form. For instance, you might have a “Contact Information” section with fields like email, phone, and address. Sections make forms easier to read and organize."
+        },
+        {
+          "id": "q14",
+          "question_text": "What are views in ServiceNow?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Views are different layouts of a form tailored for specific users or roles. For example, an IT admin might see all fields, while a regular user sees only basic fields. Views help customize the user experience."
+        },
+        {
+          "id": "q15",
+          "question_text": "What is a dictionary override?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "A dictionary override lets you change field properties for a specific table without affecting the parent table. For example, you can make a field mandatory in one module but optional in another."
+        },
+        {
+          "id": "q16",
+          "question_text": "Explain reference qualifiers. Reference qualifiers filter the options shown in a reference field. For example, when assigning a ticket, you might want to show only users from a specific department. Reference qualifiers make that possible. Q17. What are dependent values?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Dependent values create a relationship between two fields. When you select a value in one field, the options in another field change accordingly. For example, selecting “Hardware” in Category might show “Laptop” and “Desktop” in Subcategory."
+        },
+        {
+          "id": "q18",
+          "question_text": "What is a related list?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "A related list displays records from another table that are connected to the current record. For example, an incident form might show a related list of tasks associated with that incident."
+        },
+        {
+          "id": "q19",
+          "question_text": "How do you add a related list to a form?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Right-click on the form header, select “Configure,” then “Related Lists.” You can then choose which related lists to display and their order on the form."
+        },
+        {
+          "id": "q20",
+          "question_text": "Can you create custom fields without coding?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Yes! You can create custom fields through the interface by going to the dictionary entry or form configuration. You choose the field type (text, date, checkbox, etc.), and ServiceNow does the rest. Update Sets"
+        },
+        {
+          "id": "q21",
+          "question_text": "What is an update set in ServiceNow?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "An update set is a container that tracks all the changes you make in your ServiceNow instance. It’s like a package that holds your customizations so you can move them from one environment to another (like from test to production)."
+        },
+        {
+          "id": "q22",
+          "question_text": "Why are update sets important?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Update sets ensure that changes are tracked, organized, and can be migrated safely. Without them, you’d have to manually recreate every customization in each environment, which is time-consuming and error-prone."
+        },
+        {
+          "id": "q23",
+          "question_text": "What is a local update set?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "A local update set is the one you’re currently working in. When you make changes, they’re automatically captured in the active local update set."
+        },
+        {
+          "id": "q24",
+          "question_text": "What is a retrieved update set?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "A retrieved update set is one that has been moved from another ServiceNow instance. You retrieve it into your current instance so you can review and apply the changes."
+        },
+        {
+          "id": "q25",
+          "question_text": "How do you create a new update set?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Go to “System Update Sets” > “Local Update Sets,” click “New,” give it a name and description, then mark it as the current update set."
+        },
+        {
+          "id": "q26",
+          "question_text": "Can you have multiple update sets active at once?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "No, only one update set can be active at a time. You switch between them as needed depending on what changes you’re working on."
+        },
+        {
+          "id": "q27",
+          "question_text": "What does merging update sets mean?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Merging combines multiple update sets into one. This is useful when different people work on related changes, and you want to group them together before migration."
+        },
+        {
+          "id": "q28",
+          "question_text": "How do you merge update sets?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Go to “System Update Sets” > “Local Update Sets,” select the update sets you want to merge, and choose “Merge Update Sets.” ServiceNow will combine them into a single set."
+        },
+        {
+          "id": "q29",
+          "question_text": "What happens if there’s a conflict during merging?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "If two update sets change the same record differently, a conflict occurs. You’ll need to manually review and decide which version to keep."
+        },
+        {
+          "id": "q30",
+          "question_text": "What is the state of an update set?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Update sets have states like “In Progress” (being worked on), “Complete” (finished and ready to move), and “Ignore” (not to be used). Changing the state helps manage the workflow. Module 4: User Administration"
+        },
+        {
+          "id": "q31",
+          "question_text": "What is user administration in ServiceNow?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "User administration involves creating, managing, and organizing user accounts. You control who can access the system, what they can see, and what actions they can perform."
+        },
+        {
+          "id": "q32",
+          "question_text": "How do you create a new user?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Navigate to “User Administration” > “Users,” click “New,” fill in details like name, email, and username, then save the record."
+        },
+        {
+          "id": "q33",
+          "question_text": "What is a group in ServiceNow?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "A group is a collection of users organized for easier management. For example, you might have a “Network Support” group containing all network engineers. This makes assigning tasks and permissions simpler."
+        },
+        {
+          "id": "q34",
+          "question_text": "How do you create a group?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Go to “User Administration” > “Groups,” click “New,” enter the group name and details, then add members by searching for users."
+        },
+        {
+          "id": "q35",
+          "question_text": "What are roles in ServiceNow?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Roles define what users can do in the system. For example, an “admin” role has full access, while an “itil” role has access to incident and change management features."
+        },
+        {
+          "id": "q36",
+          "question_text": "How do you assign roles to a user?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Open the user’s profile, scroll to the “Roles” related list, click “Edit,” select the roles you want to assign, and save."
+        },
+        {
+          "id": "q37",
+          "question_text": "Can a user belong to multiple groups?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Yes, users can be members of multiple groups. This is common because users might work across different teams or projects."
+        },
+        {
+          "id": "q38",
+          "question_text": "What’s the difference between a role and a group?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "A role controls permissions (what you can do), while a group organizes users (who you work with). Roles are about security; groups are about workflow."
+        },
+        {
+          "id": "q39",
+          "question_text": "What is the importance of proper user administration?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Proper user administration ensures security, accountability, and efficiency. The right people get the right access, and you can track who did what in the system."
+        },
+        {
+          "id": "q40",
+          "question_text": "Can you disable a user account instead of deleting it?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Yes, you can set a user as “inactive.” This keeps their record and history but prevents them from logging in. Reports"
+        },
+        {
+          "id": "q41",
+          "question_text": "What are reports in ServiceNow?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Reports are visual representations of data stored in ServiceNow. They help you understand trends, track performance, and make informed decisions based on real information."
+        },
+        {
+          "id": "q42",
+          "question_text": "How do you create a report?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Go to “Reports” > “Create New,” choose the table you want to report on, select the type of report (bar chart, pie chart, list, etc.), configure filters and conditions, then run the report."
+        },
+        {
+          "id": "q43",
+          "question_text": "What types of reports can you create?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "You can create bar charts, pie charts, line graphs, pivot tables, and list reports. Each type serves different purposes depending on what data you want to present."
+        },
+        {
+          "id": "q44",
+          "question_text": "What is the purpose of sharing reports?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Sharing reports lets other users or groups view the data without creating their own reports. It promotes collaboration and ensures everyone sees the same information."
+        },
+        {
+          "id": "q45",
+          "question_text": "How do you share a report?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "After creating a report, click “Share,” choose whether to share with everyone, specific groups, or users, then save your settings."
+        },
+        {
+          "id": "q46",
+          "question_text": "What is a homepage in ServiceNow?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "A homepage is a personalized dashboard where users see reports, lists, and widgets relevant to their work. It’s the first screen they see after logging in."
+        },
+        {
+          "id": "q47",
+          "question_text": "How do you create a custom homepage?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Go to “Self-Service” > “Homepages,” click “New,” design the layout by adding widgets and reports, then publish it for users or groups."
+        },
+        {
+          "id": "q48",
+          "question_text": "Can you schedule reports to run automatically?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Yes, you can schedule reports to run at specific times (daily, weekly, monthly) and have the results emailed to designated recipients."
+        },
+        {
+          "id": "q49",
+          "question_text": "How do you schedule a report?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Open the report, click “Schedule,” set the frequency and time, enter email addresses, and save the schedule."
+        },
+        {
+          "id": "q50",
+          "question_text": "What is the benefit of scheduled reports?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Scheduled reports keep stakeholders informed without manual effort. They receive updates regularly and can spot issues or trends early. Service Level Agreements (SLA)"
+        },
+        {
+          "id": "q51",
+          "question_text": "What is an SLA in ServiceNow?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "An SLA (Service Level Agreement) is a commitment to complete work within a specific timeframe. For example, resolving critical incidents within 4 hours."
+        },
+        {
+          "id": "q52",
+          "question_text": "Why are SLAs important?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "SLAs ensure accountability and set clear expectations. They help teams prioritize work and measure performance against agreed standards."
+        }
+      ]
+    },
+    {
+      "name": "Module 2 (Q53-Q102)",
+      "questions": [
+        {
+          "id": "q53",
+          "question_text": "What are the components of an SLA?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "An SLA has a schedule (when it applies), conditions (what triggers it), and a duration (how long you have to complete the task)."
+        },
+        {
+          "id": "q54",
+          "question_text": "What is SLA breach?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "An SLA breach happens when work isn’t completed within the agreed timeframe. It indicates a failure to meet service commitments."
+        },
+        {
+          "id": "q55",
+          "question_text": "How does ServiceNow track SLA progress?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "ServiceNow automatically tracks time from the moment an SLA is triggered. You’ll see timers and visual indicators showing how much time remains."
+        },
+        {
+          "id": "q56",
+          "question_text": "What happens when an SLA is about to breach?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "ServiceNow can send notifications or escalate the task to higher-level staff. This ensures someone takes action before it’s too late."
+        },
+        {
+          "id": "q57",
+          "question_text": "Can you pause an SLA?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Yes, SLAs can pause based on conditions like waiting for customer response. This ensures you’re not penalized for delays outside your control."
+        },
+        {
+          "id": "q58",
+          "question_text": "What is the difference between SLA and OLA?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "An SLA is an agreement with external customers, while an OLA (Operational Level Agreement) is an internal agreement between departments."
+        },
+        {
+          "id": "q59",
+          "question_text": "How do you create an SLA in ServiceNow?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Navigate to “Service Level Management” > “SLA Definitions,” click “New,” define the conditions, set the duration, configure notifications, and activate it."
+        },
+        {
+          "id": "q60",
+          "question_text": "Can you have multiple SLAs on one record?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Yes, multiple SLAs can apply to the same record. For example, one for initial response and another for resolution. Access Control Lists (ACL)"
+        },
+        {
+          "id": "q61",
+          "question_text": "What is an Access Control List?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "An ACL controls who can see, create, edit, or delete records in ServiceNow. It’s the security layer that protects your data."
+        },
+        {
+          "id": "q62",
+          "question_text": "What are the four main ACL operations?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Create, Read, Write, and Delete. These determine what actions users can perform on records."
+        },
+        {
+          "id": "q63",
+          "question_text": "How does ServiceNow decide if a user has access?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "ServiceNow checks ACLs in a specific order. If any ACL denies access, the user is blocked. If none deny and at least one allows, access is granted."
+        },
+        {
+          "id": "q64",
+          "question_text": "What is the difference between table-level and field-level ACLs?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Table-level ACLs control access to entire records, while field-level ACLs control access to specific fields within records."
+        },
+        {
+          "id": "q65",
+          "question_text": "Can you create an ACL without coding?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Basic ACLs can be created through the interface by selecting roles and conditions. Advanced ACLs might require scripting for complex logic."
+        },
+        {
+          "id": "q66",
+          "question_text": "What happens if no ACL exists for an action?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "If no ACL is defined, ServiceNow usually denies access by default to maintain security."
+        },
+        {
+          "id": "q67",
+          "question_text": "How do you test ACLs?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "You can impersonate a user with specific roles to see what they can access. This helps verify that your ACLs work correctly."
+        },
+        {
+          "id": "q68",
+          "question_text": "What is the purpose of the “admin” role bypass?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Users with the “admin” role typically bypass ACLs, giving them full access to everything. This is necessary for system management but should be granted carefully."
+        },
+        {
+          "id": "q69",
+          "question_text": "Can ACLs be used to hide fields?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Yes, field-level ACLs can make fields invisible or read-only for specific users, ensuring sensitive information stays protected."
+        },
+        {
+          "id": "q70",
+          "question_text": "What’s the best practice for managing ACLs?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Keep ACLs simple and well-documented. Use roles rather than individual users, and regularly review ACLs to ensure they still meet security requirements. Import Sets"
+        },
+        {
+          "id": "q71",
+          "question_text": "What are import sets?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Import sets are staging tables that temporarily hold data from external sources before it’s transformed and loaded into ServiceNow tables."
+        },
+        {
+          "id": "q72",
+          "question_text": "Why use import sets instead of direct import?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Import sets provide a safe way to preview and validate data before committing it. If something goes wrong, your main tables remain untouched."
+        },
+        {
+          "id": "q73",
+          "question_text": "What is a transform map?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "A transform map defines how data from an import set moves into target tables. It maps fields from the import set to fields in the actual ServiceNow table."
+        },
+        {
+          "id": "q74",
+          "question_text": "How do you load data into ServiceNow?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "You can load data via Excel, CSV files, or integrations. The data first goes into an import set, then you run a transform map to move it to the target table."
+        },
+        {
+          "id": "q75",
+          "question_text": "What is coalesce in ServiceNow?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Coalesce is a method to match existing records during import. If a match is found, the record is updated instead of creating a duplicate."
+        },
+        {
+          "id": "q76",
+          "question_text": "How do you set up coalesce?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "In the transform map, you select which fields to use for matching (like email or employee ID). ServiceNow then checks those fields during import."
+        },
+        {
+          "id": "q77",
+          "question_text": "What happens if coalesce doesn’t find a match?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "If no match is found, ServiceNow creates a new record instead of updating an existing one."
+        },
+        {
+          "id": "q78",
+          "question_text": "Can you import data without a transform map?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "No, you need a transform map to move data from the import set to the target table. It’s the bridge between staging and final data."
+        },
+        {
+          "id": "q79",
+          "question_text": "What is data load in ServiceNow?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Data load is the process of bringing external data into ServiceNow tables through import sets and transform maps."
+        },
+        {
+          "id": "q80",
+          "question_text": "How do you handle errors during import?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "ServiceNow logs errors in the import set. You can review them, fix the source data, and re-run the import until successful. 🗺️ Follow the Complete ServiceNow Roadmap Beginner → CSA → Application Development → Advanced Modules & Integrations. Open Roadmap → Custom Applications"
+        },
+        {
+          "id": "q81",
+          "question_text": "What is a custom application in ServiceNow?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "A custom application is one you build to fit specific business needs not covered by out-of-the-box modules. It’s tailored to your organization’s unique processes."
+        },
+        {
+          "id": "q82",
+          "question_text": "Why create custom applications?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Custom applications address unique workflows, integrate with other systems, or provide specialized features that standard ServiceNow modules don’t offer."
+        },
+        {
+          "id": "q83",
+          "question_text": "What are the ways to create a custom application?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "You can use the Application Studio (low-code), manually configure tables and modules, or use templates provided by ServiceNow."
+        },
+        {
+          "id": "q84",
+          "question_text": "What is Studio in ServiceNow?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Studio is the development environment within ServiceNow where you build and customize applications. It’s your workshop for creating new functionality."
+        },
+        {
+          "id": "q85",
+          "question_text": "How do you start building a custom application?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Go to “System Applications” > “Studio,” click “Create Application,” give it a name and scope, then start adding tables, forms, and logic."
+        },
+        {
+          "id": "q86",
+          "question_text": "What is application scope?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Application scope isolates your custom application from others, preventing conflicts. Each scoped application has its own namespace and resources."
+        },
+        {
+          "id": "q87",
+          "question_text": "Can non-developers build custom applications?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Yes, using low-code tools like App Engine Studio, non-developers can build applications by configuring settings rather than writing code."
+        },
+        {
+          "id": "q88",
+          "question_text": "What are the key components of a custom application?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Tables (to store data), forms (to input data), lists (to view records), workflows (to automate processes), and reports (to analyze data)."
+        },
+        {
+          "id": "q89",
+          "question_text": "How do you publish a custom application?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Once developed and tested, you can publish the application to make it available to users in your instance or even share it on the ServiceNow Store."
+        },
+        {
+          "id": "q90",
+          "question_text": "What is the ServiceNow Store?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "The ServiceNow Store is a marketplace where you can find and install pre-built applications created by ServiceNow or third-party developers. Email Notifications"
+        },
+        {
+          "id": "q91",
+          "question_text": "What are email notifications in ServiceNow?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Email notifications are automated messages sent when specific events occur, like when a ticket is assigned or updated."
+        },
+        {
+          "id": "q92",
+          "question_text": "Why use email notifications?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "They keep users informed without requiring them to constantly check the system. Notifications improve communication and response times."
+        },
+        {
+          "id": "q93",
+          "question_text": "What triggers an email notification?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Notifications are triggered by events like record insertion, update, or deletion, or by specific field changes."
+        },
+        {
+          "id": "q94",
+          "question_text": "How do you create an email notification?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Go to “System Notification” > “Email” > “Notifications,” click “New,” select the table and conditions, design the email content, and activate it."
+        },
+        {
+          "id": "q95",
+          "question_text": "What are business rules in relation to notifications?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Business rules are scripts that run when records are inserted, updated, or deleted. They can trigger notifications or perform other automated actions."
+        },
+        {
+          "id": "q96",
+          "question_text": "Can you customize email notification templates?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Yes, you can customize subject lines, body content, and even use variables to personalize messages based on record data."
+        },
+        {
+          "id": "q97",
+          "question_text": "What are email properties in ServiceNow?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Email properties control how emails are sent, including SMTP server settings, sender addresses, and authentication details."
+        },
+        {
+          "id": "q98",
+          "question_text": "How do you test email notifications?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "You can use the “Test” button in the notification record to send a test email and verify that it’s working correctly."
+        },
+        {
+          "id": "q99",
+          "question_text": "What is the difference between notifications and events?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Events are triggers that signal something has happened. Notifications are the actual emails sent in response to those events."
+        },
+        {
+          "id": "q100",
+          "question_text": "Can notifications be sent to external email addresses?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Yes, you can send notifications to any email address, not just ServiceNow users. Client Scripts"
+        },
+        {
+          "id": "q101",
+          "question_text": "What are client scripts?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Client scripts are JavaScript code that runs on the user’s browser. They control form behavior, validate input, and enhance the user experience."
+        },
+        {
+          "id": "q102",
+          "question_text": "What are the types of client scripts?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "There are four types: onLoad (runs when the form loads), onChange (runs when a field value changes), onSubmit (runs when the form is submitted), and onCellEdit (runs in list editing)."
+        }
+      ]
+    },
+    {
+      "name": "Module 3 (Q103-Q152)",
+      "questions": [
+        {
+          "id": "q103",
+          "question_text": "When do you use an onLoad script?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Use onLoad when you want to set default values, hide/show fields, or perform actions as soon as the form appears."
+        },
+        {
+          "id": "q104",
+          "question_text": "What is an onChange client script?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "An onChange script runs whenever a specific field’s value changes. It’s useful for dependent fields or real-time validation."
+        },
+        {
+          "id": "q105",
+          "question_text": "What does an onSubmit script do?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "An onSubmit script runs before the form is saved. You can use it to validate data or prevent submission if conditions aren’t met."
+        },
+        {
+          "id": "q106",
+          "question_text": "What is onCellEdit used for?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "onCellEdit is used in list views where users can edit fields directly. The script runs when a cell value is changed."
+        },
+        {
+          "id": "q107",
+          "question_text": "Can client scripts access the server?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Client scripts primarily run in the browser, but you can use GlideAjax to communicate with the server and fetch data without reloading the page."
+        },
+        {
+          "id": "q108",
+          "question_text": "How do you create a client script?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Navigate to “System Definition” > “Client Scripts,” click “New,” select the table, type, and triggering field, write your script, and save."
+        },
+        {
+          "id": "q109",
+          "question_text": "What is the g_form object?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "g_form is a JavaScript object that provides methods to interact with form fields, like getting values, setting values, and hiding fields."
+        },
+        {
+          "id": "q110",
+          "question_text": "What’s the difference between client scripts and business rules?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Client scripts run on the user’s browser for immediate feedback, while business rules run on the server when records are saved. UI Policies"
+        },
+        {
+          "id": "q111",
+          "question_text": "What are UI Policies?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "UI Policies control form field behavior without writing code. They can make fields mandatory, read-only, or visible based on conditions."
+        },
+        {
+          "id": "q112",
+          "question_text": "Why use UI Policies instead of client scripts?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "UI Policies are easier to create and maintain. They’re point-and-click configuration rather than coding, making them accessible to non-developers."
+        },
+        {
+          "id": "q113",
+          "question_text": "What can UI Policies do?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "They can set fields as mandatory or read-only, hide or show fields and sections, and clear field values based on conditions."
+        },
+        {
+          "id": "q114",
+          "question_text": "How do you create a UI Policy?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Go to “System UI” > “UI Policies,” click “New,” select the table, define conditions, then add UI Policy Actions to specify which fields to affect."
+        },
+        {
+          "id": "q115",
+          "question_text": "What are UI Policy Actions?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "UI Policy Actions are the specific changes you want to make to fields, like making a field mandatory or hiding it."
+        },
+        {
+          "id": "q116",
+          "question_text": "Can UI Policies work on Service Portal?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "By default, UI Policies work on the platform interface. For Service Portal, you need to enable “Global” and might need additional configuration."
+        },
+        {
+          "id": "q117",
+          "question_text": "What is the execution order of UI Policies?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "UI Policies are processed in the order they’re created. If multiple policies affect the same field, the last one wins."
+        },
+        {
+          "id": "q118",
+          "question_text": "Can UI Policies run on insert only?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Yes, you can configure UI Policies to run only on new records (insert) or only on existing records (update)."
+        },
+        {
+          "id": "q119",
+          "question_text": "What’s the difference between UI Policies and Data Policies?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "UI Policies affect form appearance and field behavior. Data Policies enforce rules on data itself, even when changes come from integrations or imports."
+        },
+        {
+          "id": "q120",
+          "question_text": "How do you troubleshoot UI Policies not working?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Check the conditions, verify the order, ensure the table is correct, and look at the UI Policy Actions. You can also test by temporarily disabling other policies. Data Policies"
+        },
+        {
+          "id": "q121",
+          "question_text": "What are Data Policies?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Data Policies enforce data rules regardless of how data enters ServiceNow—through forms, imports, web services, or integrations."
+        },
+        {
+          "id": "q122",
+          "question_text": "Why are Data Policies important?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "They ensure data integrity across all entry points. Even if someone bypasses the UI, Data Policies still enforce mandatory fields and validation."
+        },
+        {
+          "id": "q123",
+          "question_text": "How are Data Policies different from UI Policies?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "UI Policies only work on forms. Data Policies work everywhere, including backend processes, making them more comprehensive for data governance."
+        },
+        {
+          "id": "q124",
+          "question_text": "What can Data Policies enforce?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "They can make fields mandatory, set fields as read-only, and validate field values according to specific rules."
+        },
+        {
+          "id": "q125",
+          "question_text": "How do you create a Data Policy?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Navigate to “System Policy” > “Data Policies,” click “New,” select the table, define conditions, and add Data Policy Rules for specific fields."
+        },
+        {
+          "id": "q126",
+          "question_text": "Can Data Policies prevent record submission?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Yes, if mandatory field requirements aren’t met, Data Policies will prevent the record from being saved."
+        },
+        {
+          "id": "q127",
+          "question_text": "Do Data Policies work on imported data?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Yes, that’s one of their key advantages. Data Policies enforce rules even during bulk imports."
+        },
+        {
+          "id": "q128",
+          "question_text": "What is a Data Policy Rule?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "A Data Policy Rule specifies which field is affected and what action to take (mandatory, read-only, etc.)."
+        },
+        {
+          "id": "q129",
+          "question_text": "Can you have multiple Data Policies on the same table?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Yes, you can have multiple Data Policies. They all get evaluated, and all conditions must be satisfied."
+        },
+        {
+          "id": "q130",
+          "question_text": "When should you use Data Policies over UI Policies?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Use Data Policies when data comes from multiple sources and you need consistent enforcement. Use UI Policies for user experience improvements on forms. Data Policies"
+        },
+        {
+          "id": "q131",
+          "question_text": "What are UI Actions?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "UI Actions are buttons, links, or context menu items that perform actions like saving records, running scripts, or navigating to other pages."
+        },
+        {
+          "id": "q132",
+          "question_text": "Where do UI Actions appear?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "They appear on forms, lists, and related lists as buttons at the top or bottom, or as options in right-click menus."
+        },
+        {
+          "id": "q133",
+          "question_text": "What types of UI Actions exist?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Form buttons, form context menu items, form links, list buttons, list context menu items, and list choices."
+        },
+        {
+          "id": "q134",
+          "question_text": "How do you create a UI Action?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Go to “System UI” > “UI Actions,” click “New,” select the table and type, write the script for what the action should do, and configure display conditions."
+        },
+        {
+          "id": "q135",
+          "question_text": "Can UI Actions run without user confirmation?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Yes, but for actions that modify data, it’s best practice to show a confirmation dialog to prevent accidental changes."
+        },
+        {
+          "id": "q136",
+          "question_text": "What is the purpose of UI Action conditions?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Conditions control when UI Actions are visible or enabled. For example, showing a “Close” button only when a ticket is resolved."
+        },
+        {
+          "id": "q137",
+          "question_text": "Can you create UI Actions without scripting?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Simple UI Actions like navigation links can be created without scripting. Actions that process data typically require scripts."
+        },
+        {
+          "id": "q138",
+          "question_text": "What is the “Submit” UI Action?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "The “Submit” button on forms is a UI Action. You can customize it or create alternative submit buttons with different behaviors."
+        },
+        {
+          "id": "q139",
+          "question_text": "How do you make a UI Action client-side?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Check the “Client” checkbox when creating the UI Action. The script will then run in the user’s browser using JavaScript."
+        },
+        {
+          "id": "q140",
+          "question_text": "What’s the difference between client and server UI Actions?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Client UI Actions run in the browser for immediate response. Server UI Actions run on the server and can perform complex operations but require a page reload. Business Rules"
+        },
+        {
+          "id": "q141",
+          "question_text": "What are business rules?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Business rules are server-side scripts that run automatically when records are inserted, updated, deleted, or queried. They automate processes and enforce business logic."
+        },
+        {
+          "id": "q142",
+          "question_text": "When do business rules execute?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "They execute at specific times: before the database operation (before), after the database operation (after), asynchronously (async), or on display (display)."
+        },
+        {
+          "id": "q143",
+          "question_text": "What is a “before” business rule?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "A “before” business rule runs before the record is saved to the database. It’s useful for modifying field values or validating data before commit."
+        },
+        {
+          "id": "q144",
+          "question_text": "What is an “after” business rule?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "An “after” business rule runs after the record is saved. It’s used for actions that depend on the record existing, like creating related records or sending notifications."
+        },
+        {
+          "id": "q145",
+          "question_text": "What are async business rules?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Async business rules run in the background after the record is saved. They don’t delay the user’s transaction, making them ideal for time-consuming tasks."
+        },
+        {
+          "id": "q146",
+          "question_text": "When should you use async business rules?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Use async for operations like sending emails, updating multiple related records, or calling external systems where immediate execution isn’t critical."
+        },
+        {
+          "id": "q147",
+          "question_text": "What is a display business rule?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Display business rules run when a record is loaded for viewing but isn’t being saved. They’re rarely used and can impact performance if overused."
+        },
+        {
+          "id": "q148",
+          "question_text": "Can business rules be scoped?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Yes, business rules can be part of a scoped application, limiting their execution to that application’s tables and logic."
+        },
+        {
+          "id": "q149",
+          "question_text": "How do you create a business rule?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Navigate to “System Definition” > “Business Rules,” click “New,” select the table and timing, write the script, define conditions, and save."
+        },
+        {
+          "id": "q150",
+          "question_text": "What is the current object in business rules?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "The “current” object represents the record being processed. You can read and modify its field values using current.field_name. Service Catalogs"
+        },
+        {
+          "id": "q151",
+          "question_text": "What is a Service Catalog in ServiceNow?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "A Service Catalog is like an online shopping experience but for services within your company. Employees can browse and request services like IT equipment, software access, HR assistance, or facility services—all from one place."
+        },
+        {
+          "id": "q152",
+          "question_text": "What are catalog items?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Catalog items are the individual services or products users can request from the Service Catalog. Examples include “Request a new laptop,” “Reset my password,” or “Book a meeting room.”"
+        }
+      ]
+    },
+    {
+      "name": "Module 4 (Q153-Q202)",
+      "questions": [
+        {
+          "id": "q153",
+          "question_text": "How do you create a catalog item?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Navigate to Service Catalog, select “Maintain Items,” click “New,” fill in the details like name, description, and price, design the request form by adding variables, then publish it for users to see."
+        },
+        {
+          "id": "q154",
+          "question_text": "What are catalog categories?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Categories organize catalog items into logical groups, making it easier for users to find what they need. For example, “Hardware,” “Software,” “HR Services,” or “Facilities.”"
+        },
+        {
+          "id": "q155",
+          "question_text": "What is a record producer?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "A record producer is a special type of catalog item that creates records in other tables directly. Instead of creating a generic request, it creates a specific record type like an incident, change request, or custom application record."
+        },
+        {
+          "id": "q156",
+          "question_text": "When would you use a record producer instead of a regular catalog item?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Use a record producer when you want users to create records in specific tables through the Service Catalog. For example, letting employees report incidents or submit change requests without accessing those modules directly."
+        },
+        {
+          "id": "q157",
+          "question_text": "What are order guides?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Order guides allow users to order multiple related catalog items together in one transaction. For example, a “New Employee Setup” order guide might include laptop, phone, email account, and building access—all ordered at once."
+        },
+        {
+          "id": "q158",
+          "question_text": "How do order guides benefit users?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Order guides save time by bundling related items. Users don’t need to submit multiple requests separately. Everything goes through as a package, and dependencies between items are automatically managed."
+        },
+        {
+          "id": "q159",
+          "question_text": "What are catalog variables?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Variables are the questions or fields users fill out when requesting a catalog item. They capture information needed to fulfill the request, like “What model laptop do you prefer?” or “When do you need this?”"
+        },
+        {
+          "id": "q160",
+          "question_text": "What types of variables can you create?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "You can create single-line text, multi-line text, multiple choice, checkboxes, date pickers, reference fields, attachments, and more. Each type serves different data collection needs."
+        },
+        {
+          "id": "q161",
+          "question_text": "Can catalog items have approval workflows?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Yes, you can attach approval workflows to catalog items. When someone orders the item, approvals are automatically triggered based on conditions like cost, department, or item type."
+        },
+        {
+          "id": "q162",
+          "question_text": "What is a fulfillment task?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Fulfillment tasks are work assignments created automatically when a catalog item is requested. They assign specific steps to different teams or individuals to complete the request."
+        },
+        {
+          "id": "q163",
+          "question_text": "How do you make a catalog item visible to specific groups?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "In the catalog item configuration, use the “Availability” settings to specify which users, groups, or roles can see and order the item."
+        },
+        {
+          "id": "q164",
+          "question_text": "What is a catalog client script?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "A catalog client script is JavaScript that runs on catalog item forms to validate input, show or hide fields, or provide dynamic behavior based on user selections."
+        },
+        {
+          "id": "q165",
+          "question_text": "Can you set prices for catalog items?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Yes, you can set prices for each catalog item. ServiceNow can track costs, generate reports on spending, and even integrate with financial systems for chargebacks. Flow Designer"
+        },
+        {
+          "id": "q166",
+          "question_text": "What is Flow Designer in ServiceNow?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Flow Designer is a visual, drag-and-drop automation tool that lets you build workflows without writing code. You create flows by connecting actions, conditions, and logic steps to automate processes."
+        },
+        {
+          "id": "q167",
+          "question_text": "Why use Flow Designer instead of traditional workflows?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Flow Designer is easier to use, provides better error handling, supports integrations through spokes, and has built-in testing capabilities. It’s the modern approach to automation in ServiceNow."
+        },
+        {
+          "id": "q168",
+          "question_text": "What is a flow?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "A flow is an automated process that performs a series of actions when triggered. For example, a flow might automatically assign tickets, send notifications, and update records based on conditions."
+        },
+        {
+          "id": "q169",
+          "question_text": "What triggers a flow?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Flows can be triggered by record events (like creating or updating records), schedules, service catalog requests, or manual triggers through UI actions."
+        },
+        {
+          "id": "q170",
+          "question_text": "What is a subflow?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "A subflow is a reusable flow component that can be called from multiple parent flows. If you have common steps used in different processes, create them once as a subflow and reuse them everywhere."
+        },
+        {
+          "id": "q171",
+          "question_text": "What is an action in Flow Designer?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "An action is a single operation within a flow, like looking up a record, sending an email, creating a task, or calling an external system. Actions are the building blocks of flows."
+        },
+        {
+          "id": "q172",
+          "question_text": "Can you create custom actions?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Yes, you can create custom actions using Action Designer. This lets you encapsulate complex logic and reuse it across multiple flows."
+        },
+        {
+          "id": "q173",
+          "question_text": "What are spokes in Flow Designer?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Spokes are integration packages that connect ServiceNow with external systems like Salesforce, Slack, Microsoft Teams, AWS, and more. They provide pre-built actions for those systems."
+        },
+        {
+          "id": "q174",
+          "question_text": "How do you handle errors in flows?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Flow Designer has built-in error handling. You can define what happens when an action fails—retry, send notifications, take alternate paths, or log errors for review."
+        },
+        {
+          "id": "q175",
+          "question_text": "Can flows replace business rules?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Flows can handle many scenarios that business rules do, especially for complex multi-step processes. However, business rules are still better for simple, immediate database operations."
+        },
+        {
+          "id": "q176",
+          "question_text": "What is the difference between workflow and Flow Designer?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Workflow is the older automation tool requiring more technical knowledge. Flow Designer is newer, more user-friendly, supports better integrations, and is now the recommended approach."
+        },
+        {
+          "id": "q177",
+          "question_text": "How do you test flows?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Flow Designer has a built-in test feature. You can run flows with sample data, see step-by-step execution, identify where errors occur, and verify outputs before activating."
+        },
+        {
+          "id": "q178",
+          "question_text": "Can flows call scripts?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Yes, you can add script steps within flows to handle custom logic that pre-built actions don’t cover."
+        },
+        {
+          "id": "q179",
+          "question_text": "What is flow version control?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Flow Designer tracks versions automatically. You can compare versions, rollback to previous versions, and see who made changes and when."
+        },
+        {
+          "id": "q180",
+          "question_text": "Are flows included in update sets?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Yes, flows and their components are automatically captured in update sets, making it easy to migrate them between instances. Schedule Jobs"
+        },
+        {
+          "id": "q181",
+          "question_text": "What are scheduled jobs in ServiceNow?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Scheduled jobs are automated tasks that run at specified times or intervals. They perform background operations like data cleanup, report generation, or system maintenance without manual intervention."
+        },
+        {
+          "id": "q182",
+          "question_text": "When would you use a scheduled job?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Use scheduled jobs for recurring tasks like daily reports, weekly data imports, nightly database maintenance, or periodic checks for outdated records."
+        },
+        {
+          "id": "q183",
+          "question_text": "How do you create a scheduled job?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Go to System Scheduler, select “Scheduled Jobs,” click “New,” name the job, write or select the script to execute, set the schedule (time and frequency), then activate it."
+        },
+        {
+          "id": "q184",
+          "question_text": "What is the difference between scheduled jobs and scheduled scripts?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Scheduled jobs can run any executable tasks including scripts. Scheduled scripts specifically run JavaScript code in the background at defined intervals."
+        },
+        {
+          "id": "q185",
+          "question_text": "Can scheduled jobs accept parameters?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Yes, you can pass parameters to scheduled jobs to customize their behavior without changing the underlying script."
+        },
+        {
+          "id": "q186",
+          "question_text": "How do you monitor scheduled job execution?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Check the “Scheduled Job Executions” module to see history, execution times, success or failure status, and any error messages."
+        },
+        {
+          "id": "q187",
+          "question_text": "What happens if a scheduled job fails?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "ServiceNow logs the failure with error details. You can configure notifications to alert administrators when jobs fail."
+        },
+        {
+          "id": "q188",
+          "question_text": "Can you pause or disable scheduled jobs?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Yes, you can set a scheduled job as inactive to temporarily stop it from running without deleting it."
+        },
+        {
+          "id": "q189",
+          "question_text": "What is the run as option in scheduled jobs?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "“Run as” specifies which user context the job executes under. This determines what records and operations the job can access based on that user’s permissions."
+        },
+        {
+          "id": "q190",
+          "question_text": "How often can scheduled jobs run?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Jobs can run as frequently as every few minutes or as infrequently as once a year. Common intervals are daily, weekly, monthly, or custom cron expressions for precise timing. Background Scripts"
+        },
+        {
+          "id": "q191",
+          "question_text": "What are background scripts?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Background scripts are one-time JavaScript code executions that run on the server. They’re useful for quick data fixes, testing code, or administrative tasks without creating permanent records."
+        },
+        {
+          "id": "q192",
+          "question_text": "When should you use background scripts?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Use them for testing logic before implementing it permanently, making bulk data updates, troubleshooting issues, or running one-off administrative tasks."
+        },
+        {
+          "id": "q193",
+          "question_text": "How do you access background scripts?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Navigate to System Definition, then Scripts – Background. You’ll see a script editor where you write your code and click “Run script” to execute."
+        },
+        {
+          "id": "q194",
+          "question_text": "Are background scripts permanent?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "No, they execute once and don’t create permanent configurations. The code runs, produces results, and then it’s done unless you save it for future reference."
+        },
+        {
+          "id": "q195",
+          "question_text": "Can background scripts modify records?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Yes, they can query, insert, update, or delete records. This makes them powerful for data maintenance but also requires careful use."
+        },
+        {
+          "id": "q196",
+          "question_text": "What permissions do you need to run background scripts?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "You typically need admin privileges because background scripts can access and modify any data in the system."
+        },
+        {
+          "id": "q197",
+          "question_text": "How do you see output from background scripts?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Results appear in the output section below the script editor. You can use gs.print() or gs.info () to display messages and values."
+        },
+        {
+          "id": "q198",
+          "question_text": "Can background scripts call functions?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Yes, you can call script includes, business rule functions, or any server-side API available in ServiceNow."
+        },
+        {
+          "id": "q199",
+          "question_text": "What’s the risk with background scripts?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "They’re powerful but risky. Mistakes can corrupt data, delete important records, or cause performance issues. Always test logic carefully and have backups."
+        },
+        {
+          "id": "q200",
+          "question_text": "Should background scripts be used in production?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Use them cautiously in production. They’re better suited for development and testing. For production changes, use proper change management and scheduled jobs instead. Script Includes"
+        },
+        {
+          "id": "q201",
+          "question_text": "What is a script include?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "A script include is reusable server-side JavaScript code stored as a library. You write functions once in a script include and call them from business rules, UI actions, scheduled jobs, or other scripts."
+        },
+        {
+          "id": "q202",
+          "question_text": "Why use script includes?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "They promote code reusability, make maintenance easier, keep logic organized, and improve performance by loading only when needed."
+        }
+      ]
+    },
+    {
+      "name": "Module 5 (Q203-Q252)",
+      "questions": [
+        {
+          "id": "q203",
+          "question_text": "How do you create a script include?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Go to System Definition, select Script Includes, click “New,” name it, write your functions, mark it as callable if needed, then save."
+        },
+        {
+          "id": "q204",
+          "question_text": "What is a client-callable script include?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "A client-callable script include can be invoked from client scripts using GlideAjax. It allows secure communication between client-side and server-side code."
+        },
+        {
+          "id": "q205",
+          "question_text": "How do you call a script include from a business rule?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Instantiate the script include using “new” keyword, then call its methods. For example: var util = new MyScriptInclude(); util.myFunction();"
+        },
+        {
+          "id": "q206",
+          "question_text": "What’s the difference between script includes and business rules?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Script includes are libraries of reusable functions. Business rules execute automatically when records change. Script includes are called; business rules are triggered."
+        },
+        {
+          "id": "q207",
+          "question_text": "Can script includes accept parameters?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Yes, functions within script includes can accept parameters just like any JavaScript function, making them flexible for different use cases."
+        },
+        {
+          "id": "q208",
+          "question_text": "What is the initialize function in script includes?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "The initialize function is a constructor that runs when you create a new instance of the script include. It’s used to set up initial values or configurations."
+        },
+        {
+          "id": "q209",
+          "question_text": "Can one script include call another?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Yes, script includes can call other script includes, allowing you to build complex functionality by combining simpler components."
+        },
+        {
+          "id": "q210",
+          "question_text": "Are script includes included in update sets?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Yes, script includes are automatically captured in update sets and can be migrated between instances. GlideRecord"
+        },
+        {
+          "id": "q211",
+          "question_text": "What is GlideRecord?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "GlideRecord is the primary API for database operations in ServiceNow. It lets you query, insert, update, and delete records using JavaScript."
+        },
+        {
+          "id": "q212",
+          "question_text": "How do you query records with GlideRecord?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Create a GlideRecord object for a table, add query conditions using addQuery(), execute with query(), then loop through results with next()."
+        },
+        {
+          "id": "q213",
+          "question_text": "What does the next() method do?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "The next() method moves to the next record in the result set. It returns true if there’s another record and false when you’ve reached the end."
+        },
+        {
+          "id": "q214",
+          "question_text": "How do you get a single record by sys_id?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Use the get() method with the sys_id. For example: gr.get(‘sys_id_value’) returns that specific record."
+        },
+        {
+          "id": "q215",
+          "question_text": "What’s the difference between query() and get()?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "query() retrieves multiple records matching conditions and requires looping. get() retrieves a single record directly by sys_id or unique field."
+        },
+        {
+          "id": "q216",
+          "question_text": "How do you insert a new record?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Create a GlideRecord object, use initialize() to prepare for insert, set field values, then call insert() to save the record."
+        },
+        {
+          "id": "q217",
+          "question_text": "How do you update records?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Query for the record, modify field values while inside the next() loop, then call update() to save changes."
+        },
+        {
+          "id": "q218",
+          "question_text": "Can GlideRecord delete records?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Yes, use the deleteRecord() method after querying and positioning on the record you want to remove."
+        },
+        {
+          "id": "q219",
+          "question_text": "What is addQuery() used for?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "addQuery() adds conditions to filter which records are returned. You can chain multiple addQuery() calls for complex filters."
+        },
+        {
+          "id": "q220",
+          "question_text": "What are encoded queries?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Encoded queries are string representations of filter conditions. You can copy them from list filters and use them in addEncodedQuery() for complex queries. GlideAjax"
+        },
+        {
+          "id": "q221",
+          "question_text": "What is GlideAjax?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "GlideAjax enables client-side scripts to communicate with server-side script includes asynchronously without refreshing the page."
+        },
+        {
+          "id": "q222",
+          "question_text": "When do you use GlideAjax?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Use GlideAjax when client scripts need data from the server, like looking up related records, performing calculations, or validating information against database values."
+        },
+        {
+          "id": "q223",
+          "question_text": "How do you create a GlideAjax call?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Instantiate GlideAjax with the script include name, add parameters using addParam(), define a callback function, then call getXML() to execute."
+        },
+        {
+          "id": "q224",
+          "question_text": "What is a callback function in GlideAjax?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "A callback function processes the response from the server. It executes after the server returns data, allowing you to update the form or perform actions."
+        },
+        {
+          "id": "q225",
+          "question_text": "Can GlideAjax modify records?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "While technically possible, it’s not recommended. GlideAjax is best for reading data. Use UI actions or other methods for modifications to maintain proper security and workflow."
+        },
+        {
+          "id": "q226",
+          "question_text": "What script include settings are needed for GlideAjax?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "The script include must be marked as “Client callable” and should extend AbstractAjaxProcessor for security and proper functioning."
+        },
+        {
+          "id": "q227",
+          "question_text": "How do you pass parameters to server-side through GlideAjax?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Use addParam() method to add each parameter. For example: ajax.addParam(‘sysparm_name’, ‘value’);"
+        },
+        {
+          "id": "q228",
+          "question_text": "How do you return values from script includes to GlideAjax?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Use the answer property of the response object. In the script include, set answer using setAnswer(), and retrieve it in the callback using response.getAnswer()."
+        },
+        {
+          "id": "q229",
+          "question_text": "Is GlideAjax synchronous or asynchronous?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "GlideAjax is asynchronous by default, meaning the page continues functioning while waiting for the server response. You can make it synchronous with getXMLWait(), but this freezes the page."
+        },
+        {
+          "id": "q230",
+          "question_text": "What are the security considerations with GlideAjax?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Only use client-callable script includes, validate all inputs server-side, don’t expose sensitive data, and ensure proper ACLs protect the underlying data. Integrations"
+        },
+        {
+          "id": "q231",
+          "question_text": "What is REST API in ServiceNow?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "REST API allows external systems to interact with ServiceNow using HTTP requests. You can create, read, update, or delete records from outside applications using REST endpoints."
+        },
+        {
+          "id": "q232",
+          "question_text": "What are the HTTP methods used in REST?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "GET (retrieve data), POST (create records), PUT (update records), PATCH (partial update), and DELETE (remove records)."
+        },
+        {
+          "id": "q233",
+          "question_text": "How do you authenticate REST API calls?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Common methods include Basic Authentication (username and password), OAuth tokens, or API keys. ServiceNow validates credentials before allowing access."
+        },
+        {
+          "id": "q234",
+          "question_text": "What is Postman?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Postman is a popular tool for testing REST APIs. You can build requests, send them to ServiceNow, view responses, and debug integration issues before implementing in code."
+        },
+        {
+          "id": "q235",
+          "question_text": "How do you create a REST API in ServiceNow?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Use Scripted REST APIs to create custom endpoints. Define the resource path, HTTP method, script logic, and response format in the REST API designer."
+        },
+        {
+          "id": "q236",
+          "question_text": "What are spokes in integrations?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Spokes are pre-built integration packages for popular third-party systems. They provide ready-to-use actions for connecting ServiceNow with platforms like Salesforce, AWS, Microsoft, and others."
+        },
+        {
+          "id": "q237",
+          "question_text": "How does ServiceNow integrate with Salesforce?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Use the Salesforce spoke which provides actions to create, update, and query Salesforce objects directly from ServiceNow flows and workflows."
+        },
+        {
+          "id": "q238",
+          "question_text": "What is Kafka integration?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Kafka integration allows ServiceNow to publish or consume messages from Apache Kafka event streams. This enables real-time data synchronization with other enterprise systems."
+        },
+        {
+          "id": "q239",
+          "question_text": "What is a webhook?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "A webhook is an HTTP callback that notifies external systems when events occur in ServiceNow. For example, when a ticket is created, a webhook can alert another application instantly."
+        },
+        {
+          "id": "q240",
+          "question_text": "What is the Integration Hub?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Integration Hub is ServiceNow’s central platform for managing integrations. It includes Flow Designer, spokes, and connection credentials for secure, governed integrations with external systems. Order Management"
+        },
+        {
+          "id": "q241",
+          "question_text": "What is Order Management in ServiceNow?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Order Management helps organizations manage complex product and service orders from capture through fulfillment, particularly for telecom and service provider industries."
+        },
+        {
+          "id": "q242",
+          "question_text": "What are the key components of Order Management?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Model categories, resource specifications, service specifications, product specifications, product offerings, characteristics, decomposition rules, and order capture workflows."
+        },
+        {
+          "id": "q243",
+          "question_text": "What is a product specification?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "A product specification defines the features, characteristics, and rules for a product offering. It’s like a blueprint for what the product includes and how it behaves."
+        },
+        {
+          "id": "q244",
+          "question_text": "What is a product offering?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "A product offering is what customers can actually purchase. It’s based on product specifications but includes pricing, availability, and sales channels."
+        },
+        {
+          "id": "q245",
+          "question_text": "What are characteristics in Order Management?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Characteristics are configurable attributes of products or services. For example, bandwidth speed for internet service or color options for hardware."
+        },
+        {
+          "id": "q246",
+          "question_text": "What are characteristic options?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "These are the available choices for each characteristic. If color is a characteristic, options might be red, blue, or black."
+        },
+        {
+          "id": "q247",
+          "question_text": "What is order capture?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Order capture is the process of collecting customer order information through various channels like web portals, call centers, or mobile apps, then converting it into actionable orders in ServiceNow."
+        },
+        {
+          "id": "q248",
+          "question_text": "What are decomposition rules?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Decomposition rules break complex orders into smaller, manageable tasks and components. They define how product offerings translate into fulfillment activities and resource allocations."
+        },
+        {
+          "id": "q249",
+          "question_text": "What is fallout management?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Fallout management handles order issues and exceptions that prevent normal processing. It identifies problems, routes them to appropriate teams, and tracks resolution to keep orders moving."
+        },
+        {
+          "id": "q250",
+          "question_text": "What is a Scripted REST API in ServiceNow?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "A Scripted REST API is a custom web service you create in ServiceNow to expose specific functionality to external systems. It allows controlled, secure access to ServiceNow data and operations through well-defined endpoints. Bonus Integration Questions"
+        },
+        {
+          "id": "q251",
+          "question_text": "How do you integrate ServiceNow with ChatGPT?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Create a REST integration using ServiceNow’s REST Message to call OpenAI’s API. Configure authentication with API keys, define request templates with prompts, handle responses, and use the integration in flows or business rules to enhance automation with AI capabilities."
+        },
+        {
+          "id": "q252",
+          "question_text": "What are the benefits of ServiceNow-Salesforce integration?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "It synchronizes customer data, enables unified case management, aligns sales and support teams, automates workflows across platforms, and provides comprehensive customer views combining sales and service information."
+        }
+      ]
+    },
+    {
+      "name": "Module 6 (Q253-Q255)",
+      "questions": [
+        {
+          "id": "q253",
+          "question_text": "What is an API key?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "An API key is a unique identifier used to authenticate requests to web services. It acts as a password for applications, allowing ServiceNow to securely connect with external systems."
+        },
+        {
+          "id": "q254",
+          "question_text": "What is JSON in REST APIs?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "JSON (JavaScript Object Notation) is the standard data format for REST API communication. It structures data in a readable format that both humans and machines can easily understand and process."
+        },
+        {
+          "id": "q255",
+          "question_text": "How do you handle API rate limits?",
+          "question_type": "short_answer",
+          "options": [],
+          "correct_options": [],
+          "explanation": "Implement retry logic, cache responses when possible, batch requests instead of individual calls, monitor usage, and design integrations to stay within provider limits. 🧩 Boost Your Hands-On ServiceNow Skills Practice workflows, scripting, integrations & automation through real tutorials. Open How-To Guides →"
+        }
+      ]
+    }
+  ]
+}
