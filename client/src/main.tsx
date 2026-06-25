@@ -25,7 +25,7 @@ TimeAgo.addLocale(ru);
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+  <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID || "missing-client-id"}>
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
         <Auth>

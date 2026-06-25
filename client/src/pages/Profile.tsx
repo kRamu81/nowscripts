@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useParams, useNavigate, NavLink, useLocation } from "react-router-dom";
+import { useParams, useNavigate, NavLink, useLocation, Link } from "react-router-dom";
 import { httpRequest } from "../interceptor/axiosInterceptor";
 import { url } from "../baseUrl";
 import { useAuth } from "../contexts/Auth";
 import { motion } from "framer-motion";
 import { 
-  Target, Edit3, MapPin, Briefcase, ExternalLink, GraduationCap, Link
+  Target, Edit3, MapPin, Briefcase, ExternalLink, GraduationCap, Link as LinkIcon
 } from "lucide-react";
 import EditProfileModal from "../components/profile/EditProfileModal";
 import SavedSection from "../components/SavedSection";

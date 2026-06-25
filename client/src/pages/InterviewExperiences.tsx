@@ -285,7 +285,7 @@ function InterviewCard({ experience }: { experience: any }) {
       
       {/* Company Avatar / Initial */}
       <div className="flex-shrink-0 hidden sm:flex w-16 h-16 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-xl items-center justify-center text-xl font-bold text-indigo-700 uppercase">
-        {experience.company.substring(0, 2)}
+        {experience.company?.substring(0, 2) || "N/A"}
       </div>
 
       <div className="flex-1">

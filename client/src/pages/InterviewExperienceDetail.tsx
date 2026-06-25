@@ -90,7 +90,7 @@ export default function InterviewExperienceDetail() {
             <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
               <div className="flex items-start gap-5">
                 <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-2xl flex items-center justify-center text-2xl md:text-3xl font-bold text-indigo-700 uppercase flex-shrink-0">
-                  {experience.company.substring(0, 2)}
+                  {experience.company?.substring(0, 2) || "N/A"}
                 </div>
                 <div>
                   <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">{experience.title}</h1>

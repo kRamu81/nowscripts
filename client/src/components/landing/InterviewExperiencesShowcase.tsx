@@ -13,7 +13,11 @@ export function InterviewExperiencesShowcase() {
     // Fetch latest 5 approved experiences
     axios.get(`${url}/interviews?limit=5&status=Approved`)
       .then(res => {
-        setExperiences(res.data.experiences);
+        if (res.data && Array.isArray(res.data.experiences)) {
+          setExperiences(res.data.experiences);
+        } else {
+          setExperiences([]);
+        }
       })
       .catch(err => console.error("Failed to fetch experiences", err))
       .finally(() => setLoading(false));
@@ -50,7 +54,7 @@ export function InterviewExperiencesShowcase() {
               >
                 <div className="flex items-start justify-between mb-4">
                    <div className="w-12 h-12 bg-gradient-to-br from-indigo-500/20 to-purple-500/20 rounded-lg flex items-center justify-center text-now-primary font-bold text-lg uppercase">
-                     {exp.company.substring(0, 2)}
+                     {exp.company?.substring(0, 2) || "N/A"}
                    </div>
                    <div className="flex items-center gap-1 text-yellow-500">
                      <Star className="w-4 h-4 fill-current" />
