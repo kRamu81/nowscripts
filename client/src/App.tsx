@@ -36,6 +36,8 @@ const VerifyCertificate = lazy(() => import("./pages/VerifyCertificate"));
 const AdminCertificates = lazy(() => import("./pages/admin/AdminCertificates"));
 const CertificateStudio = lazy(() => import("./pages/admin/CertificateStudio"));
 const AdminUsers = lazy(() => import("./pages/admin/AdminUsers"));
+const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
+import AdminLayout from "./components/admin/AdminLayout";
 const InterviewExperiences = lazy(() => import("./pages/InterviewExperiences"));
 const InterviewExperienceDetail = lazy(() => import("./pages/InterviewExperienceDetail"));
 const SubmitInterviewExperience = lazy(() => import("./pages/SubmitInterviewExperience"));
@@ -44,6 +46,7 @@ import { useAuth } from "./contexts/Auth";
 import ProtectedRoute from "./router/Authentication";
 import { AuthModalProvider } from "./contexts/AuthModalContext";
 import { AuthModal } from "./components/AuthModal";
+import AdminGuard from "./router/AdminGuard";
 export const DEFAULT_IMG =
   "https://api.dicebear.com/7.x/adventurer/svg?seed=NowScripts";
 
@@ -173,14 +176,19 @@ export default function App() {
               <Route path="/profile/:username/:tab?" element={<Profile />} />
               <Route path="/user/:username/:tab?" element={<Profile />} />
               <Route path="/notifications" element={<Notifications emptyNotifications={NullifyNotificationsCount} />} />
-              <Route path="/admin/certificates" element={<AdminCertificates />} />
-              <Route path="/admin/certificates/studio" element={<CertificateStudio />} />
-              <Route path="/admin/users" element={<AdminUsers />} />
               <Route path="/write/:postId?" element={
                 <div className="write_page mx-auto w-full md:w-3/4 lg:w-1/2 h-full">
                   <Write />
                 </div>
               } />
+            </Route>
+
+            {/* Admin Routes */}
+            <Route element={<AdminGuard><AdminLayout /></AdminGuard>}>
+              <Route path="/admin/dashboard" element={<AdminDashboard />} />
+              <Route path="/admin/certificates" element={<AdminCertificates />} />
+              <Route path="/admin/certificates/studio" element={<CertificateStudio />} />
+              <Route path="/admin/users" element={<AdminUsers />} />
             </Route>
 
             {/* Auth Pages (No layout) */}
