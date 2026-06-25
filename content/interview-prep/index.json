@@ -1,0 +1,37 @@
+{
+  "categories": [
+    {
+      "id": "scenario",
+      "title": "Scenario-Based Questions",
+      "status": "coming_soon"
+    },
+    {
+      "id": "csa",
+      "title": "CSA Questions",
+      "status": "active",
+      "dataFile": "/content/interview-prep/csa/data.json"
+    },
+    {
+      "id": "cad",
+      "title": "CAD Questions",
+      "status": "active",
+      "dataFile": "/content/interview-prep/cad/data.json"
+    },
+    {
+      "id": "hr",
+      "title": "HR Questions",
+      "status": "coming_soon"
+    },
+    {
+      "id": "experiences",
+      "title": "Real Interview Experiences",
+      "status": "coming_soon"
+    },
+    {
+      "id": "mock",
+      "title": "Mock Interviews",
+      "status": "active",
+      "dataFile": "/content/interview-prep/mock/data.json"
+    }
+  ]
+}
