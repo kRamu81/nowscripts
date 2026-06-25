@@ -4,6 +4,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { url } from "../baseUrl";
 import Post from "../components/Post";
 import { useAuth } from "../contexts/Auth";
+import { useAuthModal } from "../contexts/AuthModalContext";
 import { httpRequest } from "../interceptor/axiosInterceptor";
 import { useAppContext } from "../App";
 import { 
