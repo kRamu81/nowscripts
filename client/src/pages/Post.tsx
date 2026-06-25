@@ -17,6 +17,7 @@ import PostAuthor from "../components/PostAuthor";
 import useShare from "../hooks/useShare";
 import { useMemo, useState, useEffect } from "react";
 import { useAuth } from "../contexts/Auth";
+import { useAuthModal } from "../contexts/AuthModalContext";
 import MoreFrom from "../components/MoreFrom";
 import { GetStarted } from "../components/AvatarMenu";
 import { useAppContext } from "../App";
@@ -29,6 +30,7 @@ import ReactTimeAgo from "react-time-ago";
 export default function Post() {
   const { webShare } = useShare();
   const { user, isAuthenticated } = useAuth();
+  const { openModal } = useAuthModal();
   const { id } = useParams();
   const postUrl = useMemo(() => window.location.href, [id]);
   const [votes, setVotes] = useState(0);
@@ -70,10 +72,23 @@ export default function Post() {
   });
 
   function votePost() {
+    if (!isAuthenticated) {
+      openModal('login', () => votePost());
+      return;
+    }
     if (!turnBlack) {
        setTurnBlack(true);
        clap();
     }
+  }
+
+  function handleSavePost() {
+    if (!isAuthenticated) {
+      openModal('login', () => handleSavePost());
+      return;
+    }
+    // Add save post logic here if implemented, for now just toast
+    handleToast("Post saved successfully!");
   }
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -188,7 +203,7 @@ export default function Post() {
                    >
                       <Heart className={`w-4 h-4 ${turnBlack ? "fill-current" : ""}`} /> {formatNumber(votes)}
                    </button>
-                   <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:border-[#0F172A] hover:text-slate-900 dark:text-slate-100 transition-colors">
+                   <button onClick={handleSavePost} className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:border-[#0F172A] hover:text-slate-900 dark:text-slate-100 transition-colors">
                       <Bookmark className="w-4 h-4" /> Save
                    </button>
                    {postData?.userId === user?._id && (

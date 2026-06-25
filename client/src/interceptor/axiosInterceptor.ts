@@ -56,9 +56,6 @@ axiosInstance.interceptors.response.use(
         localStorage.clear();
         window.location.href = "/signin/in";
       }
-    } else if (error.response?.status === 401) {
-      localStorage.clear();
-      window.location.href = "/signin/in";
     } else if (error.response?.status === 403) {
       alert("Access Denied");
       window.location.href = "/";

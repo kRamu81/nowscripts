@@ -63,8 +63,8 @@ export default function SignInBox({ message, typeOfLogin }: SignInBoxType) {
 
   function handleEmailLogin() {}
   return (
-    <div className="w-[90%] sm:w-full max-w-[650px] mx-auto flex flex-col items-center gap-4 py-16 bg-white rounded-2xl px-6" style={{
-        boxShadow: "rgb(190, 190, 190) 2px 2px 12px, rgb(255, 255, 255) -20px -20px 60px"
+    <div className="w-[95%] sm:w-full max-w-[420px] mx-auto flex flex-col items-center gap-4 py-12 md:py-16 bg-white rounded-2xl px-6" style={{
+        boxShadow: "0px 4px 24px rgba(0,0,0,0.06)"
     }}>
       <BrandIconOnly className="mb-2 h-12 md:h-14" />
       <p className="font-serif text-2xl md:text-[28px] mb-8 text-center">
@@ -142,19 +142,7 @@ function ButtonLoginWith({
 }) {
   return (
     <button
-      style={{
-        backgroundColor: "transparent",
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        padding: "6px 14px",
-        borderRadius: "18px",
-        width: "200px",
-        border: "1px solid #c9c9c9",
-        gap: "12px",
-        cursor: "pointer",
-        color: "#5c5c5c",
-      }}
+      className="w-full sm:max-w-[300px] bg-transparent flex flex-row items-center justify-center p-3 rounded-2xl border border-slate-300 hover:bg-slate-50 transition-colors gap-3 cursor-pointer text-slate-700 font-medium"
       onClick={() => {
         onClick();
       }}

@@ -62,11 +62,11 @@ export function useAppContext() {
   return useContext(Context) as AppContextType;
 }
 
-function PublicLayout() {
+function PublicLayout({ notificationsCount }: { notificationsCount: number }) {
   return (
     <AuthModalProvider>
       <div className="flex flex-col min-h-screen bg-now-background text-now-text font-sans relative">
-        <LandingNavbar />
+        <LandingNavbar notificationsCount={notificationsCount} />
         <div className="flex-1">
           <Outlet />
         </div>
@@ -88,7 +88,7 @@ function AppLayout({ notificationsCount }: { notificationsCount: number }) {
 }
 
 export default function App() {
-  const { user } = useAuth();
+  const { user, isLoading } = useAuth();
   const [notificationsCount, setNotificationsCount] = useState(0);
   const socket = useMemo(() => io(url), []);
 
@@ -136,6 +136,15 @@ export default function App() {
     socket,
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-[#020617] gap-4">
+        <BrandIconOnly className="h-16 w-auto animate-pulse" />
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-now-primary"></div>
+      </div>
+    );
+  }
+
   return (
     <Context.Provider value={contextValue}>
       <Toaster position="top-center" reverseOrder={false} />
@@ -148,7 +157,7 @@ export default function App() {
         }>
           <Routes>
             {/* Public Layout Routes (Accessible to all, but shows AvatarMenu if logged in) */}
-            <Route element={<PublicLayout />}>
+            <Route element={<PublicLayout notificationsCount={notificationsCount} />}>
               <Route path="/" element={<UnAuthHome />} />
               <Route path="/roadmaps" element={<RoadmapDashboard />} />
               <Route path="/roadmaps/:slug" element={<RoadmapViewer />} />
@@ -158,21 +167,21 @@ export default function App() {
               <Route path="/verify/:certificateId" element={<VerifyCertificate />} />
               <Route path="/interviews" element={<InterviewExperiences />} />
               <Route path="/interviews/:id" element={<InterviewExperienceDetail />} />
-            </Route>
-
-            {/* Protected App Layout Routes (Requires Login) */}
-            <Route element={<ProtectedRoute><AppLayout notificationsCount={notificationsCount} /></ProtectedRoute>}>
               <Route path="/learn" element={<LearnDashboard />} />
               <Route path="/learn/:categorySlug/:lessonSlug" element={<LearnDashboard />} />
               <Route path="/interview-prep" element={<InterviewPrepDashboard />} />
               <Route path="/interview-prep/:categoryId" element={<InterviewPrepDashboard />} />
-              <Route path="/interviews/submit" element={<SubmitInterviewExperience />} />
               <Route path="/community" element={<CommunityFeed />} />
               <Route path="/tag/:tag" element={<CommunityFeed />} />
               <Route path="/projects" element={<div className="text-[#0F172A] text-center mt-20 text-2xl font-bold">Projects Coming Soon</div>} />
               <Route path="/suggestions" element={<Suggestions />} />
               <Route path="/search/:tab/:query" element={<SearchResults />} />
               <Route path="/blog/:id" element={<Post />} />
+            </Route>
+
+            {/* Protected App Layout Routes (Requires Login) */}
+            <Route element={<ProtectedRoute><AppLayout notificationsCount={notificationsCount} /></ProtectedRoute>}>
+              <Route path="/interviews/submit" element={<SubmitInterviewExperience />} />
               <Route path="/profile/:username/:tab?" element={<Profile />} />
               <Route path="/user/:username/:tab?" element={<Profile />} />
               <Route path="/notifications" element={<Notifications emptyNotifications={NullifyNotificationsCount} />} />

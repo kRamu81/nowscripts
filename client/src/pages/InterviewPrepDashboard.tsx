@@ -6,6 +6,9 @@ import {
 import { useParams, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { useAuth } from "../contexts/Auth";
+import { useAuthModal } from "../contexts/AuthModalContext";
+import { motion, AnimatePresence } from "framer-motion";
 
 // --- Types ---
 interface Category {
@@ -50,6 +53,8 @@ const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
 export default function InterviewPrepDashboard() {
   const { categoryId } = useParams();
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+  const { openModal } = useAuthModal();
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [activeCategory, setActiveCategory] = useState<Category | null>(null);
@@ -64,6 +69,7 @@ export default function InterviewPrepDashboard() {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [showAnswer, setShowAnswer] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [showFullExplanation, setShowFullExplanation] = useState(false);
 
   // Mobile responsiveness states
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -155,10 +161,41 @@ export default function InterviewPrepDashboard() {
     setShowAnswer(false);
   }, [activeQuestionIndex, activeModuleIndex]);
 
+  // Scroll Lock & Esc listener for Sidebar/Palette
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setMobileMenuOpen(false);
+        setQuestionPaletteOpen(false);
+      }
+    };
+    if (mobileMenuOpen || questionPaletteOpen) {
+      document.body.style.overflow = "hidden";
+      window.addEventListener("keydown", handleKeyDown);
+    } else {
+      document.body.style.overflow = "unset";
+      window.removeEventListener("keydown", handleKeyDown);
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [mobileMenuOpen, questionPaletteOpen]);
+
   const activeModule = questionBank?.modules[activeModuleIndex];
   const activeQuestion = activeModule?.questions[activeQuestionIndex];
 
   const totalQuestions = questionBank?.modules.reduce((acc, m) => acc + m.questions.length, 0) || 0;
+  
+  const globalQuestionIndex = (() => {
+    let idx = 0;
+    if (!questionBank) return 0;
+    for (let i = 0; i < activeModuleIndex; i++) {
+      idx += questionBank.modules[i].questions.length;
+    }
+    idx += activeQuestionIndex;
+    return idx + 1;
+  })();
   
   const updateProgressBackend = async (updates: Partial<Progress>) => {
     try {
@@ -187,6 +224,17 @@ export default function InterviewPrepDashboard() {
       activeQuestion.correct_options.length === selectedOptions.length &&
       activeQuestion.correct_options.every(opt => selectedOptions.includes(opt));
 
+    handleMarkCompleted(isCorrect);
+  };
+
+  const handleMarkCompleted = (isCorrect: boolean) => {
+    if (!isAuthenticated) {
+      // For guests, we can still show the answer, but we don't save progress
+      openModal('login', () => handleMarkCompleted(isCorrect));
+      return;
+    }
+    if (!activeQuestion || !questionBank) return;
+
     if (isCorrect) {
       const newCompleted = [...new Set([...progress.completedQuestions, activeQuestion.id])];
       const newPercent = Math.round((newCompleted.length / totalQuestions) * 100);
@@ -208,6 +256,10 @@ export default function InterviewPrepDashboard() {
   };
 
   const handleToggleBookmark = () => {
+    if (!isAuthenticated) {
+      openModal('login', () => handleToggleBookmark());
+      return;
+    }
     if (!activeQuestion) return;
     const isBookmarked = progress.bookmarkedQuestions.includes(activeQuestion.id);
     const newBookmarked = isBookmarked 
@@ -219,6 +271,10 @@ export default function InterviewPrepDashboard() {
   };
 
   const handleToggleImportant = () => {
+    if (!isAuthenticated) {
+      openModal('login', () => handleToggleImportant());
+      return;
+    }
     if (!activeQuestion) return;
     const isImportant = progress.importantQuestions.includes(activeQuestion.id);
     const newImportant = isImportant 
@@ -231,6 +287,7 @@ export default function InterviewPrepDashboard() {
 
   const goToNext = () => {
     if (!activeModule) return;
+    setShowFullExplanation(false);
     if (activeQuestionIndex < activeModule.questions.length - 1) {
       setActiveQuestionIndex(i => i + 1);
     } else if (activeModuleIndex < questionBank!.modules.length - 1) {
@@ -285,12 +342,17 @@ export default function InterviewPrepDashboard() {
       )}
 
       {/* Main Categories Sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-50 transform ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 lg:static lg:flex w-80 flex-shrink-0 border-r border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 flex-col h-full overflow-hidden transition-transform duration-300 ease-in-out`}>
+      <div 
+        role="dialog"
+        aria-modal="true"
+        aria-label="Category Sidebar"
+        className={`fixed inset-y-0 left-0 z-50 transform ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 lg:static lg:flex w-80 flex-shrink-0 border-r border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 flex-col h-full overflow-hidden transition-transform duration-300 ease-in-out`}
+      >
         <div className="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
           <h2 className="text-xl font-bold flex items-center gap-2">
             <BookOpen className="text-now-primary w-5 h-5" /> Interview Prep
           </h2>
-          <button className="lg:hidden p-2 text-slate-500 hover:text-slate-900 dark:hover:text-white" onClick={() => setMobileMenuOpen(false)}>
+          <button aria-label="Close menu" className="lg:hidden p-2 text-slate-500 hover:text-slate-900 dark:hover:text-white" onClick={() => setMobileMenuOpen(false)}>
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -349,18 +411,41 @@ export default function InterviewPrepDashboard() {
       </div>
 
       {/* Question Palette Sidebar (Right side, primarily for mobile overlay) */}
-      <div className={`fixed inset-y-0 right-0 z-50 transform ${questionPaletteOpen ? "translate-x-0" : "translate-x-full"} lg:hidden w-80 flex-shrink-0 border-l border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 flex-col h-full overflow-hidden transition-transform duration-300 ease-in-out`}>
-         <div className="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+      <div 
+        role="dialog" 
+        aria-modal="true" 
+        aria-label="Question Palette"
+        className={`fixed inset-y-0 right-0 z-50 transform ${questionPaletteOpen ? "translate-x-0" : "translate-x-full"} lg:hidden w-80 flex-shrink-0 border-l border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 flex-col h-full overflow-hidden transition-transform duration-300 ease-in-out`}
+      >
+         <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
             <h2 className="text-xl font-bold flex items-center gap-2">
                Question Palette
             </h2>
-            <button className="p-2 text-slate-500 hover:text-slate-900 dark:hover:text-white" onClick={() => setQuestionPaletteOpen(false)}>
+            <button aria-label="Close palette" className="p-2 text-slate-500 hover:text-slate-900 dark:hover:text-white" onClick={() => setQuestionPaletteOpen(false)}>
                <X className="w-5 h-5" />
             </button>
+         </div>
+         <div className="p-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <input 
+                type="number" 
+                placeholder="Jump to question..." 
+                className="w-full pl-9 pr-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-now-primary"
+                onChange={(e) => {
+                  const val = parseInt(e.target.value);
+                  if (val > 0 && activeModule && val <= activeModule.questions.length) {
+                    setActiveQuestionIndex(val - 1);
+                    setQuestionPaletteOpen(false);
+                  }
+                }}
+              />
+            </div>
          </div>
          <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
             {activeModule?.questions.map((q, idx) => {
                const isCompleted = progress.completedQuestions.includes(q.id);
+               const isBookmarked = progress.bookmarkedQuestions.includes(q.id);
                return (
                  <button
                    key={q.id}
@@ -385,6 +470,7 @@ export default function InterviewPrepDashboard() {
                    <div className="truncate flex-1">
                      Question {idx + 1}
                    </div>
+                   {isBookmarked && <Bookmark className="w-4 h-4 text-amber-500 shrink-0" fill="currentColor" />}
                  </button>
                );
             })}
@@ -445,9 +531,13 @@ export default function InterviewPrepDashboard() {
               </div>
             </div>
 
+              <div className="h-1 w-full bg-slate-200 dark:bg-slate-800 shrink-0">
+                 <div className="h-full bg-now-primary transition-all duration-300" style={{ width: `${(globalQuestionIndex / totalQuestions) * 100}%` }} />
+              </div>
+
             {/* Question Viewer */}
             {activeQuestion && (
-              <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
+              <div className="flex-1 overflow-y-auto p-4 lg:p-8 custom-scrollbar pb-32 lg:pb-8 relative">
                 <div className="max-w-4xl mx-auto">
                   
                   {/* Category & Module Header */}
@@ -457,7 +547,7 @@ export default function InterviewPrepDashboard() {
                       <ChevronRight className="w-4 h-4 flex-shrink-0" />
                       <span className="truncate max-w-[120px] lg:max-w-none">{activeModule?.name}</span>
                       <ChevronRight className="w-4 h-4 flex-shrink-0" />
-                      <span className="whitespace-nowrap">Question {activeQuestionIndex + 1} of {activeModule?.questions.length}</span>
+                      <span className="whitespace-nowrap font-bold text-slate-900 dark:text-slate-100 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">Question {globalQuestionIndex} of {totalQuestions}</span>
                     </div>
 
                     <div className="flex gap-2 self-end lg:self-auto">
@@ -470,10 +560,29 @@ export default function InterviewPrepDashboard() {
                     </div>
                   </div>
 
-                  {/* Question Text */}
-                  <div className="text-xl lg:text-2xl font-bold mb-6 lg:mb-8 leading-snug whitespace-pre-wrap">
-                    {activeQuestion.question_text}
-                  </div>
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={activeQuestion.id}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -20 }}
+                      transition={{ duration: 0.2 }}
+                      drag="x"
+                      dragConstraints={{ left: 0, right: 0 }}
+                      dragElastic={0.2}
+                      onDragEnd={(e, { offset }) => {
+                        if (offset.x < -50) {
+                          goToNext();
+                        } else if (offset.x > 50) {
+                          goToPrev();
+                        }
+                      }}
+                      className="min-h-[300px]"
+                    >
+                      {/* Question Text */}
+                      <div className="text-xl lg:text-2xl font-bold mb-6 lg:mb-8 leading-snug whitespace-pre-wrap">
+                        {activeQuestion.question_text}
+                      </div>
 
                   {/* Options or Short Answer */}
                   {activeQuestion.question_type === 'short_answer' ? (
@@ -550,47 +659,69 @@ export default function InterviewPrepDashboard() {
 
                       {/* Explanation Block */}
                       {showAnswer && activeQuestion.explanation && (
-                        <div className="mb-10 p-6 rounded-xl bg-blue-50 border border-blue-100 dark:bg-blue-900/20 dark:border-blue-800/50">
+                        <div className="mb-10 p-4 lg:p-6 rounded-xl bg-blue-50 border border-blue-100 dark:bg-blue-900/20 dark:border-blue-800/50">
                           <h4 className="font-bold text-blue-900 dark:text-blue-300 mb-2 flex items-center gap-2">
                             <AlertCircle className="w-5 h-5" /> Explanation
                           </h4>
-                          <p className="text-blue-800 dark:text-blue-200 whitespace-pre-wrap leading-relaxed">
-                            {activeQuestion.explanation}
-                          </p>
+                          <div className="text-blue-800 dark:text-blue-200 leading-relaxed text-sm lg:text-base">
+                            <p className="whitespace-pre-wrap">
+                              {showFullExplanation || activeQuestion.explanation.length <= 250
+                                ? activeQuestion.explanation
+                                : `${activeQuestion.explanation.substring(0, 250)}...`}
+                            </p>
+                            {activeQuestion.explanation.length > 250 && (
+                              <button
+                                onClick={() => setShowFullExplanation(!showFullExplanation)}
+                                className="mt-2 text-now-primary font-bold hover:underline"
+                              >
+                                {showFullExplanation ? "Show Less" : "Show More"}
+                              </button>
+                            )}
+                          </div>
                         </div>
                       )}
-                    </>
-                  )}
+                    </motion.div>
+                  </AnimatePresence>
 
                   {/* Bottom Controls */}
-                  <div className="flex flex-col-reverse lg:flex-row items-stretch lg:items-center justify-between border-t border-slate-200 dark:border-slate-800 pt-6 lg:pt-8 pb-12 gap-4">
-                    <button 
-                      onClick={goToPrev}
-                      disabled={activeModuleIndex === 0 && activeQuestionIndex === 0}
-                      className="min-h-[44px] px-6 py-3 rounded-xl font-bold flex items-center justify-center gap-2 text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-                    >
-                      <ArrowLeft className="w-5 h-5" /> <span className="lg:inline">Previous</span>
-                    </button>
-                    
-                    {!showAnswer ? (
-                      activeQuestion.question_type !== 'short_answer' && (
-                        <button 
-                          onClick={handleCheckAnswer}
-                          disabled={selectedOptions.length === 0}
-                          className="min-h-[44px] px-10 py-3 rounded-xl font-bold bg-now-primary text-white hover:bg-now-accent shadow-md disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-                        >
-                          Check Answer
-                        </button>
-                      )
-                    ) : (
+                  <div className="fixed lg:static bottom-0 left-0 right-0 lg:mt-8 p-4 lg:p-0 bg-white dark:bg-slate-950 lg:bg-transparent border-t border-slate-200 dark:border-slate-800 lg:border-none shadow-[0_-4px_20px_rgba(0,0,0,0.05)] lg:shadow-none z-20">
+                    <div className="max-w-4xl mx-auto flex flex-row items-center justify-between gap-4">
                       <button 
-                        onClick={goToNext}
-                        className="min-h-[44px] px-10 py-3 rounded-xl font-bold bg-emerald-500 text-white hover:bg-emerald-600 shadow-md transition-all flex items-center justify-center gap-2"
+                        onClick={goToPrev}
+                        disabled={activeModuleIndex === 0 && activeQuestionIndex === 0}
+                        className="min-w-[44px] min-h-[44px] flex-1 lg:flex-none px-4 lg:px-6 py-3 rounded-xl font-bold flex items-center justify-center gap-2 text-slate-600 bg-slate-100 lg:bg-transparent hover:bg-slate-200 dark:text-slate-300 dark:bg-slate-800 lg:dark:bg-transparent dark:hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                       >
-                        Next Question <ArrowRight className="w-5 h-5" />
+                        <ArrowLeft className="w-5 h-5" /> <span className="hidden sm:inline">Previous</span>
                       </button>
-                    )}
+                      
+                      {!showAnswer ? (
+                        activeQuestion.question_type !== 'short_answer' && (
+                          <button 
+                            onClick={handleCheckAnswer}
+                            disabled={selectedOptions.length === 0}
+                            className="min-h-[44px] flex-1 lg:flex-none px-6 lg:px-10 py-3 rounded-xl font-bold bg-now-primary text-white hover:bg-now-accent shadow-md disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                          >
+                            Check Answer
+                          </button>
+                        )
+                      ) : (
+                        <button 
+                          onClick={goToNext}
+                          className="min-h-[44px] flex-[2] lg:flex-none px-6 lg:px-10 py-3 rounded-xl font-bold bg-emerald-500 text-white hover:bg-emerald-600 shadow-md transition-all flex items-center justify-center gap-2"
+                        >
+                          Next <span className="hidden sm:inline">Question</span> <ArrowRight className="w-5 h-5" />
+                        </button>
+                      )}
+                    </div>
                   </div>
+
+                  {/* Floating Action Button for Mobile Palette */}
+                  <button
+                    onClick={() => setQuestionPaletteOpen(true)}
+                    className="lg:hidden fixed bottom-24 right-4 z-30 w-14 h-14 bg-now-primary text-white rounded-full shadow-lg flex items-center justify-center hover:bg-now-accent transition-all"
+                  >
+                    <List className="w-6 h-6" />
+                  </button>
 
                 </div>
               </div>

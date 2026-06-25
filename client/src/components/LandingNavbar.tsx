@@ -2,12 +2,13 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { NotificationIcon } from "../assets/icons";
 import { useAuth } from "../contexts/Auth";
 import { useAuthModal } from "../contexts/AuthModalContext";
 import AvatarMenu from "./AvatarMenu";
 import { BrandLogo } from "./BrandLogo";
 
-export default function LandingNavbar() {
+export default function LandingNavbar({ notificationsCount = 0 }: { notificationsCount?: number }) {
   const { isAuthenticated } = useAuth();
   const { openModal } = useAuthModal();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -67,7 +68,20 @@ export default function LandingNavbar() {
                 </button>
               </>
             ) : (
-              <div className="flex items-center h-full">
+              <div className="flex items-center gap-4 h-full">
+                <Link
+                  to="/notifications"
+                  className="relative text-gray-400 hover:text-white transition-colors"
+                >
+                  {NotificationIcon}
+                  {notificationsCount > 0 && (
+                    <span
+                      className="absolute -top-1.5 -right-1.5 bg-now-primary text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+                    >
+                      {notificationsCount}
+                    </span>
+                  )}
+                </Link>
                 <AvatarMenu />
               </div>
             )}

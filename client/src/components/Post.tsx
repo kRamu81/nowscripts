@@ -9,6 +9,8 @@ import { httpRequest } from "../interceptor/axiosInterceptor";
 import PostMenu from "./PostMenu";
 import { formatNumber } from "../utils/helper";
 import { MessageSquare, Heart, Bookmark, Eye, Clock, Award } from "lucide-react";
+import { useAuth } from "../contexts/Auth";
+import { useAuthModal } from "../contexts/AuthModalContext";
 
 type PostProps = {
   title: string;
@@ -67,6 +69,8 @@ export default function Post({
 }: PostProps) {
   const { handleToast } = useAppContext();
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+  const { openModal } = useAuthModal();
 
   const { refetch: ignorePostCall } = useQuery({
     queryFn: () => httpRequest.patch(`${url}/post/ignore/${postId}`),
@@ -112,6 +116,16 @@ export default function Post({
 
   function editPost() {
     navigate(`/write/${postId}`);
+  }
+
+  function handleInteraction(e: React.MouseEvent, action: () => void) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!isAuthenticated) {
+      openModal('login', action);
+      return;
+    }
+    action();
   }
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -228,14 +242,19 @@ export default function Post({
       {/* Footer Metrics */}
       <div className="flex items-center justify-between mt-auto pt-4 border-t border-[#E2E8F0] text-sm font-medium text-[#64748B]">
          <div className="flex items-center gap-4 sm:gap-6">
-            <div className="flex items-center gap-1.5 hover:text-[#0F172A] transition-colors">
+            <button onClick={(e) => handleInteraction(e, () => {
+              // Add like logic here
+              handleToast("Post liked!");
+            })} className="flex items-center gap-1.5 hover:text-[#0F172A] transition-colors">
                <Heart className="w-4 h-4" />
                <span>{formatNumber(likesCount)}</span>
-            </div>
-            <div className="flex items-center gap-1.5 hover:text-[#0F172A] transition-colors">
+            </button>
+            <button onClick={(e) => handleInteraction(e, () => {
+              navigate(`/blog/${postId}`);
+            })} className="flex items-center gap-1.5 hover:text-[#0F172A] transition-colors">
                <MessageSquare className="w-4 h-4" />
                <span>{formatNumber(commentsCount)}</span>
-            </div>
+            </button>
             <div className="flex items-center gap-1.5 hover:text-[#0F172A] transition-colors">
                <Eye className="w-4 h-4" />
                <span>{formatNumber(views)}</span>
@@ -247,7 +266,10 @@ export default function Post({
                <span>{readTime} min read</span>
             </div>
             <button 
-               onClick={(e) => { e.preventDefault(); e.stopPropagation(); }} 
+               onClick={(e) => handleInteraction(e, () => {
+                 // Add save logic here
+                 handleToast("Post saved!");
+               })} 
                className="hover:text-[#0F172A] transition-colors flex items-center gap-1.5"
             >
                <Bookmark className="w-4 h-4" />

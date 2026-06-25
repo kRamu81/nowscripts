@@ -9,7 +9,7 @@ import { useGoogleLogin } from '@react-oauth/google';
 import { url } from "../baseUrl";
 
 export function AuthModal() {
-  const { isOpen, view, closeModal, setView } = useAuthModal();
+  const { isOpen, view, closeModal, setView, onSuccessCallback, clearCallback, guestMessage } = useAuthModal();
   const { handleUser } = useAuth();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -56,6 +56,8 @@ export function AuthModal() {
 
   const handleGoogleAuth = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
+      setIsLoading(true);
+      setError(null);
       try {
         const res = await axios.post(`${url}/auth/google/direct`, {
           access_token: tokenResponse.access_token
@@ -67,15 +69,22 @@ export function AuthModal() {
           handleUser(res.data);
           closeModal();
           
-          const redirectPath = localStorage.getItem("redirect_after_login") || "/";
-          localStorage.removeItem("redirect_after_login");
-          if (window.location.pathname !== redirectPath) {
-            navigate(redirectPath);
+          if (onSuccessCallback) {
+            onSuccessCallback();
+            clearCallback();
+          } else {
+            const redirectPath = localStorage.getItem("redirect_after_login") || "/";
+            localStorage.removeItem("redirect_after_login");
+            if (window.location.pathname !== redirectPath) {
+              navigate(redirectPath);
+            }
           }
         }
       } catch (err: any) {
         setError(err.response?.data?.message || "Google authentication failed");
         console.error("Google authentication failed", err);
+      } finally {
+        setIsLoading(false);
       }
     },
     onError: () => {
@@ -108,6 +117,10 @@ export function AuthModal() {
         localStorage.setItem("refresh_token", JSON.stringify(res.data.refresh_token));
         handleUser(res.data);
         closeModal();
+        if (onSuccessCallback) {
+          onSuccessCallback();
+          clearCallback();
+        }
       } else if (view === "signup") {
         if (!name || !email || !password) return;
         if (!validatePassword(password)) {
@@ -120,6 +133,10 @@ export function AuthModal() {
         localStorage.setItem("refresh_token", JSON.stringify(res.data.refresh_token));
         handleUser(res.data);
         closeModal();
+        if (onSuccessCallback) {
+          onSuccessCallback();
+          clearCallback();
+        }
       } else if (view === "forgot_password") {
         if (!email) return;
         setIsLoading(true);
@@ -203,7 +220,9 @@ export function AuthModal() {
           <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
             <div className="mb-6">
               <h2 className="text-[24px] font-bold text-gray-900">{view === "login" ? "Welcome back" : "Create an Account"}</h2>
-              <p className="text-gray-500 text-[14px] mt-1">{view === "login" ? "Enter your credentials to access your account." : "Join us to manage your learning and certifications."}</p>
+              <p className="text-gray-500 text-[14px] mt-1">
+                {guestMessage || (view === "login" ? "Enter your credentials to access your account." : "Join us to manage your learning and certifications.")}
+              </p>
             </div>
             <form onSubmit={handleSubmit} className="space-y-4" noValidate>
               {view === "signup" && (
@@ -234,9 +253,12 @@ export function AuthModal() {
             </div>
             <button
                 type="button"
+                disabled={isLoading}
                 onClick={() => handleGoogleAuth()}
-                className="w-full bg-white border border-slate-200 text-slate-700 py-2.5 px-4 rounded-lg font-medium hover:bg-slate-50 transition-colors flex items-center justify-center gap-2 mb-4"
-              ><img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-5 h-5" alt="Google" /> Google
+                className="w-full bg-white border border-slate-200 text-slate-700 py-2.5 px-4 rounded-lg font-medium hover:bg-slate-50 transition-colors flex items-center justify-center gap-2 mb-4 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isLoading ? <Loader2 className="w-5 h-5 animate-spin text-slate-500" /> : <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-5 h-5" alt="Google" />}
+                Google
             </button>
             <div className="text-center mt-8 text-[14px] text-gray-600">
               {view === "login" ? (

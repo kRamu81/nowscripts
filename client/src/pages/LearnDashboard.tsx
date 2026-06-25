@@ -7,11 +7,15 @@ import {
 import { useParams, useNavigate } from "react-router-dom";
 import { MarkdownRenderer } from "../components/markdown/MarkdownRenderer";
 import { courseData, LessonData, Subtopic, generateSlug } from "../utils/markdownParser";
+import { useAuth } from "../contexts/Auth";
+import { useAuthModal } from "../contexts/AuthModalContext";
 
 
 export default function LearnDashboard() {
   const { categorySlug, lessonSlug } = useParams();
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+  const { openModal } = useAuthModal();
 
   // Find initial lesson based on URL params, or default to the very first one
   const getInitialLesson = () => {
@@ -385,6 +389,13 @@ export default function LearnDashboard() {
                    
                    <button 
                      onClick={(e) => {
+                        if (!isAuthenticated) {
+                          openModal('login', () => {
+                            setCompletedLessons(prev => ({ ...prev, [activeLesson.id]: true }));
+                            goToNextLesson();
+                          });
+                          return;
+                        }
                         if(!completedLessons[activeLesson.id]) {
                            setCompletedLessons(prev => ({ ...prev, [activeLesson.id]: true }));
                         }
