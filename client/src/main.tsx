@@ -23,17 +23,20 @@ TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
 
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID || "missing-client-id"}>
-    <BrowserRouter>
-      <QueryClientProvider client={queryClient}>
-        <Auth>
-          <ThemeProvider>
-            <App />
-          </ThemeProvider>
-        </Auth>
-      </QueryClientProvider>
-    </BrowserRouter>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <QueryClientProvider client={queryClient}>
+          <Auth>
+            <ThemeProvider>
+              <App />
+            </ThemeProvider>
+          </Auth>
+        </QueryClientProvider>
+      </BrowserRouter>
+    </ErrorBoundary>
   </GoogleOAuthProvider>
 );
