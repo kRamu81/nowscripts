@@ -36,6 +36,9 @@ const VerifyCertificate = lazy(() => import("./pages/VerifyCertificate"));
 const AdminCertificates = lazy(() => import("./pages/admin/AdminCertificates"));
 const CertificateStudio = lazy(() => import("./pages/admin/CertificateStudio"));
 const AdminUsers = lazy(() => import("./pages/admin/AdminUsers"));
+const InterviewExperiences = lazy(() => import("./pages/InterviewExperiences"));
+const InterviewExperienceDetail = lazy(() => import("./pages/InterviewExperienceDetail"));
+const SubmitInterviewExperience = lazy(() => import("./pages/SubmitInterviewExperience"));
 import { Routes, Route, Outlet, Navigate } from "react-router-dom";
 import { useAuth } from "./contexts/Auth";
 import ProtectedRoute from "./router/Authentication";
@@ -150,6 +153,8 @@ export default function App() {
               <Route path="/newsletter" element={<Newsletter />} />
               <Route path="/verify" element={<VerifyCertificate />} />
               <Route path="/verify/:certificateId" element={<VerifyCertificate />} />
+              <Route path="/interviews" element={<InterviewExperiences />} />
+              <Route path="/interviews/:id" element={<InterviewExperienceDetail />} />
             </Route>
 
             {/* Protected App Layout Routes (Requires Login) */}
@@ -158,6 +163,7 @@ export default function App() {
               <Route path="/learn/:categorySlug/:lessonSlug" element={<LearnDashboard />} />
               <Route path="/interview-prep" element={<InterviewPrepDashboard />} />
               <Route path="/interview-prep/:categoryId" element={<InterviewPrepDashboard />} />
+              <Route path="/interviews/submit" element={<SubmitInterviewExperience />} />
               <Route path="/community" element={<CommunityFeed />} />
               <Route path="/tag/:tag" element={<CommunityFeed />} />
               <Route path="/projects" element={<div className="text-[#0F172A] text-center mt-20 text-2xl font-bold">Projects Coming Soon</div>} />

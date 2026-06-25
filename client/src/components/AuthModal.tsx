@@ -5,6 +5,7 @@ import { useAuthModal } from "../contexts/AuthModalContext";
 import { useAuth } from "../contexts/Auth";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useGoogleLogin } from '@react-oauth/google';
 import { url } from "../baseUrl";
 
 export function AuthModal() {
@@ -53,22 +54,35 @@ export function AuthModal() {
     };
   }, [isOpen, closeModal, view]);
 
-  const handleGoogleAuth = () => {
-    const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
-    const options = {
-      redirect_uri: import.meta.env.VITE_GOOGLE_OAUTH_REDIRECT_URL,
-      client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
-      access_type: "offline",
-      response_type: "code",
-      prompt: "consent",
-      scope: [
-        "https://www.googleapis.com/auth/userinfo.profile",
-        "https://www.googleapis.com/auth/userinfo.email",
-      ].join(" "),
-    };
-    const qs = new URLSearchParams(options);
-    window.location.assign(`${rootUrl}?${qs.toString()}`);
-  };
+  const handleGoogleAuth = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        const res = await axios.post(`${url}/auth/google/direct`, {
+          access_token: tokenResponse.access_token
+        });
+        
+        if (res.data.access_token) {
+          localStorage.setItem("access_token", JSON.stringify(res.data.access_token));
+          localStorage.setItem("refresh_token", JSON.stringify(res.data.refresh_token));
+          handleUser(res.data);
+          closeModal();
+          
+          const redirectPath = localStorage.getItem("redirect_after_login") || "/";
+          localStorage.removeItem("redirect_after_login");
+          if (window.location.pathname !== redirectPath) {
+            navigate(redirectPath);
+          }
+        }
+      } catch (err: any) {
+        setError(err.response?.data?.message || "Google authentication failed");
+        console.error("Google authentication failed", err);
+      }
+    },
+    onError: () => {
+      setError("Google Login Failed");
+      console.error("Google Login Failed");
+    }
+  });
 
   const validatePassword = (pass: string) => {
     const minLength = 8;
@@ -218,8 +232,11 @@ export function AuthModal() {
               <span className="text-gray-500 text-[13px] font-medium uppercase tracking-wider">Or continue with</span>
               <div className="h-[1px] bg-gray-200 flex-1"></div>
             </div>
-            <button onClick={handleGoogleAuth} className="w-full h-[48px] bg-white/50 border border-gray-300 hover:bg-gray-50 text-gray-900 text-[15px] font-semibold rounded-md flex items-center justify-center gap-3 transition-colors">
-              <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-5 h-5" alt="Google" /> Google
+            <button
+                type="button"
+                onClick={() => handleGoogleAuth()}
+                className="w-full bg-white border border-slate-200 text-slate-700 py-2.5 px-4 rounded-lg font-medium hover:bg-slate-50 transition-colors flex items-center justify-center gap-2 mb-4"
+              ><img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-5 h-5" alt="Google" /> Google
             </button>
             <div className="text-center mt-8 text-[14px] text-gray-600">
               {view === "login" ? (

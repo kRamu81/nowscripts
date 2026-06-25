@@ -14,6 +14,7 @@ const CertificationTimeline = lazy(() => import("../components/landing/Certifica
 const FAQSectionV2 = lazy(() => import("../components/landing/FAQSectionV2").then(module => ({ default: module.FAQSectionV2 })));
 const FinalCTA = lazy(() => import("../components/landing/FinalCTA").then(module => ({ default: module.FinalCTA })));
 const FooterV2 = lazy(() => import("../components/landing/FooterV2").then(module => ({ default: module.FooterV2 })));
+const InterviewExperiencesShowcase = lazy(() => import("../components/landing/InterviewExperiencesShowcase").then(module => ({ default: module.InterviewExperiencesShowcase })));
 
 // Loading skeleton for lazy components
 const SectionSkeleton = () => (
@@ -42,6 +43,7 @@ export default function UnAuthHome() {
         <TestimonialsV2 />
         <ServiceNowPulse />
         <ProjectsShowcaseV2 />
+        <InterviewExperiencesShowcase />
         <CommunitySection />
         <CertificationTimeline />
         <FAQSectionV2 />

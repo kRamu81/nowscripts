@@ -58,6 +58,7 @@ export default function Profile() {
     { id: "activity", label: "Activity" },
     { id: "projects", label: "Projects" },
     { id: "bookmarks", label: "Bookmarks" },
+    { id: "interviews", label: "Interviews" },
     { id: "about", label: "About" },
   ];
 
@@ -145,9 +146,10 @@ export default function Profile() {
             <div className="min-h-[400px]">
               {currentTab === 'home' && <ProfileHomeTab profile={profile} />}
               {currentTab === 'activity' && <ProfileActivityTab profile={profile} />}
-              {currentTab === 'projects' && <ProfileProjectsTab profile={profile} />}
-              {currentTab === 'bookmarks' && <ProfileBookmarksTab profile={profile} />}
-              {currentTab === 'about' && <ProfileAboutTab profile={profile} />}
+              { currentTab === 'projects' && <ProfileProjectsTab profile={profile} /> }
+              { currentTab === 'bookmarks' && <ProfileBookmarksTab profile={profile} /> }
+              { currentTab === 'interviews' && <ProfileInterviewsTab profile={profile} /> }
+              { currentTab === 'about' && <ProfileAboutTab profile={profile} /> }
             </div>
 
           </div>
@@ -419,6 +421,51 @@ function ProfileAboutTab({ profile }: { profile: any }) {
         </div>
       )}
 
+    </div>
+  );
+}
+
+function ProfileInterviewsTab({ profile }: { profile: any }) {
+  const { data, isLoading } = useQuery({
+    queryFn: () => httpRequest.get(`${url}/interviews?author=${profile._id}`),
+    queryKey: ["interviews", "user", profile._id],
+  });
+
+  if (isLoading) {
+    return <div className="py-12 text-center text-slate-500 dark:text-slate-400">Loading interview experiences...</div>;
+  }
+
+  const experiences = data?.data?.experiences || [];
+
+  if (experiences.length === 0) {
+    return (
+      <div className="py-12 text-center border border-dashed border-slate-200 dark:border-slate-800 rounded-xl">
+        <p className="text-slate-500 dark:text-slate-400">No interview experiences shared yet.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      {experiences.map((exp: any) => (
+        <div key={exp._id} className="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 hover:border-now-primary/50 transition-colors">
+          <div className="flex items-center justify-between mb-3">
+             <div className="flex flex-col">
+                <Link to={`/interviews/${exp._id}`} className="text-lg font-bold hover:text-now-primary transition-colors">
+                  {exp.role} at {exp.company}
+                </Link>
+                <span className="text-sm text-slate-500 mt-1">{exp.experienceLevel} • {exp.difficulty}</span>
+             </div>
+             <span className={`text-xs font-bold uppercase tracking-wider px-2 py-1 rounded ${exp.status === 'Approved' ? 'bg-green-100 text-green-700' : exp.status === 'Rejected' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'}`}>
+               {exp.status}
+             </span>
+          </div>
+          <div className="flex items-center gap-4 text-xs font-medium text-slate-500">
+             <span className="flex items-center gap-1">👀 {exp.views} Views</span>
+             <span className="flex items-center gap-1">👍 {exp.likes?.length || 0} Likes</span>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

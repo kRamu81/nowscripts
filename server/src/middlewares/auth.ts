@@ -17,6 +17,19 @@ const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
+export const optionalAuth = (req: Request, res: Response, next: NextFunction) => {
+  const AuthToken = req.headers["authorization"]?.split(" ")[1];
+  if (AuthToken) {
+    try {
+      const decoded = <JWTPayload>jwt.verify(AuthToken, env.JWT_SECRET);
+      req.userId = decoded._id;
+    } catch (err) {
+      // ignore invalid token for optional auth
+    }
+  }
+  next();
+};
+
 export const adminGuard = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = await User.findById(req.userId);

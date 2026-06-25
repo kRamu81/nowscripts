@@ -22,14 +22,18 @@ const queryClient = new QueryClient({
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
 
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <BrowserRouter>
-    <QueryClientProvider client={queryClient}>
-      <Auth>
-        <ThemeProvider>
-          <App />
-        </ThemeProvider>
-      </Auth>
-    </QueryClientProvider>
-  </BrowserRouter>
+  <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+    <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <Auth>
+          <ThemeProvider>
+            <App />
+          </ThemeProvider>
+        </Auth>
+      </QueryClientProvider>
+    </BrowserRouter>
+  </GoogleOAuthProvider>
 );

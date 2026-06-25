@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
+import { httpRequest } from "../../interceptor/axiosInterceptor";
 import { url } from "../../baseUrl";
 import { useAppContext } from "../../App";
-import { ArrowLeft, Save, Download, FileText, CheckCircle } from "lucide-react";
+import { ArrowLeft, Save, Download, FileText, CheckCircle, Maximize2, X } from "lucide-react";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import { CertificateTemplate, CertificateData } from "../../components/admin/CertificateTemplates";
@@ -37,6 +37,7 @@ export default function CertificateStudio() {
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [savedCertId, setSavedCertId] = useState<string | null>(null);
+  const [isPreviewFullScreen, setIsPreviewFullScreen] = useState(false);
 
   // Form State
   const [formData, setFormData] = useState<CertificateData>({
@@ -64,10 +65,7 @@ export default function CertificateStudio() {
 
   const createMutation = useMutation({
     mutationFn: async (newCert: any) => {
-      const token = localStorage.getItem("token");
-      return axios.post(`${url}/certificate/create`, newCert, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      return httpRequest.post(`${url}/certificate/create`, newCert);
     },
     onSuccess: (res) => {
       queryClient.invalidateQueries(["adminCertificates"]);
@@ -257,9 +255,28 @@ export default function CertificateStudio() {
         </div>
 
         {/* Right Panel: Live Preview */}
-        <div className="flex-1 bg-gray-300 overflow-auto flex items-start justify-center p-4 lg:p-8 custom-scrollbar">
+        <div className={`flex-1 overflow-auto flex items-start justify-center p-4 lg:p-8 custom-scrollbar ${isPreviewFullScreen ? 'fixed inset-0 z-50 bg-gray-800/90 backdrop-blur-sm' : 'bg-gray-300 relative'}`}>
+          {/* Action buttons overlay for mobile preview */}
+          {isPreviewFullScreen && (
+            <button 
+              onClick={() => setIsPreviewFullScreen(false)}
+              className="absolute top-4 right-4 z-[60] bg-white p-3 rounded-full text-black shadow-lg hover:bg-gray-200"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          )}
+
+          {!isPreviewFullScreen && (
+            <button 
+              onClick={() => setIsPreviewFullScreen(true)}
+              className="lg:hidden absolute bottom-4 right-4 z-[40] bg-now-primary p-3 flex items-center justify-center rounded-full text-black shadow-2xl hover:scale-105 transition-transform"
+            >
+              <Maximize2 className="w-5 h-5" />
+            </button>
+          )}
+
           {/* Wrapper to scale the A4 component to fit the screen nicely */}
-          <div className="shadow-2xl transition-all duration-300 ease-in-out hover:scale-[1.02] transform-gpu origin-top scale-[0.35] sm:scale-[0.5] md:scale-[0.7] lg:scale-[0.8] xl:scale-100 mt-4 mb-[500px] lg:mb-0">
+          <div className={`shadow-2xl transition-all duration-300 ease-in-out transform-gpu origin-top mt-4 mb-[500px] lg:mb-0 ${isPreviewFullScreen ? 'scale-[0.45] sm:scale-[0.6] mt-24' : 'hover:scale-[1.02] scale-[0.35] sm:scale-[0.5] md:scale-[0.7] lg:scale-[0.8] xl:scale-100'}`}>
              <CertificateTemplate ref={certificateRef} data={formData} />
           </div>
         </div>

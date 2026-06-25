@@ -12,6 +12,7 @@ import roadmapRouter from "./routes/roadmapRoutes";
 import newsletterRouter from "./routes/newsletterRoutes";
 import certificateRouter from "./routes/certificateRoutes";
 import interviewPrepProgressRouter from "./routes/interviewPrepProgressRoutes";
+import interviewRouter from "./routers/interview";
 import cors from "cors";
 import { errorHandler } from "./middlewares/errorHandler";
 import { createServer } from "http";
@@ -109,6 +110,7 @@ app.use("/roadmap", roadmapRouter);
 app.use("/newsletter", newsletterRouter);
 app.use("/certificate", certificateRouter);
 app.use("/progress/interview-prep", interviewPrepProgressRouter);
+app.use("/interviews", interviewRouter);
 
 app.use(errorHandler);
 

@@ -307,8 +307,72 @@ export const googleAuth = asyncHandler(async (req, res, next) => {
   });
   await refToken.save();
   res.redirect(
-    `${env.CLIENT_URL}/oauth/redirect?uid=${isUser._id}&access_token=${access_token_server}&refresh_token=${refresh_token_server}`
+    `${env.CLIENT_URL}/authredirect?uid=${isUser._id}&access_token=${access_token_server}&refresh_token=${refresh_token_server}`
   );
+});
+
+export const googleAuthDirect = asyncHandler(async (req, res, next) => {
+  const { access_token } = req.body;
+  if (!access_token) {
+    return next(new ServerError(400, "Access token missing"));
+  }
+
+  const user = await axios
+    .get(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`)
+    .then((res) => res.data)
+    .catch((error) => {
+      console.error(`Failed to fetch user`, error);
+      throw new ServerError(401, "Invalid access token");
+    });
+
+  let isUser: any = await User.findOne({ email: user.email });
+  if (!isUser) {
+    const temp = new User({
+      name: user.name,
+      email: user.email,
+      authProviders: ["google"],
+      isVerified: true,
+      avatar:
+        user.picture ??
+        `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(user.name)}`,
+      lists: [
+        {
+          name: "Reading list",
+          posts: [],
+          images: [],
+        },
+      ],
+    });
+    isUser = await temp.save();
+  } else {
+    if (!isUser.authProviders.includes("google")) {
+      isUser.authProviders.push("google");
+      await isUser.save();
+    }
+  }
+
+  const access_token_server = jwt.sign({ _id: isUser._id }, env.JWT_SECRET, {
+    expiresIn: "30m",
+  });
+  const refresh_token_server = jwt.sign(
+    { _id: isUser._id },
+    env.JWT_REFRESH_SECRET
+  );
+  const refToken = new Token({
+    token: refresh_token_server,
+  });
+  await refToken.save();
+  
+  res.json({
+    _id: isUser._id,
+    name: isUser.name,
+    email: isUser.email,
+    role: isUser.role,
+    avatar: isUser.avatar,
+    lists: isUser.lists,
+    access_token: access_token_server,
+    refresh_token: refresh_token_server
+  });
 });
 
 async function getUserFromCode(code: string) {

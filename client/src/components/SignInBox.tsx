@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { emailIcon, googleIcon } from "../assets/icons";
 import { BrandIconOnly } from "./BrandLogo";
 
@@ -22,23 +22,45 @@ const SIGNIN_OPTIONS = [
   },
 ];
 
+import { useGoogleLogin } from '@react-oauth/google';
+import axios from 'axios';
+import { url } from '../baseUrl';
+import { useAuth } from '../contexts/Auth';
+import useLocalStorage from '../hooks/useLocalStorage';
+
 export default function SignInBox({ message, typeOfLogin }: SignInBoxType) {
-  function handleGoogleAuth() {
-    const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
-    const options = {
-      redirect_uri: import.meta.env.VITE_GOOGLE_OAUTH_REDIRECT_URL,
-      client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
-      access_type: "offline",
-      response_type: "code",
-      prompt: "consent",
-      scope: [
-        "https://www.googleapis.com/auth/userinfo.profile",
-        "https://www.googleapis.com/auth/userinfo.email",
-      ].join(" "),
-    };
-    const qs = new URLSearchParams(options);
-    window.location.assign(`${rootUrl}?${qs.toString()}`);
-  }
+  const navigate = useNavigate();
+  const { handleUser } = useAuth();
+  const [, setRefreshToken] = useLocalStorage<string | undefined>("refresh_token", undefined);
+  const [, setAccessToken] = useLocalStorage<string | undefined>("access_token", undefined);
+  const [, setUser] = useLocalStorage<any>("user", undefined);
+
+  const handleGoogleAuth = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        const res = await axios.post(`${url}/auth/google/direct`, {
+          access_token: tokenResponse.access_token
+        });
+        
+        if (res.data.access_token) {
+          setAccessToken(res.data.access_token);
+          setRefreshToken(res.data.refresh_token);
+          setUser(res.data);
+          handleUser(res.data);
+          
+          const redirectPath = localStorage.getItem("redirect_after_login") || "/";
+          localStorage.removeItem("redirect_after_login");
+          navigate(redirectPath);
+        }
+      } catch (error) {
+        console.error("Google authentication failed", error);
+      }
+    },
+    onError: () => {
+      console.error("Google Login Failed");
+    }
+  });
+
   function handleEmailLogin() {}
   return (
     <div className="w-[90%] sm:w-full max-w-[650px] mx-auto flex flex-col items-center gap-4 py-16 bg-white rounded-2xl px-6" style={{

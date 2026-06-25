@@ -1,6 +1,7 @@
 import express from "express";
 import {
   googleAuth,
+  googleAuthDirect,
   logout,
   tokenRefresh,
   register,
@@ -20,6 +21,7 @@ router.post("/verify-otp", otpVerifyLimiter, verifyOTP);
 router.post("/reset-password", resetPassword);
 
 router.route("/google/oauth").get(googleAuth);
+router.post("/google/direct", googleAuthDirect);
 router.route("/logout").post(logout);
 router.route("/token").post(tokenRefresh);
 

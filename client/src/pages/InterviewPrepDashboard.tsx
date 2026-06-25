@@ -298,7 +298,7 @@ export default function InterviewPrepDashboard() {
           {categories.map((cat) => (
             <div key={cat.id}>
               <Link
-                to={`/interview-prep/${cat.id}`}
+                to={cat.id === "interview-experiences" ? "/interviews" : `/interview-prep/${cat.id}`}
                 className={`w-full px-6 py-4 flex items-center justify-between transition-colors border-l-4 ${
                   activeCategory?.id === cat.id 
                     ? "bg-now-primary/10 border-now-primary text-now-primary font-bold" 
@@ -306,10 +306,15 @@ export default function InterviewPrepDashboard() {
                 }`}
               >
                 <span>{cat.title}</span>
-                {cat.status === "coming_soon" && (
+                {cat.status === "coming_soon" && cat.id !== "interview-experiences" && (
                   <span className="text-[10px] uppercase tracking-wider bg-slate-200 dark:bg-slate-800 text-slate-500 dark:text-slate-400 px-2 py-0.5 rounded">
                     Coming Soon
                   </span>
+                )}
+                {cat.id === "interview-experiences" && (
+                   <span className="text-[10px] uppercase tracking-wider bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded font-bold">
+                     New Platform
+                   </span>
                 )}
               </Link>
               
