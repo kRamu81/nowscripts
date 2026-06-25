@@ -339,12 +339,12 @@ function ProfileAboutTab({ profile }: { profile: any }) {
           <div className="flex flex-wrap gap-4">
             {profile.socialLinks?.github && (
               <a href={profile.socialLinks.github} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-now-primary transition-colors">
-                <Link className="w-4 h-4" /> GitHub
+                <LinkIcon className="w-4 h-4" /> GitHub
               </a>
             )}
             {profile.socialLinks?.linkedin && (
               <a href={profile.socialLinks.linkedin} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-blue-600 transition-colors">
-                <Link className="w-4 h-4" /> LinkedIn
+                <LinkIcon className="w-4 h-4" /> LinkedIn
               </a>
             )}
             {profile.socialLinks?.portfolio && (
