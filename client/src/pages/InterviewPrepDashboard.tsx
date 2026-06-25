@@ -680,8 +680,10 @@ export default function InterviewPrepDashboard() {
                           </div>
                         </div>
                       )}
-                    </motion.div>
-                  </AnimatePresence>
+                    </>
+                  )}
+                  </motion.div>
+                </AnimatePresence>
 
                   {/* Bottom Controls */}
                   <div className="fixed lg:static bottom-0 left-0 right-0 lg:mt-8 p-4 lg:p-0 bg-white dark:bg-slate-950 lg:bg-transparent border-t border-slate-200 dark:border-slate-800 lg:border-none shadow-[0_-4px_20px_rgba(0,0,0,0.05)] lg:shadow-none z-20">
