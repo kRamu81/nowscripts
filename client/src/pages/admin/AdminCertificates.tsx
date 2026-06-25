@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
+import { httpRequest } from "../../interceptor/axiosInterceptor";
 import { url } from "../../baseUrl";
 import { useAppContext } from "../../App";
 import { Search, Plus, Filter, Download, X, Check, AlertCircle, FileText } from "lucide-react";
@@ -53,21 +53,21 @@ export default function AdminCertificates() {
   }, [searchQuery]);
 
   // Fetch Certificates
-  const fetchCertificates = async (page: number, search: string, status: string) => {
-    const params = new URLSearchParams({ page: page.toString(), limit: "10" });
-    if (search) params.append("search", search);
-    if (status !== "All") params.append("status", status);
-    
-    const token = localStorage.getItem("token");
-    const response = await axios.get(`${url}/certificate/list?${params.toString()}`, {
-      headers: { Authorization: `Bearer ${token}` }
+  const fetchCertificates = async () => {
+    const params = new URLSearchParams({ 
+      page: currentPage.toString(), 
+      limit: "10",
+      ...(debouncedSearch && { search: debouncedSearch }),
+      ...(statusFilter !== "All" && { status: statusFilter })
     });
+    
+    const response = await httpRequest.get(`${url}/certificate/list?${params.toString()}`);
     return response.data;
   };
 
   const { data, isLoading } = useQuery({
     queryKey: ["adminCertificates", currentPage, debouncedSearch, statusFilter],
-    queryFn: () => fetchCertificates(currentPage, debouncedSearch, statusFilter),
+    queryFn: fetchCertificates,
     keepPreviousData: true,
   });
 
@@ -77,10 +77,7 @@ export default function AdminCertificates() {
   // Mutations
   const revokeMutation = useMutation({
     mutationFn: async (id: string) => {
-      const token = localStorage.getItem("token");
-      return axios.patch(`${url}/certificate/revoke/${id}`, {}, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      return httpRequest.patch(`${url}/certificate/revoke/${id}`, {});
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["adminCertificates"]);

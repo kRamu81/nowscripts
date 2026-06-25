@@ -8,7 +8,7 @@ import {
   Tooltip as RechartsTooltip, ResponsiveContainer, Legend
 } from "recharts";
 import { format } from "date-fns";
-import axios from "axios";
+import { httpRequest } from "../../interceptor/axiosInterceptor";
 import { url } from "../../baseUrl";
 import { useAppContext } from "../../App";
 
@@ -107,11 +107,11 @@ export default function AdminDashboard() {
         { data: activityData },
         { data: recentUsersData }
       ] = await Promise.all([
-        axios.get(`${url}/api/admin/dashboard`, { withCredentials: true }),
-        axios.get(`${url}/api/admin/user-growth`, { withCredentials: true }),
-        axios.get(`${url}/api/admin/content-analytics`, { withCredentials: true }),
-        axios.get(`${url}/api/admin/activity?limit=5`, { withCredentials: true }),
-        axios.get(`${url}/api/admin/recent-users?limit=5`, { withCredentials: true })
+        httpRequest.get(`${url}/admin/dashboard`),
+        httpRequest.get(`${url}/admin/user-growth`),
+        httpRequest.get(`${url}/admin/content-analytics`),
+        httpRequest.get(`${url}/admin/activity?limit=5`),
+        httpRequest.get(`${url}/admin/recent-users?limit=5`)
       ]);
 
       setStats(statsData);
@@ -130,8 +130,8 @@ export default function AdminDashboard() {
   const fetchLiveData = async () => {
     try {
       const [{ data: liveData }, { data: healthData }] = await Promise.all([
-        axios.get(`${url}/api/admin/live-users`, { withCredentials: true }),
-        axios.get(`${url}/api/admin/system-health`, { withCredentials: true })
+        httpRequest.get(`${url}/admin/live-users`),
+        httpRequest.get(`${url}/admin/system-health`)
       ]);
       setLiveUsers(liveData.users);
       setHealth(healthData);

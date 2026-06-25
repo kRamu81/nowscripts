@@ -33,7 +33,7 @@ export default function AdminUsers() {
   const fetchUsers = async () => {
     try {
       const res = await httpRequest.get(`${url}/admin/users`);
-      setUsers(res.data);
+      setUsers(res.data.users);
     } catch (error) {
       toast.error("Failed to load users");
     } finally {
