@@ -70,32 +70,32 @@ export const Callout = ({ children, ...props }: any) => {
   // Map types to styles and icons
   const styles: Record<string, { bg: string, border: string, text: string, icon: React.ReactNode, title: string }> = {
     NOTE: {
-      bg: 'bg-blue-50', border: 'border-blue-500', text: 'text-blue-800',
-      icon: <Info className="w-5 h-5 text-blue-500" />, title: 'Note'
+      bg: 'bg-blue-50 dark:bg-blue-900/20', border: 'border-blue-500', text: 'text-blue-800 dark:text-blue-300',
+      icon: <Info className="w-5 h-5 text-blue-500 dark:text-blue-400" />, title: 'Note'
     },
     TIP: {
-      bg: 'bg-green-50', border: 'border-green-500', text: 'text-green-800',
-      icon: <Lightbulb className="w-5 h-5 text-green-500" />, title: 'Tip'
+      bg: 'bg-green-50 dark:bg-emerald-900/20', border: 'border-green-500 dark:border-emerald-500', text: 'text-green-800 dark:text-emerald-300',
+      icon: <Lightbulb className="w-5 h-5 text-green-500 dark:text-emerald-400" />, title: 'Tip'
     },
     WARNING: {
-      bg: 'bg-yellow-50', border: 'border-yellow-500', text: 'text-yellow-800',
-      icon: <AlertTriangle className="w-5 h-5 text-yellow-500" />, title: 'Warning'
+      bg: 'bg-yellow-50 dark:bg-amber-900/20', border: 'border-yellow-500 dark:border-amber-500', text: 'text-yellow-800 dark:text-amber-300',
+      icon: <AlertTriangle className="w-5 h-5 text-yellow-600 dark:text-amber-400" />, title: 'Warning'
     },
     IMPORTANT: {
-      bg: 'bg-red-50', border: 'border-red-500', text: 'text-red-800',
-      icon: <AlertCircle className="w-5 h-5 text-red-500" />, title: 'Important'
+      bg: 'bg-red-50 dark:bg-rose-900/20', border: 'border-red-500 dark:border-rose-500', text: 'text-red-800 dark:text-rose-300',
+      icon: <AlertCircle className="w-5 h-5 text-red-500 dark:text-rose-400" />, title: 'Important'
     }
   };
 
   const style = styles[type] || styles.NOTE;
 
   return (
-    <div className={`my-6 pl-4 py-4 pr-4 border-l-4 rounded-r-lg ${style.bg} ${style.border}`}>
-      <div className="flex items-center gap-2 mb-2 font-bold" style={{ color: style.text.replace('text-', '') }}>
+    <div className={`my-8 pl-5 py-4 pr-5 border-l-[4px] rounded-r-xl ${style.bg} ${style.border}`}>
+      <div className={`flex items-center gap-2.5 mb-2 font-bold ${style.text}`}>
         {style.icon}
-        <span className={style.text}>{style.title}</span>
+        <span>{style.title}</span>
       </div>
-      <div className="text-[15px] text-slate-800 dark:text-slate-200 leading-relaxed [&>p:last-child]:mb-0">
+      <div className="text-[16px] text-slate-800 dark:text-slate-200 leading-[1.8] [&>p:last-child]:mb-0">
         {cleanChildren}
       </div>
     </div>

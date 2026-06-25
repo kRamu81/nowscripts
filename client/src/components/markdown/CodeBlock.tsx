@@ -28,15 +28,15 @@ export const CodeBlock = ({ children, className, ...props }: any) => {
   }
 
   return (
-    <div className="relative group my-6 rounded-lg overflow-hidden border border-gray-700 bg-[#1E1E1E] shadow-lg">
-      <div className="flex items-center justify-between px-4 py-2 bg-[#2D2D2D] border-b border-gray-700">
-        <span className="text-xs font-mono text-gray-400 uppercase tracking-wider">{language || 'text'}</span>
+    <div className="relative group my-8 rounded-xl overflow-hidden border border-slate-700/50 bg-[#0d1117] shadow-xl">
+      <div className="flex items-center justify-between px-4 py-2.5 bg-[#161b22] border-b border-slate-700/50">
+        <span className="text-[12px] font-mono text-slate-400 font-semibold">{language || 'text'}</span>
         <button
           onClick={copyToClipboard}
-          className="text-gray-400 hover:text-white transition-colors flex items-center gap-1 text-xs font-medium"
+          className="text-slate-400 hover:text-white transition-colors flex items-center gap-1.5 text-xs font-medium bg-transparent hover:bg-slate-700/30 px-2 py-1 rounded-md"
         >
           {copied ? (
-            <><Check className="w-3.5 h-3.5 text-green-400" /> Copied</>
+            <><Check className="w-3.5 h-3.5 text-emerald-400" /> Copied</>
           ) : (
             <><Copy className="w-3.5 h-3.5" /> Copy</>
           )}
@@ -48,12 +48,20 @@ export const CodeBlock = ({ children, className, ...props }: any) => {
           style={vscDarkPlus}
           language={language}
           PreTag="div"
+          showLineNumbers={true}
+          wrapLines={true}
           customStyle={{
             margin: 0,
             padding: '1.25rem',
             background: 'transparent',
-            fontSize: '14px',
+            fontSize: '13.5px',
             lineHeight: '1.6',
+          }}
+          lineNumberStyle={{
+            minWidth: '2.5em',
+            paddingRight: '1em',
+            color: '#6e7681',
+            textAlign: 'right'
           }}
           {...props}
         />

@@ -47,18 +47,49 @@
 
 /* Inline Code styling */
 code:not([class*="language-"]) {
-  background-color: #f1f5f9;
-  color: #db2777;
-  padding: 0.2em 0.4em;
-  border-radius: 0.25rem;
-  font-size: 0.875em;
-  font-family: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  background-color: rgba(200, 210, 225, 0.25);
+  color: #c92a2a;
+  padding: 0.25em 0.4em;
+  border-radius: 6px;
+  font-size: 0.85em;
+  font-weight: 500;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 .dark code:not([class*="language-"]) {
-  background-color: #1e293b;
-  color: #f472b6;
+  background-color: rgba(148, 163, 184, 0.15);
+  color: #ff8787;
 }
+
+/* Blockquote (Standard) */
+.markdown-body blockquote {
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid #cbd5e1;
+  background-color: #f8fafc;
+  color: #475569;
+  border-radius: 0 0.5rem 0.5rem 0;
+  font-style: normal;
+}
+
+.dark .markdown-body blockquote {
+  border-left-color: #475569;
+  background-color: #0f172a;
+  color: #94a3b8;
+}
+
+/* Horizontal Rule */
+.markdown-body hr {
+  height: 1px;
+  background-color: #e2e8f0;
+  border: none;
+  margin: 3rem 0;
+}
+
+.dark .markdown-body hr {
+  background-color: #1e293b;
+}
+
 
 /* Tooltip for copy heading */
 .copy-heading-tooltip {

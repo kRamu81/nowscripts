@@ -30,19 +30,19 @@ export const FieldInfoCard: React.FC<FieldInfoCardProps> = ({ fields, title, cla
   if (!fields || fields.length === 0) return null;
 
   return (
-    <div className={`my-8 bg-[#FAFAFA] border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm ${className}`}>
+    <div className={`my-8 bg-slate-50 dark:bg-[#0d1117] border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm ${className}`}>
       {title && (
-        <div className="px-6 py-3 bg-[#F1F5F9] border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 text-sm tracking-wide uppercase">
+        <div className="px-6 py-3 bg-slate-100 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 text-sm tracking-wide uppercase">
           {title}
         </div>
       )}
-      <div className="divide-y divide-[#E2E8F0]">
+      <div className="divide-y divide-slate-200 dark:divide-slate-800">
         {fields.map((field, idx) => (
-          <div key={idx} className="flex flex-col sm:flex-row px-6 py-3 hover:bg-slate-50 dark:bg-slate-900 transition-colors">
-            <div className="w-full sm:w-1/3 md:w-1/4 text-sm font-semibold text-slate-500 dark:text-slate-400 flex items-center mb-1 sm:mb-0">
+          <div key={idx} className="flex flex-col sm:flex-row px-6 py-3.5 hover:bg-slate-100/50 dark:hover:bg-slate-800/40 transition-colors">
+            <div className="w-full sm:w-1/3 md:w-1/4 text-[14px] font-semibold text-slate-500 dark:text-slate-400 flex items-center mb-1 sm:mb-0">
               {field.label}
             </div>
-            <div className="w-full sm:w-2/3 md:w-3/4 text-[15px] text-slate-900 dark:text-slate-100 leading-relaxed flex items-center flex-wrap gap-1">
+            <div className="w-full sm:w-2/3 md:w-3/4 text-[15px] font-medium text-slate-900 dark:text-slate-100 flex items-center flex-wrap gap-1">
               {field.value}
             </div>
           </div>

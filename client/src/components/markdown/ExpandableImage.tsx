@@ -8,10 +8,10 @@ export const ExpandableImage = ({ src, alt, title, ...props }: any) => {
   return (
     <>
       <div 
-        className="relative group cursor-pointer my-8 rounded-lg overflow-hidden border border-gray-200 bg-gray-50 flex justify-center items-center"
+        className="relative group cursor-pointer my-10 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 flex justify-center items-center shadow-sm hover:shadow-md transition-shadow"
         onClick={() => setIsOpen(true)}
       >
-        <img src={src} alt={alt || title} title={title} className="max-w-full max-h-[500px] object-contain" {...props} />
+        <img src={src} alt={alt || title} title={title} className="max-w-full max-h-[600px] object-contain rounded-xl" {...props} />
         
         {/* Overlay Hover */}
         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">

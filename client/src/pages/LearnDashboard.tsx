@@ -206,7 +206,7 @@ export default function LearnDashboard() {
           />
         )}
 
-        <div className={`absolute lg:relative w-80 flex-shrink-0 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 dark:bg-slate-950 flex flex-col z-50 h-full overflow-hidden transition-transform duration-300 ${
+        <div className={`absolute lg:relative w-72 flex-shrink-0 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 dark:bg-slate-950 flex flex-col z-50 h-full overflow-hidden transition-transform duration-300 ${
           mobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         }`}>
           <div className="p-6 border-b border-slate-200 dark:border-slate-800">
@@ -346,7 +346,7 @@ export default function LearnDashboard() {
           ref={scrollContainerRef}
           className="flex-1 overflow-y-auto bg-white dark:bg-slate-900 dark:bg-slate-950 custom-scrollbar relative h-full flex justify-center w-full min-w-0"
         >
-          <div className="w-full max-w-4xl px-4 lg:px-8 xl:px-16 py-8 xl:py-12 pb-48 overflow-x-hidden">
+          <div className="w-full max-w-[960px] px-4 lg:px-8 xl:px-12 py-8 xl:py-12 pb-48 overflow-x-hidden">
             <AnimatePresence mode="wait">
               <motion.div 
                 key={activeLesson.id}
@@ -374,42 +374,47 @@ export default function LearnDashboard() {
                 
                 <MarkdownRenderer content={contentToRender} lessonData={activeLesson} />
 
-                <div className="mt-20 lg:mt-32 pt-8 lg:pt-10 border-t border-slate-200 dark:border-slate-800 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-4">
-                   <button 
-                     onClick={goToPrevLesson}
-                     disabled={currentIndex === 0}
-                     className={`flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold transition-all min-h-[44px] ${
-                       currentIndex === 0 
-                         ? "opacity-50 cursor-not-allowed text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900" 
-                         : "bg-white dark:bg-slate-900 dark:bg-slate-950 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-800 shadow-sm hover:bg-slate-50 dark:bg-slate-900 hover:border-now-primary"
-                     }`}
-                   >
-                     <ChevronLeft className="w-5 h-5" /> <span className="sm:inline">Previous Lesson</span>
-                   </button>
+                {/* Bottom Navigation Cards */}
+                <div className="mt-20 lg:mt-32 pt-8 border-t border-slate-200 dark:border-slate-800 grid grid-cols-1 md:grid-cols-2 gap-4">
+                   {currentIndex > 0 ? (
+                     <button 
+                       onClick={goToPrevLesson}
+                       className="group flex flex-col items-start p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl hover:border-now-primary dark:hover:border-now-primary transition-all text-left"
+                     >
+                       <span className="text-sm font-medium text-slate-500 dark:text-slate-400 flex items-center gap-2 mb-2">
+                         <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" /> Previous Lesson
+                       </span>
+                       <span className="text-lg font-bold text-slate-900 dark:text-slate-100 group-hover:text-now-primary transition-colors line-clamp-2">
+                         {allLessons[currentIndex - 1].title.replace(/\*\*/g, '')}
+                       </span>
+                     </button>
+                   ) : <div />}
                    
-                   <button 
-                     onClick={(e) => {
-                        if (!isAuthenticated) {
-                          openModal('login', () => {
-                            setCompletedLessons(prev => ({ ...prev, [activeLesson.id]: true }));
-                            goToNextLesson();
-                          });
-                          return;
-                        }
-                        if(!completedLessons[activeLesson.id]) {
-                           setCompletedLessons(prev => ({ ...prev, [activeLesson.id]: true }));
-                        }
-                        goToNextLesson();
-                     }}
-                     disabled={currentIndex === allLessons.length - 1}
-                     className={`flex items-center justify-center gap-2 px-8 py-3 rounded-xl font-bold transition-all shadow-sm min-h-[44px] ${
-                       currentIndex === allLessons.length - 1
-                         ? "opacity-50 cursor-not-allowed text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800" 
-                         : "bg-now-primary text-white hover:bg-now-accent"
-                     }`}
-                   >
-                     Complete & Continue <IconNext className="w-5 h-5" />
-                   </button>
+                   {currentIndex < allLessons.length - 1 ? (
+                     <button 
+                       onClick={(e) => {
+                          if (!isAuthenticated) {
+                            openModal('login', () => {
+                              setCompletedLessons(prev => ({ ...prev, [activeLesson.id]: true }));
+                              goToNextLesson();
+                            });
+                            return;
+                          }
+                          if(!completedLessons[activeLesson.id]) {
+                             setCompletedLessons(prev => ({ ...prev, [activeLesson.id]: true }));
+                          }
+                          goToNextLesson();
+                       }}
+                       className="group flex flex-col items-end p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl hover:border-now-primary dark:hover:border-now-primary transition-all text-right shadow-sm hover:shadow-md"
+                     >
+                       <span className="text-sm font-bold text-now-primary flex items-center gap-2 mb-2">
+                         Complete & Continue <IconNext className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                       </span>
+                       <span className="text-lg font-bold text-slate-900 dark:text-slate-100 group-hover:text-now-primary transition-colors line-clamp-2">
+                         {allLessons[currentIndex + 1].title.replace(/\*\*/g, '')}
+                       </span>
+                     </button>
+                   ) : <div />}
                 </div>
 
               </motion.div>
@@ -424,7 +429,7 @@ export default function LearnDashboard() {
             onClick={() => setTocMenuOpen(false)}
           />
         )}
-        <div className={`fixed right-0 top-0 xl:relative w-72 flex-shrink-0 border-l border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 dark:bg-slate-950 flex flex-col z-50 h-full overflow-hidden transition-transform duration-300 ${
+        <div className={`fixed right-0 top-0 xl:relative w-60 flex-shrink-0 border-l border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 dark:bg-slate-950 flex flex-col z-50 h-full overflow-hidden transition-transform duration-300 ${
           tocMenuOpen ? "translate-x-0" : "translate-x-full xl:translate-x-0"
         }`}>
           <div className="p-6 pb-4 flex items-center justify-between">
@@ -465,6 +470,16 @@ export default function LearnDashboard() {
           <List size={16} /> TOC
         </button>
       </div>
+
+      {/* Scroll to Top Button */}
+      <button
+        onClick={() => scrollContainerRef.current?.scrollTo({ top: 0, behavior: 'smooth' })}
+        className={`fixed bottom-6 right-6 z-40 p-3 rounded-full bg-slate-900 dark:bg-slate-800 text-white shadow-lg hover:bg-now-primary transition-all duration-300 transform ${
+          readingProgress > 10 ? 'translate-y-0 opacity-100' : 'translate-y-16 opacity-0'
+        }`}
+      >
+        <ChevronLeft className="w-5 h-5 rotate-90" />
+      </button>
 
       <style>{`
         .custom-scrollbar::-webkit-scrollbar {

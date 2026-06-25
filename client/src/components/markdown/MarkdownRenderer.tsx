@@ -33,7 +33,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, les
   };
 
   return (
-    <div className={`markdown-body w-full max-w-[850px] mx-auto pb-24 ${className || ''}`}>
+    <div className={`markdown-body w-full max-w-none mx-auto pb-24 ${className || ''}`}>
       
       {/* Premium Header if lessonData is provided */}
       {lessonData && (
@@ -189,7 +189,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, les
                 }
 
                 return (
-                  <p className="text-[18px] leading-[1.9] mb-[20px] text-slate-800 dark:text-slate-200" {...props}>
+                  <p className="text-[17px] sm:text-[18px] leading-[1.8] mb-[24px] text-slate-800 dark:text-slate-200" {...props}>
                     {children}
                   </p>
                 );
