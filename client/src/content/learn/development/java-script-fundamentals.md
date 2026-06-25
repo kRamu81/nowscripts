@@ -8,7 +8,7 @@ order: 1
 tags:
   - ServiceNow
   - Development
-lastUpdated: 2026-06-22
+lastUpdated: 2026-06-25
 author: NowScripts
 ---
 
