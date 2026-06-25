@@ -25,7 +25,8 @@
     {
       "id": "experiences",
       "title": "Real Interview Experiences",
-      "status": "coming_soon"
+      "status": "active",
+      "url": "/interviews"
     },
     {
       "id": "mock",

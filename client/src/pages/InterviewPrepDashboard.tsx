@@ -13,6 +13,7 @@ interface Category {
   title: string;
   status: string;
   dataFile?: string;
+  url?: string;
 }
 
 interface Question {
@@ -298,7 +299,7 @@ export default function InterviewPrepDashboard() {
           {categories.map((cat) => (
             <div key={cat.id}>
               <Link
-                to={cat.id === "interview-experiences" ? "/interviews" : `/interview-prep/${cat.id}`}
+                to={cat.url || `/interview-prep/${cat.id}`}
                 className={`w-full px-6 py-4 flex items-center justify-between transition-colors border-l-4 ${
                   activeCategory?.id === cat.id 
                     ? "bg-now-primary/10 border-now-primary text-now-primary font-bold" 
