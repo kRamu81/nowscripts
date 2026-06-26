@@ -1,5 +1,7 @@
 import React from 'react';
 import Markdown from 'markdown-to-jsx';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { Clock, BookOpen, Settings, Target, Calendar, User } from 'lucide-react';
 import { LessonData } from '../../utils/markdownParser';
 
@@ -99,6 +101,8 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, les
       {/* Markdown Content */}
       <Markdown
         options={{
+          forceBlock: true,
+          wrapper: React.Fragment,
           overrides: {
             h1: { component: H1 },
             h2: { component: H2 },

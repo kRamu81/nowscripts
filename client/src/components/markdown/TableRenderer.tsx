@@ -1,33 +1,46 @@
 import React from 'react';
 
 export const Table = ({ children, ...props }: any) => (
-  <div className="markdown-table-wrapper shadow-sm rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700/70 my-8">
-    <table className="w-full text-left border-collapse text-[15px] text-slate-700 dark:text-slate-300" {...props}>
+  <div style={{ overflowX: 'auto', margin: '1.5rem 0' }}>
+    <table style={{ width: '100%', borderCollapse: 'collapse' }} {...props}>
       {children}
     </table>
   </div>
 );
 
 export const TableHead = ({ children, ...props }: any) => (
-  <thead className="bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 border-b-2 border-slate-200 dark:border-slate-700" {...props}>
+  <thead style={{ backgroundColor: '#1e1e2e' }} {...props}>
     {children}
   </thead>
 );
 
 export const TableRow = ({ children, ...props }: any) => (
-  <tr className="border-b border-slate-200 dark:border-slate-700/50 even:bg-slate-50/50 dark:even:bg-slate-800/20 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors" {...props}>
+  <tr style={{ borderBottom: '1px solid #334155' }} {...props}>
     {children}
   </tr>
 );
 
 export const TableHeader = ({ children, ...props }: any) => (
-  <th className="px-6 py-4 font-bold text-slate-900 dark:text-slate-100 whitespace-nowrap" {...props}>
+  <th style={{
+    padding: '10px 14px',
+    textAlign: 'left',
+    fontWeight: '600',
+    fontSize: '14px',
+    color: '#94a3b8',
+    borderBottom: '2px solid #334155',
+    whiteSpace: 'nowrap',
+  }} {...props}>
     {children}
   </th>
 );
 
 export const TableCell = ({ children, ...props }: any) => (
-  <td className="px-6 py-4 leading-relaxed" {...props}>
+  <td style={{
+    padding: '10px 14px',
+    fontSize: '15px',
+    color: '#e2e8f0',
+    borderBottom: '1px solid #1e293b',
+  }} {...props}>
     {children}
   </td>
 );

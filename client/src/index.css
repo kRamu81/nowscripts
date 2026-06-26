@@ -48,6 +48,22 @@ body {
   object-fit: contain;
 }
 
+.markdown-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+.markdown-table th,
+.markdown-table td {
+  border: 1px solid #444;
+  padding: 8px 12px;
+  text-align: left;
+}
+.markdown-table th {
+  background-color: #1e1e1e;
+  font-weight: bold;
+}
+
 .markdown table {
   display: block;
   max-width: 100%;

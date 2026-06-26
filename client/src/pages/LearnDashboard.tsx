@@ -372,7 +372,9 @@ export default function LearnDashboard() {
                   )}
                 </div>
                 
-                <MarkdownRenderer content={contentToRender} lessonData={activeLesson} />
+                <div id={activeLesson.id} className="mb-16">
+                  <MarkdownRenderer content={contentToRender} lessonData={activeLesson} />
+                </div>
 
                 {/* Bottom Navigation Cards */}
                 <div className="mt-20 lg:mt-32 pt-8 border-t border-slate-200 dark:border-slate-800 grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -9,7 +9,7 @@ tags:
   - ServiceNow
   - Development
 lastUpdated: 2026-06-25
-author: NowScripts
+author: Kanam Ramu
 ---
 
 # Java Script Fundamentals
