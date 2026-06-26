@@ -35,30 +35,21 @@ export default function LandingNavbar({ notificationsCount = 0 }: { notification
           <Link to="/learn" className="hidden md:block text-sm font-medium text-gray-300 hover:text-white transition-colors">
             Learn
           </Link>
+          <Link to="/roadmaps" className="hidden md:block text-sm font-medium text-gray-300 hover:text-white transition-colors">
+            Roadmaps
+          </Link>
+          <Link to="/interview-prep" className="hidden md:block text-sm font-medium text-gray-300 hover:text-white transition-colors">
+            Interview Prep
+          </Link>
+          <Link to="/projects" className="hidden lg:block text-sm font-medium text-gray-300 hover:text-white transition-colors">
+            Projects
+          </Link>
           <Link to="/newsletter" className="hidden md:block text-sm font-medium text-gray-300 hover:text-white transition-colors">
             Newsletter
           </Link>
-          <Link to="/community" className="hidden md:block text-sm font-medium text-gray-300 hover:text-white transition-colors">
-            Community
+          <Link to="/about" className="hidden md:block text-sm font-medium text-gray-300 hover:text-white transition-colors">
+            About Us
           </Link>
-          <Link to="#" className="hidden lg:block text-sm font-medium text-gray-300 hover:text-white transition-colors">
-            Projects
-          </Link>
-          <Link to="/interview-prep" className="text-sm font-medium text-[#64748B] hover:text-[#0F172A] transition-colors hidden md:block">
-            Interview Prep
-          </Link>
-          {isAuthenticated ? (
-            <Link to="/write" className="hidden sm:flex text-sm font-medium text-now-primary hover:text-now-accent transition-colors">
-              Share Content
-            </Link>
-          ) : (
-            <button 
-              onClick={() => openModal('login', () => window.location.href = '/write', 'Please log in to share content.')} 
-              className="hidden sm:flex text-sm font-medium text-now-primary hover:text-now-accent transition-colors"
-            >
-              Share Content
-            </button>
-          )}
           
           <div className="flex items-center gap-3 ml-2">
             {!isAuthenticated ? (
@@ -130,10 +121,11 @@ export default function LandingNavbar({ notificationsCount = 0 }: { notification
               <nav className="flex flex-col space-y-1 px-4">
                 <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-md font-medium">Home</Link>
                 <Link to="/learn" onClick={() => setIsMobileMenuOpen(false)} className="px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-md font-medium">Learn</Link>
-                <Link to="/newsletter" onClick={() => setIsMobileMenuOpen(false)} className="px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-md font-medium">Newsletter</Link>
-                <Link to="/projects" onClick={() => setIsMobileMenuOpen(false)} className="px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-md font-medium">Projects</Link>
+                <Link to="/roadmaps" onClick={() => setIsMobileMenuOpen(false)} className="px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-md font-medium">Roadmaps</Link>
                 <Link to="/interview-prep" onClick={() => setIsMobileMenuOpen(false)} className="px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-md font-medium">Interview Prep</Link>
-                <Link to="/community" onClick={() => setIsMobileMenuOpen(false)} className="px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-md font-medium">Community</Link>
+                <Link to="/projects" onClick={() => setIsMobileMenuOpen(false)} className="px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-md font-medium">Projects</Link>
+                <Link to="/newsletter" onClick={() => setIsMobileMenuOpen(false)} className="px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-md font-medium">Newsletter</Link>
+                <Link to="/about" onClick={() => setIsMobileMenuOpen(false)} className="px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-md font-medium">About Us</Link>
               </nav>
             </div>
           </motion.div>

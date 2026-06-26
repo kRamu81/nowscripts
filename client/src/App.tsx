@@ -16,6 +16,7 @@ import { url } from "./baseUrl";
 import { BrandIconOnly } from "./components/BrandLogo";
 
 const UnAuthHome = lazy(() => import("./pages/UnAuthHome"));
+const AboutUs = lazy(() => import("./pages/AboutUs"));
 const CommunityFeed = lazy(() => import("./pages/Home"));
 const AuthRedirect = lazy(() => import("./pages/AuthRedirect"));
 const Post = lazy(() => import("./pages/Post"));
@@ -164,6 +165,7 @@ export default function App() {
             {/* Public Layout Routes (Accessible to all, but shows AvatarMenu if logged in) */}
             <Route element={<PublicLayout notificationsCount={notificationsCount} />}>
               <Route path="/" element={<UnAuthHome />} />
+              <Route path="/about" element={<AboutUs />} />
               <Route path="/roadmaps" element={<RoadmapDashboard />} />
               <Route path="/roadmaps/:slug" element={<RoadmapViewer />} />
               <Route path="/certifications" element={<CertificationCenter />} />

@@ -395,14 +395,7 @@ export default function LearnDashboard() {
                    {currentIndex < allLessons.length - 1 ? (
                      <button 
                        onClick={(e) => {
-                          if (!isAuthenticated) {
-                            openModal('login', () => {
-                              setCompletedLessons(prev => ({ ...prev, [activeLesson.id]: true }));
-                              goToNextLesson();
-                            });
-                            return;
-                          }
-                          if(!completedLessons[activeLesson.id]) {
+                          if (isAuthenticated && !completedLessons[activeLesson.id]) {
                              setCompletedLessons(prev => ({ ...prev, [activeLesson.id]: true }));
                           }
                           goToNextLesson();

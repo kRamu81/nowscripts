@@ -228,11 +228,7 @@ export default function InterviewPrepDashboard() {
   };
 
   const handleMarkCompleted = (isCorrect: boolean) => {
-    if (!isAuthenticated) {
-      // For guests, we can still show the answer, but we don't save progress
-      openModal('login', () => handleMarkCompleted(isCorrect));
-      return;
-    }
+    if (!isAuthenticated) return;
     if (!activeQuestion || !questionBank) return;
 
     if (isCorrect) {
@@ -256,10 +252,6 @@ export default function InterviewPrepDashboard() {
   };
 
   const handleToggleBookmark = () => {
-    if (!isAuthenticated) {
-      openModal('login', () => handleToggleBookmark());
-      return;
-    }
     if (!activeQuestion) return;
     const isBookmarked = progress.bookmarkedQuestions.includes(activeQuestion.id);
     const newBookmarked = isBookmarked 
@@ -267,14 +259,10 @@ export default function InterviewPrepDashboard() {
       : [...progress.bookmarkedQuestions, activeQuestion.id];
     
     setProgress(prev => ({ ...prev, bookmarkedQuestions: newBookmarked }));
-    updateProgressBackend({ bookmarkedQuestions: newBookmarked });
+    if (isAuthenticated) updateProgressBackend({ bookmarkedQuestions: newBookmarked });
   };
 
   const handleToggleImportant = () => {
-    if (!isAuthenticated) {
-      openModal('login', () => handleToggleImportant());
-      return;
-    }
     if (!activeQuestion) return;
     const isImportant = progress.importantQuestions.includes(activeQuestion.id);
     const newImportant = isImportant 
@@ -282,7 +270,7 @@ export default function InterviewPrepDashboard() {
       : [...progress.importantQuestions, activeQuestion.id];
     
     setProgress(prev => ({ ...prev, importantQuestions: newImportant }));
-    updateProgressBackend({ importantQuestions: newImportant });
+    if (isAuthenticated) updateProgressBackend({ importantQuestions: newImportant });
   };
 
   const goToNext = () => {
