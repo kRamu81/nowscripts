@@ -45,40 +45,49 @@ export const CertificateTemplate = React.forwardRef<HTMLDivElement, { data: Cert
   return (
     <div 
       ref={ref}
-      // A4 dimensions at 96 DPI
-      className="bg-white relative mx-auto text-black font-sans"
-      style={{ width: "794px", height: "1123px", padding: "60px 80px", boxSizing: "border-box" }}
+      className="bg-white relative mx-auto text-black font-sans flex flex-col"
+      style={{ 
+        width: "794px", 
+        height: "1123px", 
+        padding: "60px 80px", 
+        boxSizing: "border-box",
+        overflowWrap: "break-word",
+        wordBreak: "break-word",
+        whiteSpace: "normal"
+      }}
     >
       {/* Header with Logo */}
-      <div className="flex justify-end mb-4">
+      <div className="flex justify-end mb-[16px]">
         <img src="/certificate-logo.jpg" alt="NowScripts Logo" className="h-[45px] object-contain mix-blend-multiply" />
       </div>
 
-      <div className="text-center mb-10">
-        <span className="text-[#1a56db] underline text-xl decoration-1 underline-offset-4">
+      <div className="text-center mb-[40px]">
+        <span className="text-[#1a56db] underline decoration-1 underline-offset-4" style={{ fontSize: "18px", lineHeight: "1.5" }}>
           {data.companyName}
         </span>
       </div>
 
-      <h1 className="text-[34px] font-bold text-center text-black mb-10 tracking-tight">
+      <h1 className="font-bold text-center text-black mb-[40px] tracking-tight" style={{ fontSize: "30px", lineHeight: "1.25" }}>
         {data.templateType}
       </h1>
 
       {/* Date */}
-      <div className="text-right mb-6">
-        <p className="font-bold text-black text-[17px]">{formatDate(data.issueDate)}</p>
+      <div className="text-right mb-[24px]">
+        <p className="font-bold text-black" style={{ fontSize: "14px", lineHeight: "1.75" }}>{formatDate(data.issueDate)}</p>
       </div>
 
       {/* Name and ID Block */}
-      <div className="mb-10 text-left">
-        <h2 className="text-[20px] font-bold mb-1" style={{ color: "#000000" }}>Name: {data.candidateName || "[Candidate Name]"}</h2>
-        <p className="text-[15px]" style={{ color: "#4B5563" }}>
+      <div className="mb-[40px] text-left">
+        <h2 className="font-bold mb-[4px]" style={{ color: "#000000", fontSize: "20px", lineHeight: "1.25" }}>
+          Name: {data.candidateName || "[Candidate Name]"}
+        </h2>
+        <p style={{ color: "#4B5563", fontSize: "14px", lineHeight: "1.75" }}>
           Certificate ID: <span className="font-semibold" style={{ color: "#1F2937" }}>{data.certificateId || "[Auto-Generated]"}</span> · {data.location || "Full-time Remote"}
         </p>
       </div>
 
       {/* Main Paragraph */}
-      <div className="text-[17px] leading-[1.7] text-black space-y-6 min-h-[180px]">
+      <div className="text-black flex flex-col gap-[24px]" style={{ fontSize: "14px", lineHeight: "1.75" }}>
         {isCompletionLetter ? (
           <>
             {data.templateType === "Offer Letter" ? (
@@ -92,71 +101,69 @@ export const CertificateTemplate = React.forwardRef<HTMLDivElement, { data: Cert
             )}
             
             {data.projectUndertaken && (
-              <div className="mt-6">
-                <p className="mb-2">Project undertaken:</p>
-                <ol className="list-decimal pl-10">
-                  <li className="font-bold pl-2">{data.projectUndertaken}</li>
+              <div className="flex flex-col gap-[8px]">
+                <p>Project undertaken:</p>
+                <ol className="list-decimal pl-[40px]">
+                  <li className="font-bold pl-[8px]">{data.projectUndertaken}</li>
                 </ol>
               </div>
             )}
             
             {data.rolesAndResponsibilities && (
-              <div className="mt-6">
-                <p className="mb-2">Intern Role's and Responsibilities:</p>
-                <ul className="list-disc pl-10">
-                  <li className="pl-2">{data.rolesAndResponsibilities}</li>
+              <div className="flex flex-col gap-[8px]">
+                <p>Intern Role's and Responsibilities:</p>
+                <ul className="list-disc pl-[40px]">
+                  <li className="pl-[8px]">{data.rolesAndResponsibilities}</li>
                 </ul>
               </div>
             )}
             
-            <p className="mt-8">We wish you all the best for your future endeavors.</p>
+            <p className="mt-[8px]">We wish you all the best for your future endeavors.</p>
           </>
         ) : (
            // General Certificate Text
-           <>
-            <p className="text-center italic text-xl text-gray-600 my-8">This certifies that</p>
-            <p className="text-center text-3xl font-bold text-[#0F172A] mb-8">{data.candidateName || "[Candidate Name]"}</p>
-            <p className="text-center">
+           <div className="flex flex-col gap-[32px] items-center my-[32px]">
+            <p className="italic text-gray-600" style={{ fontSize: "18px", lineHeight: "1.5" }}>This certifies that</p>
+            <p className="font-bold text-[#0F172A]" style={{ fontSize: "30px", lineHeight: "1.25", textAlign: "center" }}>{data.candidateName || "[Candidate Name]"}</p>
+            <p style={{ textAlign: "center", fontSize: "14px", lineHeight: "1.75" }}>
               has successfully completed the <strong>{data.internshipTitle || "[Internship Program]"}</strong> from <strong>{formatMonthYear(data.startDate)}</strong> to <strong>{formatMonthYear(data.endDate)}</strong>.
             </p>
             {data.projectUndertaken && (
-              <p className="text-center mt-4">
+              <p style={{ textAlign: "center", fontSize: "14px", lineHeight: "1.75" }}>
                 Outstanding contribution on: <strong>{data.projectUndertaken}</strong>
               </p>
             )}
-           </>
+           </div>
         )}
       </div>
 
       {/* Signatures & Stamp */}
-      <div className="mt-14 space-y-1">
-        <p className="text-[17px] text-black">Sincere Regards</p>
-        <p className="text-[17px] text-black">For {data.companyName}</p>
+      <div className="mt-[56px] flex flex-col gap-[4px]">
+        <p className="text-black" style={{ fontSize: "14px", lineHeight: "1.75" }}>Sincere Regards</p>
+        <p className="text-black" style={{ fontSize: "14px", lineHeight: "1.75" }}>For {data.companyName}</p>
         
-        <div className="mt-6 mb-4">
+        <div className="mt-[24px] mb-[16px]">
           <img src="/certificate-stamp.jpg" alt="NowScripts Stamp" className="h-[120px] w-[120px] object-contain mix-blend-multiply" />
         </div>
 
-        <p className="text-[17px] text-black">HR Department</p>
-        <p className="text-[17px] font-bold text-black">Senior Director – HR Shared Service</p>
+        <p className="text-black" style={{ fontSize: "14px", lineHeight: "1.75" }}>HR Department</p>
+        <p className="font-bold text-black" style={{ fontSize: "14px", lineHeight: "1.75" }}>Senior Director – HR Shared Service</p>
       </div>
 
       {/* Footer Branding and Verification */}
-      <div className="absolute bottom-[60px] left-[80px] right-[80px] flex justify-between items-end border-t border-gray-200 pt-6">
-        <div className="w-full flex justify-between text-[13px] text-gray-500 items-center">
-          <span className="flex items-center gap-2">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-            https://nowscript.in/
-          </span>
-          <span className="flex items-center gap-2">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-            Remote
-          </span>
-          <span className="flex items-center gap-2">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-            hr@nowscripts.com
-          </span>
-        </div>
+      <div className="mt-auto border-t border-gray-200 pt-[24px] w-full flex justify-between items-center text-gray-500" style={{ fontSize: "10px", lineHeight: "1.5" }}>
+        <span className="flex items-center gap-[8px]">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          https://nowscript.in/
+        </span>
+        <span className="flex items-center gap-[8px]">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+          Remote
+        </span>
+        <span className="flex items-center gap-[8px]">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          hr@nowscripts.com
+        </span>
       </div>
     </div>
   );

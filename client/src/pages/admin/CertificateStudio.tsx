@@ -96,21 +96,29 @@ export default function CertificateStudio() {
     
     setIsGenerating(true);
     try {
-      // Small delay to ensure any React re-renders (like ID injection) are painted
+      // Wait for all fonts and images to load completely
+      await document.fonts.ready;
       await new Promise(resolve => setTimeout(resolve, 500));
 
       const canvas = await html2canvas(certificateRef.current, {
-        scale: 2, // higher resolution
+        scale: 3,
         useCORS: true,
+        allowTaint: false,
         logging: false,
-        backgroundColor: "#ffffff"
+        backgroundColor: "#ffffff",
+        scrollX: 0,
+        scrollY: 0,
+        windowWidth: 794,
+        windowHeight: 1123,
+        removeContainer: true
       });
       
-      const imgData = canvas.toDataURL("image/png");
+      const imgData = canvas.toDataURL("image/png", 1.0);
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "px",
-        format: [794, 1123] // A4 size in pixels at 96dpi
+        format: [794, 1123],
+        compress: true
       });
       
       pdf.addImage(imgData, "PNG", 0, 0, 794, 1123);
@@ -276,7 +284,16 @@ export default function CertificateStudio() {
           )}
 
           {/* Wrapper to scale the A4 component to fit the screen nicely */}
-          <div className={`shadow-2xl transition-all duration-300 ease-in-out transform-gpu origin-top mt-4 mb-[500px] lg:mb-0 ${isPreviewFullScreen ? 'scale-[0.45] sm:scale-[0.6] mt-24' : 'hover:scale-[1.02] scale-[0.35] sm:scale-[0.5] md:scale-[0.7] lg:scale-[0.8] xl:scale-100'}`}>
+          <div 
+            className="shadow-2xl origin-top transition-transform duration-300 mx-auto" 
+            style={{ 
+              transform: isPreviewFullScreen ? 'scale(0.8)' : 'scale(0.4)',
+              transformOrigin: 'top center',
+              width: '794px',
+              height: '1123px',
+              marginBottom: isPreviewFullScreen ? '0' : '-600px'
+            }}
+          >
              <CertificateTemplate ref={certificateRef} data={formData} />
           </div>
         </div>
