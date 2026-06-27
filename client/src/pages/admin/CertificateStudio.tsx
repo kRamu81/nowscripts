@@ -110,7 +110,15 @@ export default function CertificateStudio() {
         scrollY: 0,
         windowWidth: 794,
         windowHeight: 1123,
-        removeContainer: true
+        removeContainer: true,
+        onclone: (clonedDoc) => {
+          // Remove any scaling transforms from the cloned document's parent wrappers
+          // that cause text overlapping issues in html2canvas
+          const element = clonedDoc.getElementById('certificate-export-wrap');
+          if (element) {
+            element.style.transform = 'none';
+          }
+        }
       });
       
       const imgData = canvas.toDataURL("image/png", 1.0);
@@ -285,6 +293,7 @@ export default function CertificateStudio() {
 
           {/* Wrapper to scale the A4 component to fit the screen nicely */}
           <div 
+            id="certificate-export-wrap"
             className="shadow-2xl origin-top transition-transform duration-300 mx-auto" 
             style={{ 
               transform: isPreviewFullScreen ? 'scale(0.8)' : 'scale(0.4)',

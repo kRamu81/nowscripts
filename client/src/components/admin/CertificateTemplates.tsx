@@ -53,7 +53,8 @@ export const CertificateTemplate = React.forwardRef<HTMLDivElement, { data: Cert
         boxSizing: "border-box",
         overflowWrap: "break-word",
         wordBreak: "break-word",
-        whiteSpace: "normal"
+        whiteSpace: "normal",
+        textRendering: "auto"
       }}
     >
       {/* Header with Logo */}
