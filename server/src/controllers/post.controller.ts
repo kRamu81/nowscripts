@@ -349,18 +349,25 @@ export const getAllSavedFromList = asyncHandler(async (req, res, next) => {
 });
 
 export async function getPostsWithUser(q: any) {
-  const posts = await q.sort({ _id: -1 });
-  return Promise.all(
-    posts.map(async (post: any) => {
-      const user = await User.findOne({ _id: post.userId });
-      return { post, user };
-    })
-  );
+  const posts = await q.sort({ _id: -1 }).lean();
+  
+  const userIds = [...new Set(posts.map((p: any) => p.userId?.toString()).filter(Boolean))];
+  const users = await User.find({ _id: { $in: userIds } }, "name username avatar role").lean();
+  
+  const userMap = users.reduce((acc: any, user: any) => {
+    acc[user._id.toString()] = user;
+    return acc;
+  }, {});
+
+  return posts.map((post: any) => ({
+    post,
+    user: userMap[post.userId?.toString()] || null
+  }));
 }
 
 export const getRecentActivity = asyncHandler(async (req, res, next) => {
-  const activities = await Activity.find({}).sort({ createdAt: -1 }).limit(10);
-  res.send(activities);
+  const activities = await Activity.find({}).sort({ createdAt: -1 }).limit(10).lean();
+  res.send({ success: true, data: activities });
 });
 
 export const getCommunityStats = asyncHandler(async (req, res, next) => {
@@ -392,13 +399,6 @@ export const getCommunityPulse = asyncHandler(async (req, res, next) => {
 });
 
 export const getTrendingDiscussions = asyncHandler(async (req, res, next) => {
-  const posts = await Post.find({})
-    .sort({ views: -1 })
-    .limit(5);
-  
-  const populated = await Promise.all(posts.map(async (p) => {
-     const user = await User.findOne({ _id: p.userId });
-     return { post: p, user };
-  }));
-  res.send(populated);
+  const posts = await getPostsWithUser(Post.find({}).sort({ views: -1 }).limit(5));
+  res.send({ success: true, data: posts });
 });

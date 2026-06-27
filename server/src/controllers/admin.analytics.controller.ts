@@ -10,45 +10,60 @@ import ActivityLog from "../models/activity_log";
 import Newsletter from "../models/newsletter";
 import os from "os";
 import { LIVE_USERS_MAP } from "../app";
+import { cacheService } from "../utils/cache";
 
 // GET /api/admin/dashboard
 export const getDashboardStats = asyncHandler(async (req, res, next) => {
-  const totalUsers = await User.countDocuments();
-  
-  // Calculate today's dates
-  const startOfToday = new Date();
-  startOfToday.setHours(0, 0, 0, 0);
-  const endOfToday = new Date();
-  endOfToday.setHours(23, 59, 59, 999);
+  const stats = await cacheService.fetchWithCache("dashboard_stats", async () => {
+    const totalUsers = await User.countDocuments();
+    
+    // Calculate today's dates
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+    const endOfToday = new Date();
+    endOfToday.setHours(23, 59, 59, 999);
 
-  const startOfWeek = new Date();
-  startOfWeek.setDate(startOfWeek.getDate() - 7);
+    const startOfWeek = new Date();
+    startOfWeek.setDate(startOfWeek.getDate() - 7);
 
-  const startOfMonth = new Date();
-  startOfMonth.setMonth(startOfMonth.getMonth() - 1);
+    const startOfMonth = new Date();
+    startOfMonth.setMonth(startOfMonth.getMonth() - 1);
 
-  const newUsersToday = await User.countDocuments({ createdAt: { $gte: startOfToday, $lte: endOfToday } });
-  const newUsersThisWeek = await User.countDocuments({ createdAt: { $gte: startOfWeek } });
-  const newUsersThisMonth = await User.countDocuments({ createdAt: { $gte: startOfMonth } });
+    const [
+      newUsersToday,
+      newUsersThisWeek,
+      newUsersThisMonth,
+      googleSignins,
+      emailSignins,
+      activeUsersTodayObj
+    ] = await Promise.all([
+      User.countDocuments({ createdAt: { $gte: startOfToday, $lte: endOfToday } }),
+      User.countDocuments({ createdAt: { $gte: startOfWeek } }),
+      User.countDocuments({ createdAt: { $gte: startOfMonth } }),
+      User.countDocuments({ authProviders: "google" }),
+      User.countDocuments({ authProviders: "password" }),
+      ActivityLog.aggregate([
+        { $match: { timestamp: { $gte: startOfToday } } },
+        { $group: { _id: "$userId" } },
+        { $count: "activeUsers" }
+      ])
+    ]);
 
-  const googleSignins = await User.countDocuments({ authProviders: "google" });
-  const emailSignins = await User.countDocuments({ authProviders: "password" });
+    const activeUsersToday = activeUsersTodayObj.length > 0 ? activeUsersTodayObj[0].activeUsers : 0;
 
-  const activeUsersTodayObj = await ActivityLog.aggregate([
-    { $match: { timestamp: { $gte: startOfToday } } },
-    { $group: { _id: "$userId" } },
-    { $count: "activeUsers" }
-  ]);
-  const activeUsersToday = activeUsersTodayObj.length > 0 ? activeUsersTodayObj[0].activeUsers : 0;
+    return {
+      totalUsers,
+      newUsersToday,
+      newUsersThisWeek,
+      newUsersThisMonth,
+      activeUsersToday,
+      googleSignins,
+      emailSignins,
+    };
+  }, 60);
 
   res.json({
-    totalUsers,
-    newUsersToday,
-    newUsersThisWeek,
-    newUsersThisMonth,
-    activeUsersToday,
-    googleSignins,
-    emailSignins,
+    ...stats,
     usersOnlineNow: LIVE_USERS_MAP.size,
   });
 });

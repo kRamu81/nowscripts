@@ -14,4 +14,7 @@ const roadmapSchema = new Schema(
 );
 
 type roadmapSchemaInferType = InferSchemaType<typeof roadmapSchema>;
+
+roadmapSchema.index({ order: 1 });
+
 export default model<roadmapSchemaInferType>("roadmaps", roadmapSchema);

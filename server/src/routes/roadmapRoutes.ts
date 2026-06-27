@@ -3,13 +3,16 @@ import Roadmap from "../models/roadmap";
 import RoadmapModule from "../models/RoadmapModule";
 import RoadmapProgress from "../models/RoadmapProgress";
 import User from "../models/user";
+import { cacheService } from "../utils/cache";
 
 const router = express.Router();
 
 // Get all roadmaps
 router.get("/", async (req, res) => {
   try {
-    const roadmaps = await Roadmap.find().sort({ order: 1 });
+    const roadmaps = await cacheService.fetchWithCache('all_roadmaps', () => 
+      Roadmap.find().sort({ order: 1 }).lean()
+    , 300);
     res.status(200).json({ success: true, data: roadmaps });
   } catch (error) {
     res.status(500).json({ success: false, message: "Error fetching roadmaps" });
@@ -19,12 +22,19 @@ router.get("/", async (req, res) => {
 // Get single roadmap with modules
 router.get("/:slug", async (req, res) => {
   try {
-    const roadmap = await Roadmap.findOne({ slug: req.params.slug });
-    if (!roadmap) return res.status(404).json({ success: false, message: "Roadmap not found" });
+    const data = await cacheService.fetchWithCache(`roadmap_${req.params.slug}`, async () => {
+      const roadmap = await Roadmap.findOne({ slug: req.params.slug }).lean();
+      if (!roadmap) throw new Error("Roadmap not found");
 
-    const modules = await RoadmapModule.find({ roadmapId: roadmap._id }).sort({ order: 1 });
-    res.status(200).json({ success: true, data: { roadmap, modules } });
-  } catch (error) {
+      const modules = await RoadmapModule.find({ roadmapId: roadmap._id }).sort({ order: 1 }).lean();
+      return { roadmap, modules };
+    }, 300);
+
+    res.status(200).json({ success: true, data });
+  } catch (error: any) {
+    if (error.message === "Roadmap not found") {
+      return res.status(404).json({ success: false, message: error.message });
+    }
     res.status(500).json({ success: false, message: "Error fetching roadmap" });
   }
 });

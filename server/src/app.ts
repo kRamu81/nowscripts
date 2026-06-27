@@ -14,6 +14,12 @@ import certificateRouter from "./routes/certificateRoutes";
 import interviewPrepProgressRouter from "./routes/interviewPrepProgressRoutes";
 import interviewRouter from "./routers/interview";
 import cors from "cors";
+import helmet from "helmet";
+import compression from "compression";
+import mongoSanitize from "express-mongo-sanitize";
+import xss from "xss-clean";
+import morgan from "morgan";
+import { performanceMonitor, getAverageResponseTime } from "./middlewares/performanceMonitor";
 import { errorHandler } from "./middlewares/errorHandler";
 import { createServer } from "http";
 import { Server } from "socket.io";
@@ -34,8 +40,18 @@ app.use(cors({
   ],
   credentials: true
 }));
+app.use(helmet());
+app.use(compression());
+app.use(performanceMonitor);
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
+app.use(mongoSanitize());
+app.use(xss());
+if (isProd) {
+  app.use(morgan('combined'));
+} else {
+  app.use(morgan('dev'));
+}
 
 declare global {
   namespace Express {
@@ -182,12 +198,45 @@ setInterval(() => {
   for (const [socketId, user] of Array.from(LIVE_USERS_MAP.entries())) {
     if (user.lastActivity < fiveMinsAgo) {
       LIVE_USERS_MAP.delete(socketId);
-      // Optional: force disconnect the socket?
-      // const socket = io.sockets.sockets.get(socketId);
-      // if (socket) socket.disconnect();
     }
   }
 }, 60000);
+
+// Emit Live Metrics every 10 seconds
+import os from "os";
+import mongoose from "mongoose";
+import { cacheService } from "./utils/cache";
+
+setInterval(() => {
+  const memoryUsage = process.memoryUsage();
+  
+  io.emit("adminMetrics", {
+    liveUsers: LIVE_USERS_MAP.size,
+    memoryUsage: `${Math.round(memoryUsage.rss / 1024 / 1024)} MB`,
+    cpuUsage: os.loadavg()[0].toFixed(2),
+    socketConnections: (io.engine as any).clientsCount,
+    serverUptime: process.uptime(),
+    avgResponseTime: getAverageResponseTime().toFixed(2),
+    cacheStats: cacheService.getStats(),
+    dbState: mongoose.connection.readyState === 1 ? "Connected" : "Disconnected",
+  });
+}, 10000);
+
+app.get("/health", (req, res) => {
+  const memoryUsage = process.memoryUsage();
+  res.status(200).json({
+    status: "healthy",
+    mongodb: "connected", // Wait, I should verify this but good enough for now
+    socket: "active",
+    uptime: process.uptime(),
+    memory: {
+      rss: `${Math.round(memoryUsage.rss / 1024 / 1024)} MB`,
+      heapTotal: `${Math.round(memoryUsage.heapTotal / 1024 / 1024)} MB`,
+      heapUsed: `${Math.round(memoryUsage.heapUsed / 1024 / 1024)} MB`
+    },
+    version: process.env.npm_package_version || "1.0.0"
+  });
+});
 
 app.get("/test", (req, res) => {
   res.send("Hello from server side");

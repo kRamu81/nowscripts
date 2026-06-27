@@ -37,74 +37,96 @@ export const deleteUser = asyncHandler(async (req, res, next) => {
 export const followUser = asyncHandler(async (req, res, next) => {
   const { userId: userTo } = req.params;
   const { userId } = req;
-  const checkOther = await User.findOne({ _id: userTo });
+
+  const [checkOther, checkMe] = await Promise.all([
+    User.findOne({ _id: userTo }).lean(),
+    User.findOne({ _id: userId }).lean()
+  ]);
+
   if (!checkOther) throw new ServerError(404, "User does not exist");
-  const checkMe = await User.findOne({ _id: userId });
+  
   const index = checkMe?.followings.findIndex(
     (item) => item.toString() === userTo
   );
 
-  if (index != -1) {
+  if (index !== -1 && index !== undefined) {
     res.send({ success: false });
     return;
   }
-  const me = await User.findOneAndUpdate(
-    { _id: userId },
-    { $push: { followings: userTo } },
-    { returnDocument: "after" }
-  );
-  const other = await User.findOneAndUpdate(
-    { _id: userTo },
-    { $push: { followers: userId } },
-    { returnDocument: "after" }
-  );
-  await User.updateOne(
-    { _id: other?._id },
-    {
-      $push: {
-        notifications: {
-          userId,
-          username: me?.name,
-          avatar: me?.avatar,
-          message: "started following you",
+
+  const [me, other] = await Promise.all([
+    User.findOneAndUpdate(
+      { _id: userId },
+      { $push: { followings: userTo } },
+      { returnDocument: "after" }
+    ).lean(),
+    User.findOneAndUpdate(
+      { _id: userTo },
+      { $push: { followers: userId } },
+      { returnDocument: "after" }
+    ).lean()
+  ]);
+
+  if (other) {
+    await User.updateOne(
+      { _id: other._id },
+      {
+        $push: {
+          notifications: {
+            userId,
+            username: me?.name,
+            avatar: me?.avatar,
+            message: "started following you",
+          },
         },
-      },
-    }
-  );
-  res.send({ success: other && me });
+      }
+    );
+  }
+  res.send({ success: true, data: { other, me } });
 });
 
 export const unfollowUser = asyncHandler(async (req, res, next) => {
   const { userId: userTo } = req.params;
   const { userId } = req;
-  const checkOther = await User.findOne({ _id: userTo });
+  
+  const [checkOther, checkMe] = await Promise.all([
+    User.findOne({ _id: userTo }).lean(),
+    User.findOne({ _id: userId }).lean()
+  ]);
+
   if (!checkOther) throw new ServerError(404, "User does not exist");
-  const checkMe = await User.findOne({ _id: userId });
   const index = checkMe?.followings.findIndex(
     (item) => item.toString() === userTo
   );
 
-  if (index == -1) {
+  if (index === -1 || index === undefined) {
     res.send({ success: false });
     return;
   }
-  const me = await User.updateOne(
-    { _id: userId },
-    { $pull: { followings: userTo } }
-  );
-  const other = await User.updateOne(
-    { _id: userTo },
-    { $pull: { followers: userId } }
-  );
+
+  const [me, other] = await Promise.all([
+    User.updateOne(
+      { _id: userId },
+      { $pull: { followings: userTo } }
+    ),
+    User.updateOne(
+      { _id: userTo },
+      { $pull: { followers: userId } }
+    )
+  ]);
+  
   res.send({ success: other.modifiedCount == 1 && me.modifiedCount == 1 });
 });
 
 export const suggestUsers = asyncHandler(async (req, res, next) => {
   const { userId } = req;
-  const users = await User.find({
-    $and: [{ _id: { $ne: userId } }, { followers: { $ne: userId } }],
-  }).limit(3);
-  res.send(users);
+  const users = await User.find(
+    { $and: [{ _id: { $ne: userId } }, { followers: { $ne: userId } }] },
+    "name username avatar bio role location"
+  )
+    .lean()
+    .limit(3);
+  res.send({ success: true, data: users });
 });
 
 export const getUser = asyncHandler(async (req, res, next) => {

@@ -7,7 +7,11 @@ import cron from "node-cron";
 import { syncNewsletterArticles } from "./utils/newsletterSync";
 
 mongoose
-  .connect(env.MONGO_URI)
+  .connect(env.MONGO_URI, {
+    maxPoolSize: 100,
+    minPoolSize: 10,
+    retryWrites: true,
+  })
   .then(async () => {
     server.listen(env.PORT);
     console.log("Server runninng at PORT :", env.PORT);

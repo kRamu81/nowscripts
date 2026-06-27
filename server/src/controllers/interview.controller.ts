@@ -62,13 +62,15 @@ export const getInterviewExperiences = asyncHandler(async (req: Request, res: Re
   }
 
   // Fetch data
-  const experiences = await InterviewExperience.find(filter)
-    .populate("author", "name username avatar")
-    .sort({ createdAt: -1 })
-    .skip(skip)
-    .limit(limit);
-
-  const total = await InterviewExperience.countDocuments(filter);
+  const [experiences, total] = await Promise.all([
+    InterviewExperience.find(filter)
+      .populate("author", "name username avatar")
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean(),
+    InterviewExperience.countDocuments(filter)
+  ]);
 
   res.status(200).json({
     experiences,

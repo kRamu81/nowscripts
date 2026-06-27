@@ -43,4 +43,10 @@ const userSchema = new Schema(
 );
 
 type userSchemaInferType = InferSchemaType<typeof userSchema>;
+
+// Indexes for performance
+userSchema.index({ userId: 1 });
+userSchema.index({ tags: 1 });
+userSchema.index({ createdAt: -1 });
+
 export default model<userSchemaInferType>("posts", userSchema);

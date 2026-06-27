@@ -5,13 +5,16 @@ import Lesson from "../models/lesson";
 import Quiz from "../models/quiz";
 import UserProgress from "../models/userProgress";
 import Bookmark from "../models/bookmark";
+import { cacheService } from "../utils/cache";
 
 const router = Router();
 
 // Get all courses with modules
 router.get("/courses", async (req, res) => {
   try {
-    const courses = await Course.find().populate("modules").sort({ order: 1 });
+    const courses = await cacheService.fetchWithCache('all_courses', () => 
+      Course.find().populate("modules").sort({ order: 1 }).lean()
+    , 300);
     res.status(200).json({ success: true, data: courses });
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message });
@@ -21,17 +24,26 @@ router.get("/courses", async (req, res) => {
 // Get single module with lesson and quiz
 router.get("/modules/:id", async (req, res) => {
   try {
-    const module = await Module.findById(req.params.id).populate("courseId");
-    if (!module) return res.status(404).json({ success: false, message: "Module not found" });
+    const data = await cacheService.fetchWithCache(`module_${req.params.id}`, async () => {
+      const module = await Module.findById(req.params.id).populate("courseId").lean();
+      if (!module) throw new Error("Module not found");
 
-    const lesson = await Lesson.findOne({ moduleId: module._id });
-    const quiz = await Quiz.findOne({ moduleId: module._id });
+      const [lesson, quiz] = await Promise.all([
+        Lesson.findOne({ moduleId: module._id }).lean(),
+        Quiz.findOne({ moduleId: module._id }).lean()
+      ]);
+
+      return { module, lesson, quiz };
+    }, 300);
 
     res.status(200).json({
       success: true,
-      data: { module, lesson, quiz }
+      data
     });
   } catch (error: any) {
+    if (error.message === "Module not found") {
+      return res.status(404).json({ success: false, message: error.message });
+    }
     res.status(500).json({ success: false, message: error.message });
   }
 });
@@ -39,13 +51,17 @@ router.get("/modules/:id", async (req, res) => {
 // Get user progress
 router.get("/progress/:userId", async (req, res) => {
   try {
-    let progress = await UserProgress.findOne({ userId: req.params.userId }).populate("completedModules");
-    if (!progress) {
-      progress = await UserProgress.create({ userId: req.params.userId });
-    }
+    const [progressResult, totalModules] = await Promise.all([
+      UserProgress.findOne({ userId: req.params.userId }).populate("completedModules").lean(),
+      cacheService.fetchWithCache('total_modules_count', () => Module.countDocuments(), 300)
+    ]);
     
-    // Calculate total modules for stats
-    const totalModules = await Module.countDocuments();
+    let progress = progressResult;
+    if (!progress) {
+      const newProgress = await UserProgress.create({ userId: req.params.userId });
+      // Can't lean() on create directly, so just convert to object or refetch
+      progress = newProgress.toObject();
+    }
     
     res.status(200).json({
       success: true,

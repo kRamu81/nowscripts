@@ -22,4 +22,7 @@ const lessonSchema = new Schema({
 }, { timestamps: true });
 
 type lessonSchemaInferType = InferSchemaType<typeof lessonSchema>;
+
+lessonSchema.index({ moduleId: 1 });
+
 export default model<lessonSchemaInferType>("lessons", lessonSchema);
