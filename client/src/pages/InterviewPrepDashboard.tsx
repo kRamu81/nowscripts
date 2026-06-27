@@ -468,7 +468,13 @@ export default function InterviewPrepDashboard() {
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden bg-white dark:bg-slate-950 relative">
         {activeCategory?.status === "coming_soon" ? (
-          <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
+          <div className="flex-1 flex flex-col items-center justify-center p-8 text-center relative">
+            <button 
+              onClick={() => setMobileMenuOpen(true)}
+              className="lg:hidden absolute top-4 left-4 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 flex items-center gap-2 font-medium"
+            >
+              <Menu className="w-5 h-5" /> Menu
+            </button>
             <div className="w-24 h-24 mb-6 rounded-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center">
               <BookOpen className="w-10 h-10 text-slate-400" />
             </div>

@@ -93,16 +93,19 @@ export default function LandingNavbar({ notificationsCount = 0 }: { notification
     {/* Mobile Drawer */}
     <AnimatePresence>
       {isMobileMenuOpen && (
-        <>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.5 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="fixed inset-0 bg-black z-40 md:hidden"
-          />
-          <motion.div
-            initial={{ x: "-100%" }}
+        <motion.div
+          key="backdrop"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.5 }}
+          exit={{ opacity: 0 }}
+          onClick={() => setIsMobileMenuOpen(false)}
+          className="fixed inset-0 bg-black z-40 md:hidden"
+        />
+      )}
+      {isMobileMenuOpen && (
+        <motion.div
+          key="drawer"
+          initial={{ x: "-100%" }}
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
             transition={{ type: "spring", bounce: 0, duration: 0.3 }}
@@ -129,7 +132,6 @@ export default function LandingNavbar({ notificationsCount = 0 }: { notification
               </nav>
             </div>
           </motion.div>
-        </>
       )}
     </AnimatePresence>
     </>
